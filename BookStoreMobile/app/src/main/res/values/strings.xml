@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BookStore Mobile</string>
+    <string name="add_book">Thêm sản phẩm</string>
+    <string name="add_book_image">Thêm ảnh</string>
+    <string name="name">Tên</string>
+    <string name="price">Giá (vnđ)</string>
+    <string name="author">Tác giả</string>
+    <string name="publisher">Nhà xuất bản</string>
+    <string name="weight">Trọng Lượng (kg)</string>
+    <string name="size">Kích Thước</string>
+</resources>
