@@ -37,7 +37,7 @@ public class ViewBookList extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.list_RecyclerView);
 
         Retrofit retrofit = RetrofitAPI.getInstance();
         BookService bookService = retrofit.create(BookService.class);
@@ -55,7 +55,7 @@ public class ViewBookList extends AppCompatActivity {
                         }
                     }
 
-                    BookAdapter adapter = new BookAdapter(ViewBookList.this, bookList);
+                    BookAdapter adapter = new BookAdapter(ViewBookList.this, bookList, recyclerView);
                     recyclerView.setLayoutManager(new GridLayoutManager(ViewBookList.this, 2));
                     recyclerView.setAdapter(adapter);
 
@@ -64,10 +64,7 @@ public class ViewBookList extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
-
             }
         });
-
-
     }
 }

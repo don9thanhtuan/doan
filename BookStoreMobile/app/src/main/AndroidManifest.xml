@@ -32,6 +32,7 @@
         </activity>
         <activity android:name=".activity.ViewBookList" />
         <activity android:name=".activity.AddBook" />
+        <activity android:name=".activity.ViewBookDetails" />
 
     </application>
 

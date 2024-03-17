@@ -1,6 +1,7 @@
 package com.nhom4.bookstoremobile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.nhom4.bookstoremobile.R;
+import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.entities.Book;
 
 import java.util.List;
@@ -20,21 +22,29 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     private final Context context;
     private final List<Book> bookList;
+    private final RecyclerView mRecyclerView;
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int itemPosition = mRecyclerView.getChildLayoutPosition(view);
+            Book book = bookList.get(itemPosition);
+            Intent intent = new Intent(context, ViewBookDetails.class);
+            intent.putExtra("book_id", book.getId());
+            context.startActivity(intent);
+        }
+    };
 
-    public BookAdapter(Context context, List<Book> bookList) {
+    public BookAdapter(Context context, List<Book> bookList, RecyclerView recyclerView) {
         this.context = context;
         this.bookList = bookList;
+        mRecyclerView = recyclerView;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_page_book_layout, parent, false);
-
-        /*DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int screenWidth = displayMetrics.widthPixels;
-        int itemWidth = (screenWidth / 2) - 40;
-        view.setLayoutParams(new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.WRAP_CONTENT));*/
+        view.setOnClickListener(mOnClickListener);
 
         return new ViewHolder(view);
     }
@@ -43,11 +53,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Book book = bookList.get(position);
 
+        holder.bookId = book.getId();
         holder.list_Name.setText(book.getTen());
         holder.list_Author.setText(book.getTacGia());
         holder.list_Price.setText(book.getGia());
 
-        // Load image using Glide
         Glide.with(context)
                 .load(book.getHinhAnh())
                 .into(holder.BookImageMainPage);
@@ -59,6 +69,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        String bookId;
         ImageView BookImageMainPage;
         TextView list_Name;
         TextView list_Author;

@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService{
     public List<Book> getTopSelling() {
         List<Book> booklist = bookDAOController.getBookList();
         Collections.sort(booklist, Comparator.comparingInt(Book::getDaBan).reversed());
-
+        
         return booklist.subList(0, Math.min(5, booklist.size()));
     }
 
