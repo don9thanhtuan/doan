@@ -7,6 +7,18 @@
     android:background="@color/light"
     tools:context=".activity.AddBook">
 
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:background="#00000000"
+        android:src="@drawable/ic_arrow_back_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
     <TextView
         android:id="@+id/addBook"
         android:layout_width="wrap_content"
