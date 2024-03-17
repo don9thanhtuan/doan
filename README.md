@@ -3,4 +3,5 @@
 - Xem danh sách
 - Xem chi tiết
 - Thêm sản phẩm
-  
+- Chỉnh sửa sản phẩm (Có bug)
+- Xóa sản phẩm 
