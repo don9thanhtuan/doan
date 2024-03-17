@@ -16,6 +16,19 @@ public class Book {
     public Book() {
     }
 
+    public Book(String id, String ten, String hinhAnh, String tacGia, String nhaCungCap, int tonKho, String gia, double trongLuong, String kichThuoc, String gioiThieu) {
+        this.id = id;
+        this.ten = ten;
+        this.hinhAnh = hinhAnh;
+        this.tacGia = tacGia;
+        this.nhaCungCap = nhaCungCap;
+        this.tonKho = tonKho;
+        this.gia = gia;
+        this.trongLuong = trongLuong;
+        this.kichThuoc = kichThuoc;
+        this.gioiThieu = gioiThieu;
+    }
+
     public String getId() {
         return id;
     }

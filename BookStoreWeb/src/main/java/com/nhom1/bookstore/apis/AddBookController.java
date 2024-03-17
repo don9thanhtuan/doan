@@ -62,7 +62,7 @@ public class AddBookController {
 
         bookService.addBook(newBook);
 
-        BookResponse response = new BookResponse(newBook, "Book added successfully");
+        BookResponse response = new BookResponse(newBook.getId(), "Book added successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

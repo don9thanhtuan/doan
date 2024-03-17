@@ -57,6 +57,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.list_Name.setText(book.getTen());
         holder.list_Author.setText(book.getTacGia());
         holder.list_Price.setText(book.getGia());
+        holder.list_Sold.setText("Đã bán " + book.getDaBan());
 
         Glide.with(context)
                 .load(book.getHinhAnh())
@@ -74,6 +75,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         TextView list_Name;
         TextView list_Author;
         TextView list_Price;
+        TextView list_Sold;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +83,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             list_Name = itemView.findViewById(R.id.list_Name);
             list_Author = itemView.findViewById(R.id.list_Author);
             list_Price = itemView.findViewById(R.id.list_Price);
+            list_Sold = itemView.findViewById(R.id.list_Sold);
+
         }
     }
 }

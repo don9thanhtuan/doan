@@ -37,6 +37,14 @@ public class ViewBookList extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookList.this, AddBook.class);
+                startActivity(intent);
+            }
+        });
+
         RecyclerView recyclerView = findViewById(R.id.list_RecyclerView);
 
         Retrofit retrofit = RetrofitAPI.getInstance();

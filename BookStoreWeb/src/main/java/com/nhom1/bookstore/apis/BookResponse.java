@@ -1,22 +1,20 @@
 package com.nhom1.bookstore.apis;
 
-import com.nhom1.bookstore.entity.Book;
-
 public class BookResponse {
-    private Book book;
+    private String bookID;
     private String message;
 
-    public BookResponse(Book book, String message) {
-        this.book = book;
+    public BookResponse(String bookID, String message) {
+        this.bookID = bookID;
         this.message = message;
     }
 
-    public Book getBook() {
-        return book;
+    public String getBookID() {
+        return bookID;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBookID(String bookID) {
+        this.bookID = bookID;
     }
 
     public String getMessage() {
@@ -26,4 +24,6 @@ public class BookResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    
 }

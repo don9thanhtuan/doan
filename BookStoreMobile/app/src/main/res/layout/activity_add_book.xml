@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:background="#00000000"
-        android:src="@drawable/ic_arrow_back_dark"
+        android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
@@ -64,7 +64,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp" />
 
-
             </LinearLayout>
 
 
@@ -72,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
+                android:inputType="none"
                 android:text="Tên:"
                 android:textSize="20sp" />
 
@@ -90,6 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:inputType="none"
                 android:text="Giá (vnđ):"
                 android:textSize="20sp" />
 
@@ -108,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:inputType="number"
+                android:inputType="none"
                 android:text="Tác Giả:"
                 android:textSize="20sp" />
 
@@ -121,12 +122,14 @@
                 android:inputType="text"
                 android:maxLength="40"
                 android:padding="8dp"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:inputType="none"
                 android:text="Nhà xuất bản:"
                 android:textSize="20sp" />
 
@@ -144,6 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:inputType="none"
                 android:text="Trọng Lượng (kg):"
                 android:textSize="20sp" />
 
@@ -162,7 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:inputType="number"
+                android:inputType="none"
                 android:text="Kích Thước:"
                 android:textSize="20sp" />
 
@@ -181,6 +185,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:inputType="none"
                 android:text="Số tồn kho:"
                 android:textSize="20sp" />
 
@@ -199,6 +204,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:inputType="none"
                 android:text="Giới thiệu:"
                 android:textSize="20sp" />
 

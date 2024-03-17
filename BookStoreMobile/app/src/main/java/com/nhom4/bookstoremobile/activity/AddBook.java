@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.entities.BookResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 
@@ -112,7 +112,7 @@ public class AddBook extends AppCompatActivity {
 
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
-        Call<Book> call = bookService.addBook(imagePart,
+        Call<BookResponse> call = bookService.addBook(imagePart,
                 RequestBody.create(MediaType.parse("text/plain"), name),
                 RequestBody.create(MediaType.parse("text/plain"), price),
                 RequestBody.create(MediaType.parse("text/plain"), author),
@@ -122,14 +122,17 @@ public class AddBook extends AppCompatActivity {
                 RequestBody.create(MediaType.parse("text/plain"), stock),
                 RequestBody.create(MediaType.parse("text/plain"), introduction));
 
-        call.enqueue(new Callback<Book>() {
+        call.enqueue(new Callback<BookResponse>() {
             @Override
-            public void onResponse(Call<Book> call, Response<Book> response) {
+            public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {
                 if (response.isSuccessful()) {
-                    Book book = response.body();
-                    if (book != null) {
+                    BookResponse bookResponse = response.body();
+                    if (bookResponse != null) {
                         Toast.makeText(AddBook.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
                         clearFields();
+                        Intent intent = new Intent(AddBook.this, ViewBookDetails.class);
+                        intent.putExtra("book_id", bookResponse.getBookID());
+                        startActivity(intent);
                     }
                 } else {
                     Toast.makeText(AddBook.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
@@ -137,7 +140,7 @@ public class AddBook extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Book> call, Throwable t) {
+            public void onFailure(Call<BookResponse> call, Throwable t) {
                 Toast.makeText(AddBook.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
