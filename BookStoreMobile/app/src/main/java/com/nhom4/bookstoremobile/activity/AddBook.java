@@ -14,7 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.nhom4.bookstoremobile.R;
+import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.BookResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
@@ -33,14 +35,12 @@ public class AddBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     ImageView addBookImage;
     Uri selectedImage;
-    BookService bookService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
 
-        bookService = RetrofitAPI.getInstance().create(BookService.class);
 
         addBookImage = findViewById(R.id.addBookImage);
 
@@ -110,15 +110,21 @@ public class AddBook extends AppCompatActivity {
 
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
-        Call<BookResponse> call = bookService.addBook(imagePart,
-                RequestBody.create(MediaType.parse("text/plain"), name),
-                RequestBody.create(MediaType.parse("text/plain"), price),
-                RequestBody.create(MediaType.parse("text/plain"), author),
-                RequestBody.create(MediaType.parse("text/plain"), publisher),
-                RequestBody.create(MediaType.parse("text/plain"), weight),
-                RequestBody.create(MediaType.parse("text/plain"), size),
-                RequestBody.create(MediaType.parse("text/plain"), stock),
-                RequestBody.create(MediaType.parse("text/plain"), introduction));
+        Book newBook = new Book();
+
+        newBook.setTen(name);
+        newBook.setGia(price);
+        newBook.setTacGia(author);
+        newBook.setNhaCungCap(publisher);
+        newBook.setTrongLuong(Double.parseDouble(weight));
+        newBook.setKichThuoc(size);
+        newBook.setTonKho(Integer.parseInt(stock));
+        newBook.setGioiThieu(introduction);
+
+        RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
+
+        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
+        Call<BookResponse> call = bookService.addBook(imagePart, newBook_RB);
 
         call.enqueue(new Callback<BookResponse>() {
             @Override

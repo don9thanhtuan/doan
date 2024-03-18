@@ -32,14 +32,7 @@ public interface BookService {
     @POST("books")
     Call<BookResponse> addBook(
             @Part MultipartBody.Part image,
-            @Part("name") RequestBody name,
-            @Part("price") RequestBody price,
-            @Part("author") RequestBody author,
-            @Part("publisher") RequestBody publisher,
-            @Part("weight") RequestBody weight,
-            @Part("size") RequestBody size,
-            @Part("stock") RequestBody stock,
-            @Part("introduction") RequestBody introduction
+            @Part("book") RequestBody newBookJson
     );
 
     @Multipart
@@ -47,15 +40,7 @@ public interface BookService {
     Call<String> editBook(
             @Path("id") String bookId,
             @Part MultipartBody.Part image,
-            @Part("path") RequestBody filePath,
-            @Part("name") RequestBody name,
-            @Part("price") RequestBody price,
-            @Part("author") RequestBody author,
-            @Part("publisher") RequestBody publisher,
-            @Part("weight") RequestBody weight,
-            @Part("size") RequestBody size,
-            @Part("stock") RequestBody stock,
-            @Part("introduction") RequestBody introduction
+            @Part("book") RequestBody newBookJson
     );
 
     @DELETE("books/{id}")

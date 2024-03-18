@@ -17,9 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 
 import java.io.FileNotFoundException;
@@ -31,8 +32,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EditBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
@@ -130,26 +129,22 @@ public class EditBook extends AppCompatActivity {
         }
 
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/api/")
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setLenient().create()))
-                .build();
 
-        BookService bookService = retrofit.create(BookService.class);
+        Book newBook = new Book();
+        newBook.setId(current_Book.getId());
+        newBook.setTen(name);
+        newBook.setGia(price);
+        newBook.setTacGia(author);
+        newBook.setNhaCungCap(publisher);
+        newBook.setTrongLuong(Double.parseDouble(weight));
+        newBook.setKichThuoc(size);
+        newBook.setTonKho(Integer.parseInt(stock));
+        newBook.setGioiThieu(introduction);
 
-        Call<String> call = bookService.editBook(
-                current_Book.getId(),
-                imagePart,
-                RequestBody.create(MediaType.parse("text/plain"), "filePath"),
-                RequestBody.create(MediaType.parse("text/plain"), name),
-                RequestBody.create(MediaType.parse("text/plain"), price),
-                RequestBody.create(MediaType.parse("text/plain"), author),
-                RequestBody.create(MediaType.parse("text/plain"), publisher),
-                RequestBody.create(MediaType.parse("text/plain"), weight),
-                RequestBody.create(MediaType.parse("text/plain"), size),
-                RequestBody.create(MediaType.parse("text/plain"), stock),
-                RequestBody.create(MediaType.parse("text/plain"), introduction)
-        );
+        RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
+
+        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
+        Call<String> call = bookService.editBook(current_Book.getId(), imagePart, newBook_RB);
 
         call.enqueue(new Callback<String>() {
             @Override
@@ -227,7 +222,11 @@ public class EditBook extends AppCompatActivity {
                 .into(addBookImage);
 
         nameEditText.setText(book.getTen());
-        priceEditText.setText(book.getGia());
+
+        String priceRaw = book.getGia();
+        String price = priceRaw.replaceAll("[^0-9]", "");
+        priceEditText.setText(price);
+
         authorEditText.setText(book.getTacGia());
         publisherEditText.setText(book.getNhaCungCap());
         weightEditText.setText(String.valueOf(book.getTrongLuong()));
