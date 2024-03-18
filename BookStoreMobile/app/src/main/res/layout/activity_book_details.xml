@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="Đã bán 10"
+                    android:text="Đã bán"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name_TxtView" />
 
@@ -124,7 +124,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:maxLines="2"
-                    android:text="Hacking: The Art of Exploitation, 2nd Edition"
+                    android:text="Tên"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/price_TxtView" />
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="10.000 ₫"
+                    android:text="Giá"
                     android:textSize="30sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/book_Image" />
@@ -144,7 +144,6 @@
                     android:id="@+id/book_Image"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:src="@drawable/hacking"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

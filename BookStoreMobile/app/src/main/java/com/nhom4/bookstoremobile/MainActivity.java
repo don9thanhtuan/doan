@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         RecyclerView recyclerView = findViewById(R.id.home_RecyclerView);
 
         Retrofit retrofit = RetrofitAPI.getInstance();
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
+
             }
         });
     }

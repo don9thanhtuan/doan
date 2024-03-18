@@ -20,8 +20,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
-import com.nhom4.bookstoremobile.entities.BookResponse;
-import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 
 import java.io.FileNotFoundException;
@@ -49,7 +47,6 @@ public class EditBook extends AppCompatActivity {
         TextView addBook = findViewById(R.id.addBook);
         addBook.setText("Chỉnh sửa sản phẩm");
 
-        String bookID = getIntent().getStringExtra("book_id");
         String book_ID = getIntent().getStringExtra("book_id");
         String book_Name = getIntent().getStringExtra("book_name");
         String book_HinhAnh = getIntent().getStringExtra("book_HinhAnh");
@@ -85,7 +82,7 @@ public class EditBook extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
-                intent.putExtra("book_id", bookID);
+                intent.putExtra("book_id", book_ID);
                 startActivity(intent);
             }
         });
@@ -172,7 +169,10 @@ public class EditBook extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(EditBook.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(EditBook.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
+                intent.putExtra("book_id", current_Book.getId());
+                startActivity(intent);
             }
         });
     }

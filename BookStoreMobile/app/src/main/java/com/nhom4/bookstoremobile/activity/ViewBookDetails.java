@@ -32,6 +32,7 @@ import retrofit2.Retrofit;
 
 public class ViewBookDetails extends AppCompatActivity {
     private Book book;
+
     public static void showConfirmationPopup(Context context, String title, String message, DialogInterface.OnClickListener positiveClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title)
