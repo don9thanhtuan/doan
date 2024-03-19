@@ -1,5 +1,6 @@
 package com.nhom1.bookstore.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +34,8 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void editBook(Book newBook) {
+        Book currentBook = bookDAOController.getBook(newBook.getId());
+        deleteImage(currentBook.getHinhAnh());
         bookDAOController.editBook(newBook);
     }
 
@@ -79,5 +82,18 @@ public class BookServiceImpl implements BookService{
     @Override
     public void updateSoldQuantity(String id, int daBan) {
         bookDAOController.updateSoldQuantity(id, daBan);
+    }
+
+    private void deleteImage(String imagePath) {
+        String baseFolderPath = "src/main/resources/static";
+
+        // Tạo đối tượng Path từ đường dẫn tương đối
+        Path fullPath = Paths.get(baseFolderPath, imagePath);
+
+        // Lấy đường dẫn tuyệt đối
+        String absolutePath = fullPath.toAbsolutePath().toString();
+
+        File fileToDelete = new File(absolutePath);
+        fileToDelete.delete();
     }
 }

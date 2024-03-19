@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.nhom1.bookstore.entity.Book;
 import com.nhom1.bookstore.services.ConverterCurrency;
+import com.nhom1.bookstore.services.Optimization;
 
 @Repository
 public class BookDAOImpl implements BookDAO{
@@ -158,6 +159,7 @@ public class BookDAOImpl implements BookDAO{
         }catch (SQLException e) {
             e.printStackTrace();
         }
+        new Optimization().cleanImage(bookList);
         return bookList;
     }
 
@@ -196,5 +198,4 @@ public class BookDAOImpl implements BookDAO{
         }
         return result;
     }
-
 }
