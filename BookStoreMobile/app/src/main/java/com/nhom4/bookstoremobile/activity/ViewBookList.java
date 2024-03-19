@@ -34,6 +34,7 @@ public class ViewBookList extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewBookList.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

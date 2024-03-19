@@ -64,6 +64,7 @@ public class AddBook extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AddBook.this, ViewBookList.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

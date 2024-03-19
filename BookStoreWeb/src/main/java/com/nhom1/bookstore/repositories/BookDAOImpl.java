@@ -159,7 +159,7 @@ public class BookDAOImpl implements BookDAO{
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        new Optimization().cleanImage(bookList);
+        Optimization.cleanImage(bookList);
         return bookList;
     }
 

@@ -26,7 +26,7 @@ public class EditBookController {
 
         String path = bookService.fileToFilePathConverter(file);
         newBook.setHinhAnh(path);
-
+                
         bookService.editBook(newBook);
         return "Book edited successfully";
     }

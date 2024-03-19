@@ -28,7 +28,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class ViewBookDetails extends AppCompatActivity {
     private Book book;
@@ -52,8 +51,9 @@ public class ViewBookDetails extends AppCompatActivity {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewBookDetails.this, MainActivity.class);
+                Intent intent = new Intent(ViewBookDetails.this, ViewBookList.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -82,9 +82,7 @@ public class ViewBookDetails extends AppCompatActivity {
             }
         });
 
-        Retrofit retrofit = RetrofitAPI.getInstance();
-        BookService bookService = retrofit.create(BookService.class);
-
+        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<Book> call = bookService.getBookDetailsFromRestAPI(id);
         call.enqueue(new Callback<Book>() {
             @Override
@@ -102,12 +100,17 @@ public class ViewBookDetails extends AppCompatActivity {
         });
 
         Call<List<Book>> call2 = bookService.getBookFromRestAPI();
-
         call2.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful()) {
                     List<Book> bookList = response.body();
+                    for (Book book : bookList) {
+                        if (book.getId().equals(id)) {
+                            bookList.remove(book);
+                            break;
+                        }
+                    }
                     for (Book book : bookList) {
                         String imageUrl = book.getHinhAnh();
                         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -173,6 +176,7 @@ public class ViewBookDetails extends AppCompatActivity {
                             Toast.makeText(ViewBookDetails.this, "Xóa thành công sản phẩm " + book.getId(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ViewBookDetails.this, ViewBookList.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             // Xử lý khi xóa sách không thành công
                             Toast.makeText(ViewBookDetails.this, "Failed to delete book", Toast.LENGTH_SHORT).show();

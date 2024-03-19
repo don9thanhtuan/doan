@@ -25,8 +25,17 @@ public class AddBookController {
     @PostMapping
     public ResponseEntity<BookResponse> addBook(@RequestParam("image") MultipartFile file, @RequestParam("book") String bookJSON) {
         Book newBook = ConverterBook.jsonToEntity(bookJSON);
+        
+        String id = IDGenerator.IDBook();
+        while (true) {
+            if(bookService.search(id) == null) {
+                break;
+            } else{
+                id = IDGenerator.IDBook();
+            }
+        }
+        newBook.setId(id);
 
-        newBook.setId(IDGenerator.IDBook());
         String filePath = bookService.fileToFilePathConverter(file);
         newBook.setHinhAnh(filePath);
 

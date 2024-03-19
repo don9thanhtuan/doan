@@ -7,10 +7,10 @@ import java.util.List;
 import com.nhom1.bookstore.entity.Book;
 
 public class Optimization {
-    final String DEFAULT_PATH = "/img/product/";
-    final String DEFAULT_FOLDER = "src/main/resources/static/img/product";
+    final static String DEFAULT_PATH = "/img/product/";
+    final static String DEFAULT_FOLDER = "src/main/resources/static/img/product";
 
-    public void cleanImage(List<Book> bookList) {
+    public static void cleanImage(List<Book> bookList) {
         for (int i = 0; i < getAllImageFileName().size(); i++) {
             List<String> fileNames = getAllImageFileName();
             boolean found = false;
@@ -31,7 +31,7 @@ public class Optimization {
         }
     }
 
-    private List<String> getAllImageFileName() {
+    private static List<String> getAllImageFileName() {
         File[] files = getAllFile();
         List<String> imageFiles = new ArrayList<>();
 
@@ -45,12 +45,12 @@ public class Optimization {
         return imageFiles;
     }
 
-    private File[] getAllFile() {
+    private static File[] getAllFile() {
         File folder = new File(DEFAULT_FOLDER);
         return folder.listFiles();
     }
 
-    private boolean isImageFile(String fileName) {
+    private static boolean isImageFile(String fileName) {
         if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png")
                 || fileName.endsWith(".gif")) {
             return true;

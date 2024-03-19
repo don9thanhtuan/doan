@@ -3,7 +3,10 @@ package com.nhom4.bookstoremobile.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -17,12 +20,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
+import com.nhom4.bookstoremobile.service.ExceptionHandler;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -35,6 +42,7 @@ import retrofit2.Response;
 
 public class EditBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
+    boolean changeImage = false;
     ImageView addBookImage;
     Uri selectedImage;
     Book current_Book;
@@ -83,6 +91,7 @@ public class EditBook extends AppCompatActivity {
                 Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
                 intent.putExtra("book_id", book_ID);
                 startActivity(intent);
+                finish();
             }
         });
         setBookData(current_Book);
@@ -97,6 +106,7 @@ public class EditBook extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(selectedImage);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 addBookImage.setImageBitmap(bitmap);
+                changeImage = true;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -104,47 +114,21 @@ public class EditBook extends AppCompatActivity {
     }
 
     private void editBook() {
-        EditText nameEditText = findViewById(R.id.add_name);
-        EditText priceEditText = findViewById(R.id.add_price);
-        EditText authorEditText = findViewById(R.id.add_author);
-        EditText publisherEditText = findViewById(R.id.add_publisher);
-        EditText weightEditText = findViewById(R.id.add_weight);
-        EditText sizeEditText = findViewById(R.id.add_size);
-        EditText stockEditText = findViewById(R.id.add_stock);
-        EditText introductionEditText = findViewById(R.id.add_introduction);
-
-        String name = nameEditText.getText().toString();
-        String price = priceEditText.getText().toString();
-        String author = authorEditText.getText().toString();
-        String publisher = publisherEditText.getText().toString();
-        String weight = weightEditText.getText().toString();
-        String size = sizeEditText.getText().toString();
-        String stock = stockEditText.getText().toString();
-        String introduction = introductionEditText.getText().toString();
-
-        if (name.isEmpty() || price.isEmpty() || author.isEmpty() || publisher.isEmpty() || weight.isEmpty() ||
-                size.isEmpty() || stock.isEmpty() || introduction.isEmpty() || selectedImage == null) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin và chọn hình ảnh", Toast.LENGTH_SHORT).show();
+        if(selectedImage == null) {
+            Toast.makeText(this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        MultipartBody.Part imagePart = prepareFilePart(selectedImage);
-
-        Book newBook = new Book();
+        Book newBook = new ExceptionHandler().handleException(this);
+        if(newBook == null) {
+            return;
+        }
         newBook.setId(current_Book.getId());
-        newBook.setTen(name);
-        newBook.setGia(price);
-        newBook.setTacGia(author);
-        newBook.setNhaCungCap(publisher);
-        newBook.setTrongLuong(Double.parseDouble(weight));
-        newBook.setKichThuoc(size);
-        newBook.setTonKho(Integer.parseInt(stock));
-        newBook.setGioiThieu(introduction);
+        MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
         RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<String> call = bookService.editBook(current_Book.getId(), imagePart, newBook_RB);
+        Call<String> call = bookService.editBook(newBook.getId(), imagePart, newBook_RB);
 
         call.enqueue(new Callback<String>() {
             @Override

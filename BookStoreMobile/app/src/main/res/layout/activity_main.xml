@@ -79,59 +79,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_Top_LinearLayout">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="150dp"
+                android:src="@drawable/banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:src="@drawable/banner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/BestSellerText"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:background="#FCDDEF"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="SẢN PHẨM NỔI BẬT"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/banner" />
 
-                <TextView
-                    android:id="@+id/BestSellerText"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:background="#FCDDEF"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="SẢN PHẨM NỔI BẬT"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/banner" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_RecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/BestSellerText" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/home_RecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/BestSellerText" />
-
-                <Button
-                    android:id="@+id/viewListButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/viewListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
 
-                    android:text="Xem thêm"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/home_RecyclerView" />
+                android:text="Xem thêm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_RecyclerView" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <LinearLayout
