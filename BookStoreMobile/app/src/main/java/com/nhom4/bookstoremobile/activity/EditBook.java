@@ -3,10 +3,7 @@ package com.nhom4.bookstoremobile.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -20,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -28,8 +24,6 @@ import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -81,7 +75,7 @@ public class EditBook extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editBook();
+                editBookByAPI();
             }
         });
 
@@ -113,7 +107,7 @@ public class EditBook extends AppCompatActivity {
         }
     }
 
-    private void editBook() {
+    private void editBookByAPI() {
         if(selectedImage == null) {
             Toast.makeText(this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
             return;
@@ -136,10 +130,10 @@ public class EditBook extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         Toast.makeText(EditBook.this, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-                        clearFields();
                         Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
                         intent.putExtra("book_id", current_Book.getId());
                         startActivity(intent);
+                        finish();
                     }
                 } else {
                     Toast.makeText(EditBook.this, "Chỉnh sửa thất bại", Toast.LENGTH_SHORT).show();
@@ -167,28 +161,6 @@ public class EditBook extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private void clearFields() {
-        EditText nameEditText = findViewById(R.id.add_name);
-        EditText priceEditText = findViewById(R.id.add_price);
-        EditText authorEditText = findViewById(R.id.add_author);
-        EditText publisherEditText = findViewById(R.id.add_publisher);
-        EditText weightEditText = findViewById(R.id.add_weight);
-        EditText sizeEditText = findViewById(R.id.add_size);
-        EditText stockEditText = findViewById(R.id.add_stock);
-        EditText introductionEditText = findViewById(R.id.add_introduction);
-
-        nameEditText.setText("");
-        priceEditText.setText("");
-        authorEditText.setText("");
-        publisherEditText.setText("");
-        weightEditText.setText("");
-        sizeEditText.setText("");
-        stockEditText.setText("");
-        introductionEditText.setText("");
-
-        addBookImage.setImageResource(R.drawable.imagenotavailable);
     }
 
     void setBookData(Book book) {

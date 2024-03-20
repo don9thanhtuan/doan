@@ -34,22 +34,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
         RecyclerView recyclerView = findViewById(R.id.home_RecyclerView);
+        getTopSellingFromAPI(recyclerView);
+    }
 
-        Retrofit retrofit = RetrofitAPI.getInstance();
-        BookService bookService = retrofit.create(BookService.class);
-
+    private void getTopSellingFromAPI(RecyclerView recyclerView) {
+        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<List<Book>> call = bookService.getBookTopSellingFromRestAPI();
-
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
@@ -69,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Book>> call, Throwable t) {
-
-            }
+            public void onFailure(Call<List<Book>> call, Throwable t) {}
         });
     }
 }

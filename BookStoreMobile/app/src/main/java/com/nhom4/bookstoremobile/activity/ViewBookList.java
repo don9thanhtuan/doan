@@ -23,7 +23,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ViewBookList extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,19 +36,21 @@ public class ViewBookList extends AppCompatActivity {
                 finish();
             }
         });
-
         findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewBookList.this, AddBook.class);
                 startActivity(intent);
+                finish();
             }
         });
 
         RecyclerView recyclerView = findViewById(R.id.list_RecyclerView);
+        getBookListFromAPI(recyclerView);
+    }
 
-        Retrofit retrofit = RetrofitAPI.getInstance();
-        BookService bookService = retrofit.create(BookService.class);
+    private void getBookListFromAPI(RecyclerView recyclerView) {
+        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<List<Book>> call = bookService.getBookFromRestAPI();
 
         call.enqueue(new Callback<List<Book>>() {
@@ -67,7 +68,6 @@ public class ViewBookList extends AppCompatActivity {
                     BookAdapter adapter = new BookAdapter(ViewBookList.this, bookList, recyclerView);
                     recyclerView.setLayoutManager(new GridLayoutManager(ViewBookList.this, 2));
                     recyclerView.setAdapter(adapter);
-
                 }
             }
 
