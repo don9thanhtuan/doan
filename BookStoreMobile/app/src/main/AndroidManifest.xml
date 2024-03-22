@@ -34,6 +34,7 @@
         <activity android:name=".activity.AddBook" />
         <activity android:name=".activity.ViewBookDetails" />
         <activity android:name=".activity.EditBook" />
+        <activity android:name=".activity.ViewCart" />
     </application>
 
 </manifest>

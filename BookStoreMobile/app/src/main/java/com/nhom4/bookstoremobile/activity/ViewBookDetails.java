@@ -13,10 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -32,6 +30,7 @@ import retrofit2.Response;
 
 public class ViewBookDetails extends AppCompatActivity {
     private Book book;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,14 +71,14 @@ public class ViewBookDetails extends AppCompatActivity {
             }
         });
 
-        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                recreate();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+//        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                recreate();
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
 
         getBookDetailFromAPI(id);
         getBookListFromAPI();
@@ -102,7 +101,6 @@ public class ViewBookDetails extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void getBookListFromAPI() {

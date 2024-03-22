@@ -108,12 +108,12 @@ public class EditBook extends AppCompatActivity {
     }
 
     private void editBookByAPI() {
-        if(selectedImage == null) {
+        if (selectedImage == null) {
             Toast.makeText(this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
         Book newBook = new ExceptionHandler().handleException(this);
-        if(newBook == null) {
+        if (newBook == null) {
             return;
         }
         newBook.setId(current_Book.getId());

@@ -89,11 +89,12 @@ public class BookDAOImpl implements BookDAO{
     
     @Override
     public void updateSoldQuantity(String id, int daBan) {
-        String sql = "UPDATE Sach SET DaBan = ? WHERE ID = ?";
-
+        String sql = "UPDATE Sach SET DaBan = ?, TonKho = ? WHERE ID = ?";
+        Book book = getBook(id);
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, daBan);
-            statement.setString(2, id);
+            statement.setInt(2, book.getTonKho() - daBan);
+            statement.setString(3, id);
 
             statement.executeUpdate();
         }catch (SQLException e) {

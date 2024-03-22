@@ -94,6 +94,7 @@ public class BookServiceImpl implements BookService{
         String absolutePath = fullPath.toAbsolutePath().toString();
 
         File fileToDelete = new File(absolutePath);
+        System.out.println(fileToDelete.getName());
         fileToDelete.delete();
     }
 }

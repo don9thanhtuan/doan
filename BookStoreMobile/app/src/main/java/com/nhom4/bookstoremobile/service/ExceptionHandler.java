@@ -1,17 +1,12 @@
 package com.nhom4.bookstoremobile.service;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Rect;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
-
-import okhttp3.MultipartBody;
 
 public class ExceptionHandler {
     public Book handleException(Activity activity) {
