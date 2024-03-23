@@ -33,6 +33,7 @@ public class ViewBookList extends AppCompatActivity {
                 Intent intent = new Intent(ViewBookList.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             }
         });
         findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {

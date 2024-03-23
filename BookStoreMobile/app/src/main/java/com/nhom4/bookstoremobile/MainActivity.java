@@ -32,20 +32,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ViewBookList.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
         });
+
         findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recreate();
             }
         });
+
         findViewById(R.id.top_cartBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 redirectToCart();
             }
         });
+
         findViewById(R.id.bottom_cartBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private void redirectToCart() {
         Intent intent = new Intent(MainActivity.this, ViewCart.class);
         startActivity(intent);
-        finish();
     }
 
     private void getTopSellingFromAPI(RecyclerView recyclerView) {

@@ -54,4 +54,19 @@ public class CartDB extends SQLiteOpenHelper {
         db.delete("cart", "bookID=?", new String[]{bookID});
         db.close();
     }
+
+    public void deleteAllCartItems() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("cart", null, null);
+        db.close();
+    }
+
+    public Cursor findCartItem(String bookID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {"bookID", "quantity"};
+        String selection = "bookID=?";
+        String[] selectionArgs = {bookID};
+        return db.query("cart", projection, selection, selectionArgs, null, null, null);
+    }
+
 }

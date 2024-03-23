@@ -4,8 +4,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +27,7 @@ import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
+import com.nhom4.bookstoremobile.sqlite.CartDB;
 
 import java.util.List;
 
@@ -30,12 +38,13 @@ import retrofit2.Response;
 
 public class ViewBookDetails extends AppCompatActivity {
     private Book book;
+    private View addCart_Layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
-
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         String id = getIntent().getStringExtra("book_id");
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -44,6 +53,7 @@ public class ViewBookDetails extends AppCompatActivity {
                 Intent intent = new Intent(ViewBookDetails.this, ViewBookList.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             }
         });
         findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
@@ -71,14 +81,78 @@ public class ViewBookDetails extends AppCompatActivity {
             }
         });
 
-//        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                recreate();
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
-//        });
+        findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = getLayoutInflater();
+                addCart_Layout = inflater.inflate(R.layout.main_add_cart_item_layout, null);
+                FrameLayout layoutContainer = findViewById(R.id.addCart_Layout);
+                layoutContainer.addView(addCart_Layout);
+
+                addCart_Layout.setClickable(true);
+                addCart_Layout.setFocusable(true);
+                findViewById(R.id.overlayLayout).setVisibility(View.VISIBLE);
+                addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        closeAddCart();
+                    }
+                });
+                addCart_Layout.findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText quantityEditText = findViewById(R.id.quantity_EditText);
+                        String quantityRaw = quantityEditText.getText().toString();
+                        int quantity = Integer.parseInt(quantityRaw);
+                        addItemToCart(id, quantity);
+                        Toast.makeText(ViewBookDetails.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                        closeAddCart();
+                    }
+                });
+
+                addCart_Layout.findViewById(R.id.plusBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText quantity_EditText = findViewById(R.id.quantity_EditText);
+                        String quantityRaw = quantity_EditText.getText().toString();
+                        int quantity = Integer.parseInt(quantityRaw) + 1;
+
+                        if (book.getTonKho() < quantity) {
+                            Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                        } else {
+                            quantity_EditText.setText(String.valueOf(quantity));
+                        }
+                    }
+                });
+
+                addCart_Layout.findViewById(R.id.minusBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText quantity_EditText = findViewById(R.id.quantity_EditText);
+                        String quantityRaw = quantity_EditText.getText().toString();
+                        int quantity = Integer.parseInt(quantityRaw) - 1;
+
+                        if (quantity <= 0) {
+                            Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+                        } else {
+                            quantity_EditText.setText(String.valueOf(quantity));
+                        }
+                    }
+                });
+                setDataToAddCart();
+
+                Animation slideUpAnimation = AnimationUtils.loadAnimation(ViewBookDetails.this, R.anim.slide_up);
+                addCart_Layout.startAnimation(slideUpAnimation);
+            }
+        });
+
+        findViewById(R.id.overlayLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                closeAddCart();
+                return false;
+            }
+        });
 
         getBookDetailFromAPI(id);
         getBookListFromAPI();
@@ -98,7 +172,6 @@ public class ViewBookDetails extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Book> call, Throwable t) {
-
             }
         });
     }
@@ -203,8 +276,51 @@ public class ViewBookDetails extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(ViewBookDetails.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void closeAddCart() {
+        FrameLayout layoutContainer = findViewById(R.id.addCart_Layout);
+
+        findViewById(R.id.overlayLayout).setVisibility(View.GONE);
+        addCart_Layout.setClickable(false);
+        addCart_Layout.setFocusable(false);
+        Animation slideDownAnimation = AnimationUtils.loadAnimation(ViewBookDetails.this, R.anim.slide_down);
+        addCart_Layout.startAnimation(slideDownAnimation);
+        layoutContainer.removeAllViewsInLayout();
+    }
+
+    private void addItemToCart(String id, int quantity) {
+        CartDB cartDB = new CartDB(ViewBookDetails.this);
+        Cursor cursor = cartDB.findCartItem(id);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int current_Quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+
+                cartDB.updateQuantityItem(id, current_Quantity + quantity);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        } else {
+            cartDB.addToCart(id, quantity);
+        }
+    }
+
+    private void setDataToAddCart() {
+        ImageView imageView = addCart_Layout.findViewById(R.id.imageView);
+        TextView nameTextView = addCart_Layout.findViewById(R.id.name_TxtView);
+        TextView authorTextView = addCart_Layout.findViewById(R.id.author_TxtView);
+        TextView priceTextView = addCart_Layout.findViewById(R.id.price_TxtView);
+
+
+        Glide.with(this)
+                .load("http://10.0.2.2:8080" + book.getHinhAnh())
+                .into(imageView);
+
+        nameTextView.setText(book.getTen());
+        authorTextView.setText(book.getTacGia());
+        priceTextView.setText(book.getGia());
     }
 }

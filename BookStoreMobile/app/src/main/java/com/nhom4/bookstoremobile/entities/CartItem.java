@@ -1,10 +1,13 @@
 package com.nhom4.bookstoremobile.entities;
 
 public class CartItem {
+    private boolean isCheck;
     private String bookID;
     private int quantity;
     private Book book;
-    public CartItem() {}
+
+    public CartItem() {
+    }
 
     public CartItem(String bookID, int quantity) {
         this.bookID = bookID;
@@ -33,5 +36,13 @@ public class CartItem {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 }
