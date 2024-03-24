@@ -46,6 +46,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_page_book_layout, parent, false);
         view.setOnClickListener(mOnClickListener);
 
+        // here we override the inflated view's height to be half the recyclerview size
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        layoutParams.width = (parent.getWidth() / 2) - layoutParams.leftMargin - layoutParams.rightMargin;
+        view.setLayoutParams(layoutParams);
+
         return new ViewHolder(view);
     }
 

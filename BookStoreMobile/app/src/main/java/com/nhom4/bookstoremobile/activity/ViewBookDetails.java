@@ -1,12 +1,8 @@
 package com.nhom4.bookstoremobile.activity;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,11 +23,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.Target;
-import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.sqlite.CartDB;
@@ -119,6 +114,8 @@ public class ViewBookDetails extends AppCompatActivity {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
                     book = response.body();
+                    String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
+                    book.setHinhAnh(imageUrl);
                     setData(book);
                 }
             }
@@ -144,10 +141,8 @@ public class ViewBookDetails extends AppCompatActivity {
                         }
                     }
                     for (Book book : bookList) {
-                        String imageUrl = book.getHinhAnh();
-                        if (imageUrl != null && !imageUrl.isEmpty()) {
-                            book.setHinhAnh("http://10.0.2.2:8080" + imageUrl);
-                        }
+                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
+                        book.setHinhAnh(imageUrl);
                     }
 
                     RecyclerView recyclerView = findViewById(R.id.detail_RecyclerView);
@@ -176,9 +171,8 @@ public class ViewBookDetails extends AppCompatActivity {
         TextView sizeTextView = findViewById(R.id.size_TxtView);
         TextView introductionTextView = findViewById(R.id.introduction_TxtView);
 
-        String imageUrl = "http://10.0.2.2:8080" + book.getHinhAnh();
         Glide.with(this)
-                .load(imageUrl)
+                .load(book.getHinhAnh())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()
@@ -251,7 +245,7 @@ public class ViewBookDetails extends AppCompatActivity {
 
 
         Glide.with(this)
-                .load("http://10.0.2.2:8080" + book.getHinhAnh())
+                .load(book.getHinhAnh())
                 .into(imageView);
 
         nameTextView.setText(book.getTen());

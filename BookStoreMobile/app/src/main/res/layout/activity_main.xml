@@ -11,55 +11,73 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#F0F0F0"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/search_text"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:background="@color/white"
-                android:focusable="false"
-                android:hint="Nhập từ khóa tìm kiếm..."
-                android:inputType="text"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/banner"
-                app:layout_constraintEnd_toStartOf="@+id/top_cartBtn"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <ImageButton
-                android:id="@+id/top_cartBtn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/white"
-                android:contentDescription="cart"
-                android:padding="5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_cart"
-                app:layout_constraintBottom_toTopOf="@+id/banner"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/topLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/search_text"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:focusable="false"
+                    android:hint="Nhập từ khóa tìm kiếm..."
+                    android:inputType="text"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/top_cartBtn"
+                    app:layout_constraintStart_toEndOf="@+id/logo"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/top_cartBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@color/white"
+                    android:contentDescription="cart"
+                    android:padding="3dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_cart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="8dp"
                 android:contentDescription="banner"
                 android:src="@drawable/banner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_text" />
+                app:layout_constraintTop_toBottomOf="@+id/topLayout" />
 
             <TextView
                 android:id="@+id/BestSellerText"
@@ -92,6 +110,7 @@
 
                 android:layout_marginTop="8dp"
                 android:text="Xem thêm"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_RecyclerView" />
@@ -102,9 +121,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
+        android:paddingVertical="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -113,9 +133,7 @@
             android:id="@+id/homeBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginStart="24dp"
             android:background="#00FFFFFF"
             android:contentDescription="home"
             android:src="@drawable/home"
@@ -127,8 +145,6 @@
             android:id="@+id/bottom_cartBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:background="#00FFFFFF"
             android:contentDescription="cart"
             android:src="@drawable/ic_cart"
@@ -141,9 +157,7 @@
             android:id="@+id/accountBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="24dp"
             android:background="#00FFFFFF"
             android:src="@drawable/avatar"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
@@ -50,7 +51,7 @@ public class EditBook extends AppCompatActivity {
 
         String book_ID = getIntent().getStringExtra("book_id");
         String book_Name = getIntent().getStringExtra("book_name");
-        String book_HinhAnh = getIntent().getStringExtra("book_HinhAnh");
+        String book_HinhAnh = DefaultURL.getUrl() + getIntent().getStringExtra("book_HinhAnh");
         String book_TacGia = getIntent().getStringExtra("book_TacGia");
         String book_NhaCungCap = getIntent().getStringExtra("book_NhaCungCap");
         int book_TonKho = getIntent().getIntExtra("book_TonKho", 0);
@@ -174,7 +175,7 @@ public class EditBook extends AppCompatActivity {
         EditText introductionEditText = findViewById(R.id.add_introduction);
 
         Glide.with(this)
-                .load("http://10.0.2.2:8080" + book.getHinhAnh())
+                .load(book.getHinhAnh())
                 .into(imagePreview);
 
         nameEditText.setText(book.getTen());

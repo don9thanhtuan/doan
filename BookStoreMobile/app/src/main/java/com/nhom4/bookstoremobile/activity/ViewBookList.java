@@ -1,6 +1,5 @@
 package com.nhom4.bookstoremobile.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 
@@ -49,10 +48,8 @@ public class ViewBookList extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<Book> bookList = response.body();
                     for (Book book : bookList) {
-                        String imageUrl = book.getHinhAnh();
-                        if (imageUrl != null && !imageUrl.isEmpty()) {
-                            book.setHinhAnh("http://10.0.2.2:8080" + imageUrl);
-                        }
+                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
+                        book.setHinhAnh(imageUrl);
                     }
 
                     BookAdapter adapter = new BookAdapter(ViewBookList.this, bookList, recyclerView);

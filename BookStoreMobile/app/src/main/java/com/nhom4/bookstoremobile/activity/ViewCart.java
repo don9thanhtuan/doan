@@ -20,6 +20,7 @@ import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.CartItemAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
+import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.sqlite.CartDB;
@@ -40,36 +41,7 @@ public class ViewCart extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
-
-        findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewCart.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        CheckBox totalCheckBox = findViewById(R.id.totalCheckBox);
-        totalCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                adapter.checkAllCartItem(isChecked);
-            }
-        });
-
-        findViewById(R.id.deleteBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationPopup();
-            }
-        });
+        setListener();
 
         cartDB = new CartDB(this);
 
@@ -124,8 +96,8 @@ public class ViewCart extends AppCompatActivity {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
                     Book book = response.body();
-                    String imageUrl = book.getHinhAnh();
-                    book.setHinhAnh("http://10.0.2.2:8080" + imageUrl);
+                    String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
+                    book.setHinhAnh(imageUrl);
                     cartItem.setBook(book);
                     adapter.notifyDataSetChanged();
                 }
@@ -152,6 +124,47 @@ public class ViewCart extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 adapter.deleteCartItem();
+            }
+        });
+    }
+
+    private void setListener() {
+        findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewCart.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        CheckBox totalCheckBox = findViewById(R.id.totalCheckBox);
+        totalCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                adapter.checkAllCartItem(isChecked);
+            }
+        });
+
+        findViewById(R.id.deleteBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationPopup();
+            }
+        });
+
+        findViewById(R.id.accountBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewCart.this, ViewAccount.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

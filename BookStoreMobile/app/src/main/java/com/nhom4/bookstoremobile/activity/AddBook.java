@@ -85,7 +85,7 @@ public class AddBook extends AppCompatActivity {
     }
 
     private void addBook() {
-        if(selectedImage == null) {
+        if (selectedImage == null) {
             Rect rectangle = new Rect();
             Toast.makeText(this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
             imagePreview.requestFocus();
