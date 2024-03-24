@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,8 +23,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.Target;
+import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -50,37 +57,17 @@ public class ViewBookDetails extends AppCompatActivity {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewBookDetails.this, ViewBookList.class);
-                startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             }
         });
-        findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.cartBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewBookDetails.this, EditBook.class);
-                intent.putExtra("book_id", book.getId());
-                intent.putExtra("book_name", book.getTen());
-                intent.putExtra("book_HinhAnh", book.getHinhAnh());
-                intent.putExtra("book_TacGia", book.getTacGia());
-                intent.putExtra("book_NhaCungCap", book.getNhaCungCap());
-                intent.putExtra("book_TonKho", book.getTonKho());
-                intent.putExtra("book_Gia", book.getGia());
-                intent.putExtra("book_TrongLuong", book.getTrongLuong());
-                intent.putExtra("book_KickThuoc", book.getKichThuoc());
-                intent.putExtra("book_GioiThieu", book.getGioiThieu());
+                Intent intent = new Intent(ViewBookDetails.this, ViewCart.class);
                 startActivity(intent);
-                finish();
             }
         });
-        findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationPopup();
-            }
-        });
-
         findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,54 +79,11 @@ public class ViewBookDetails extends AppCompatActivity {
                 addCart_Layout.setClickable(true);
                 addCart_Layout.setFocusable(true);
                 findViewById(R.id.overlayLayout).setVisibility(View.VISIBLE);
-                addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        closeAddCart();
-                    }
-                });
-                addCart_Layout.findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditText quantityEditText = findViewById(R.id.quantity_EditText);
-                        String quantityRaw = quantityEditText.getText().toString();
-                        int quantity = Integer.parseInt(quantityRaw);
-                        addItemToCart(id, quantity);
-                        Toast.makeText(ViewBookDetails.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
-                        closeAddCart();
-                    }
-                });
 
-                addCart_Layout.findViewById(R.id.plusBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditText quantity_EditText = findViewById(R.id.quantity_EditText);
-                        String quantityRaw = quantity_EditText.getText().toString();
-                        int quantity = Integer.parseInt(quantityRaw) + 1;
-
-                        if (book.getTonKho() < quantity) {
-                            Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                        } else {
-                            quantity_EditText.setText(String.valueOf(quantity));
-                        }
-                    }
-                });
-
-                addCart_Layout.findViewById(R.id.minusBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditText quantity_EditText = findViewById(R.id.quantity_EditText);
-                        String quantityRaw = quantity_EditText.getText().toString();
-                        int quantity = Integer.parseInt(quantityRaw) - 1;
-
-                        if (quantity <= 0) {
-                            Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
-                        } else {
-                            quantity_EditText.setText(String.valueOf(quantity));
-                        }
-                    }
-                });
                 setDataToAddCart();
+
+                handlerExcreption(addCart_Layout);
+
 
                 Animation slideUpAnimation = AnimationUtils.loadAnimation(ViewBookDetails.this, R.anim.slide_up);
                 addCart_Layout.startAnimation(slideUpAnimation);
@@ -151,6 +95,15 @@ public class ViewBookDetails extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 closeAddCart();
                 return false;
+            }
+        });
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                recreate();
+                pullToRefresh.setRefreshing(false);
             }
         });
 
@@ -223,8 +176,12 @@ public class ViewBookDetails extends AppCompatActivity {
         TextView sizeTextView = findViewById(R.id.size_TxtView);
         TextView introductionTextView = findViewById(R.id.introduction_TxtView);
 
+        String imageUrl = "http://10.0.2.2:8080" + book.getHinhAnh();
         Glide.with(this)
-                .load("http://10.0.2.2:8080" + book.getHinhAnh())
+                .load(imageUrl)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .fitCenter()
                 .into(bookImage);
 
         nameTextView.setText(book.getTen());
@@ -238,26 +195,6 @@ public class ViewBookDetails extends AppCompatActivity {
         introductionTextView.setText(book.getGioiThieu());
     }
 
-    private void showConfirmationPopup(Context context, String title, String message, DialogInterface.OnClickListener positiveClickListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK", positiveClickListener)
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    private void showConfirmationPopup() {
-        TextView idTextView = findViewById(R.id.id_TxtView);
-        String id = idTextView.getText().toString();
-        showConfirmationPopup(this, "Xác nhận", "Bạn muốn xóa sản phẩm " + id + "?", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteBookByAPi();
-            }
-        });
-    }
-
     private void deleteBookByAPi() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<ResponseBody> call = bookService.deleteBook(book.getId());
@@ -266,8 +203,6 @@ public class ViewBookDetails extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ViewBookDetails.this, "Xóa thành công sản phẩm " + book.getId(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ViewBookDetails.this, ViewBookList.class);
-                    startActivity(intent);
                     finish();
                 } else {
                     Toast.makeText(ViewBookDetails.this, "Failed to delete book", Toast.LENGTH_SHORT).show();
@@ -322,5 +257,80 @@ public class ViewBookDetails extends AppCompatActivity {
         nameTextView.setText(book.getTen());
         authorTextView.setText(book.getTacGia());
         priceTextView.setText(book.getGia());
+    }
+
+    private void handlerExcreption(View addCart_Layout) {
+        EditText quantity_EditText = addCart_Layout.findViewById(R.id.quantity_EditText);
+
+        addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAddCart();
+            }
+        });
+        addCart_Layout.findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String quantityRaw = quantity_EditText.getText().toString();
+                int quantity = Integer.parseInt(quantityRaw);
+                addItemToCart(book.getId(), quantity);
+                Toast.makeText(ViewBookDetails.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                closeAddCart();
+            }
+        });
+        quantity_EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String quantityRaw = s.toString();
+                int quantity = 0;
+                if (!quantityRaw.isEmpty()) {
+                    quantity = Integer.parseInt(quantityRaw);
+                }
+
+                if (quantity <= 0) {
+                    Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+                    quantity_EditText.setText("1");
+                } else if (book.getTonKho() < quantity) {
+                    Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                    quantity_EditText.setText(String.valueOf(book.getTonKho()));
+                }
+            }
+        });
+
+        addCart_Layout.findViewById(R.id.plusBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String quantityRaw = quantity_EditText.getText().toString();
+                int quantity = Integer.parseInt(quantityRaw) + 1;
+
+                if (book.getTonKho() < quantity) {
+                    Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                } else {
+                    quantity_EditText.setText(String.valueOf(quantity));
+                }
+            }
+        });
+
+        addCart_Layout.findViewById(R.id.minusBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String quantityRaw = quantity_EditText.getText().toString();
+                int quantity = Integer.parseInt(quantityRaw) - 1;
+
+                if (quantity <= 0) {
+                    Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+                } else {
+                    quantity_EditText.setText(String.valueOf(quantity));
+                }
+            }
+        });
     }
 }

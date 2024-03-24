@@ -37,7 +37,7 @@ import retrofit2.Response;
 public class EditBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     boolean changeImage = false;
-    ImageView addBookImage;
+    ImageView imagePreview;
     Uri selectedImage;
     Book current_Book;
 
@@ -45,7 +45,7 @@ public class EditBook extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
-        TextView addBook = findViewById(R.id.addBook);
+        TextView addBook = findViewById(R.id.titleTxtView);
         addBook.setText("Chỉnh sửa sản phẩm");
 
         String book_ID = getIntent().getStringExtra("book_id");
@@ -61,9 +61,9 @@ public class EditBook extends AppCompatActivity {
 
         current_Book = new Book(book_ID, book_Name, book_HinhAnh, book_TacGia, book_NhaCungCap, book_TonKho, book_GiaR, book_TrongLuong, book_KickThuoc, book_GioiThieu);
 
-        addBookImage = findViewById(R.id.addBookImage);
+        imagePreview = findViewById(R.id.imagePreview);
 
-        findViewById(R.id.addBookImageButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.addImageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -99,7 +99,7 @@ public class EditBook extends AppCompatActivity {
             try {
                 InputStream inputStream = getContentResolver().openInputStream(selectedImage);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                addBookImage.setImageBitmap(bitmap);
+                imagePreview.setImageBitmap(bitmap);
                 changeImage = true;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -175,7 +175,7 @@ public class EditBook extends AppCompatActivity {
 
         Glide.with(this)
                 .load("http://10.0.2.2:8080" + book.getHinhAnh())
-                .into(addBookImage);
+                .into(imagePreview);
 
         nameEditText.setText(book.getTen());
 

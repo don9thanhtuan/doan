@@ -3,6 +3,7 @@ package com.nhom4.bookstoremobile.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.CartItemAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -40,6 +42,14 @@ public class ViewCart extends AppCompatActivity {
         setContentView(R.layout.activity_view_cart);
 
         findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewCart.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

@@ -1,0 +1,44 @@
+findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookDetails.this, EditBook.class);
+                intent.putExtra("book_id", book.getId());
+                intent.putExtra("book_name", book.getTen());
+                intent.putExtra("book_HinhAnh", book.getHinhAnh());
+                intent.putExtra("book_TacGia", book.getTacGia());
+                intent.putExtra("book_NhaCungCap", book.getNhaCungCap());
+                intent.putExtra("book_TonKho", book.getTonKho());
+                intent.putExtra("book_Gia", book.getGia());
+                intent.putExtra("book_TrongLuong", book.getTrongLuong());
+                intent.putExtra("book_KickThuoc", book.getKichThuoc());
+                intent.putExtra("book_GioiThieu", book.getGioiThieu());
+                startActivity(intent);
+                finish();
+            }
+        });
+        findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationPopup();
+            }
+        });
+
+        private void showConfirmationPopup(Context context, String title, String message, DialogInterface.OnClickListener positiveClickListener) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(title)
+                        .setMessage(message)
+                        .setPositiveButton("OK", positiveClickListener)
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+
+            private void showConfirmationPopup() {
+                TextView idTextView = findViewById(R.id.id_TxtView);
+                String id = idTextView.getText().toString();
+                showConfirmationPopup(this, "Xác nhận", "Bạn muốn xóa sản phẩm " + id + "?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteBookByAPi();
+                    }
+                });
+            }

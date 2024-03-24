@@ -28,7 +28,7 @@ public class AddBookController {
         
         String id = IDGenerator.IDBook();
         while (true) {
-            if(bookService.search(id) == null) {
+            if(bookService.search(id).size() == 0) {
                 break;
             } else{
                 id = IDGenerator.IDBook();

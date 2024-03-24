@@ -3,6 +3,7 @@ package com.nhom4.bookstoremobile.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.BookResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
+import com.nhom4.bookstoremobile.service.ExceptionHandler;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -33,7 +35,7 @@ import retrofit2.Response;
 
 public class AddBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
-    ImageView addBookImage;
+    ImageView imagePreview;
     Uri selectedImage;
 
     @Override
@@ -42,9 +44,9 @@ public class AddBook extends AppCompatActivity {
         setContentView(R.layout.activity_add_book);
 
 
-        addBookImage = findViewById(R.id.addBookImage);
+        imagePreview = findViewById(R.id.imagePreview);
 
-        findViewById(R.id.addBookImageButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.addImageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -62,8 +64,6 @@ public class AddBook extends AppCompatActivity {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddBook.this, ViewBookList.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -77,7 +77,7 @@ public class AddBook extends AppCompatActivity {
             try {
                 InputStream inputStream = getContentResolver().openInputStream(selectedImage);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                addBookImage.setImageBitmap(bitmap);
+                imagePreview.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -85,43 +85,18 @@ public class AddBook extends AppCompatActivity {
     }
 
     private void addBook() {
-        EditText nameEditText = findViewById(R.id.add_name);
-        EditText priceEditText = findViewById(R.id.add_price);
-        EditText authorEditText = findViewById(R.id.add_author);
-        EditText publisherEditText = findViewById(R.id.add_publisher);
-        EditText weightEditText = findViewById(R.id.add_weight);
-        EditText sizeEditText = findViewById(R.id.add_size);
-        EditText stockEditText = findViewById(R.id.add_stock);
-        EditText introductionEditText = findViewById(R.id.add_introduction);
-
-        String name = nameEditText.getText().toString();
-        String price = priceEditText.getText().toString();
-        String author = authorEditText.getText().toString();
-        String publisher = publisherEditText.getText().toString();
-        String weight = weightEditText.getText().toString();
-        String size = sizeEditText.getText().toString();
-        String stock = stockEditText.getText().toString();
-        String introduction = introductionEditText.getText().toString();
-
-        if (name.isEmpty() || price.isEmpty() || author.isEmpty() || publisher.isEmpty() || weight.isEmpty() ||
-                size.isEmpty() || stock.isEmpty() || introduction.isEmpty() || selectedImage == null) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin và chọn hình ảnh", Toast.LENGTH_SHORT).show();
+        if(selectedImage == null) {
+            Rect rectangle = new Rect();
+            Toast.makeText(this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
+            imagePreview.requestFocus();
+            imagePreview.getGlobalVisibleRect(rectangle);
+            imagePreview.requestRectangleOnScreen(rectangle);
             return;
         }
 
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
-        Book newBook = new Book();
-
-        newBook.setTen(name);
-        newBook.setGia(price);
-        newBook.setTacGia(author);
-        newBook.setNhaCungCap(publisher);
-        newBook.setTrongLuong(Double.parseDouble(weight));
-        newBook.setKichThuoc(size);
-        newBook.setTonKho(Integer.parseInt(stock));
-        newBook.setGioiThieu(introduction);
-
+        Book newBook = new ExceptionHandler().handleException(this);
         RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
@@ -138,6 +113,7 @@ public class AddBook extends AppCompatActivity {
                         Intent intent = new Intent(AddBook.this, ViewBookDetails.class);
                         intent.putExtra("book_id", bookResponse.getBookID());
                         startActivity(intent);
+                        finish();
                     }
                 } else {
                     Toast.makeText(AddBook.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
@@ -183,6 +159,6 @@ public class AddBook extends AppCompatActivity {
         stockEditText.setText("");
         introductionEditText.setText("");
 
-        addBookImage.setImageResource(R.drawable.imagenotavailable);
+        imagePreview.setImageResource(R.drawable.imagenotavailable);
     }
 }

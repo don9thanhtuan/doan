@@ -30,18 +30,8 @@ public class ViewBookList extends AppCompatActivity {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewBookList.this, MainActivity.class);
-                startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            }
-        });
-        findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewBookList.this, AddBook.class);
-                startActivity(intent);
-                finish();
             }
         });
 

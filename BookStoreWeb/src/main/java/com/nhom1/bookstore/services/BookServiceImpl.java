@@ -46,6 +46,8 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void deleteBook(String id) {
+        Book currentBook = bookDAOController.getBook(id);
+        deleteImage(currentBook.getHinhAnh());
         bookDAOController.deleteBook(id);
     }
 

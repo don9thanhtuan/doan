@@ -270,7 +270,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    public void updateCartItem() {
+    public void updateTotal() {
         getTotalQuantity();
         getTotalPrice();
     }

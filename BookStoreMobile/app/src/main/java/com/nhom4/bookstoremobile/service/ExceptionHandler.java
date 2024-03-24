@@ -66,10 +66,15 @@ public class ExceptionHandler {
         newBook.setGia(price);
         newBook.setTacGia(author);
         newBook.setNhaCungCap(publisher);
-        newBook.setTrongLuong(Double.parseDouble(weight));
         newBook.setKichThuoc(size);
-        newBook.setTonKho(Integer.parseInt(stock));
         newBook.setGioiThieu(introduction);
+
+        if (weight != null) {
+            newBook.setTrongLuong(Double.parseDouble(weight));
+        }
+        if (stock != null) {
+            newBook.setTonKho(Integer.parseInt(stock));
+        }
 
         return newBook;
     }
