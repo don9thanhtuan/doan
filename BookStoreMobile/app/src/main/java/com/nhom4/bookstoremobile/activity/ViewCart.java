@@ -36,11 +36,12 @@ public class ViewCart extends AppCompatActivity {
     private final List<CartItem> cart = new ArrayList<>();
     private CartDB cartDB;
     private CartItemAdapter adapter;
-
+    private CheckBox totalCheckBox;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
+        totalCheckBox = findViewById(R.id.totalCheckBox);
         setListener();
 
         cartDB = new CartDB(this);
@@ -61,7 +62,7 @@ public class ViewCart extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.cartItemList);
         adapter = new CartItemAdapter(this, cart, recyclerView);
-
+        adapter.setTotalCheckBox(totalCheckBox);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
 
@@ -124,6 +125,7 @@ public class ViewCart extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 adapter.deleteCartItem();
+                totalCheckBox.setChecked(false);
             }
         });
     }
@@ -144,7 +146,6 @@ public class ViewCart extends AppCompatActivity {
             }
         });
 
-        CheckBox totalCheckBox = findViewById(R.id.totalCheckBox);
         totalCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

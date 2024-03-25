@@ -23,6 +23,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private final Context context;
     private final List<Book> bookList;
     private final RecyclerView mRecyclerView;
+    private final boolean setWidth;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -38,6 +39,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         this.context = context;
         this.bookList = bookList;
         mRecyclerView = recyclerView;
+        this.setWidth = true;
+    }
+
+    public BookAdapter(Context context, List<Book> bookList, RecyclerView recyclerView, boolean setWidth) {
+        this.context = context;
+        this.bookList = bookList;
+        mRecyclerView = recyclerView;
+        this.setWidth = setWidth;
     }
 
     @NonNull
@@ -46,10 +55,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_page_book_layout, parent, false);
         view.setOnClickListener(mOnClickListener);
 
-        // here we override the inflated view's height to be half the recyclerview size
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        layoutParams.width = (parent.getWidth() / 2) - layoutParams.leftMargin - layoutParams.rightMargin;
-        view.setLayoutParams(layoutParams);
+        if(setWidth) {
+            setWidth(view);
+        }
 
         return new ViewHolder(view);
     }
@@ -91,5 +99,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             list_Sold = itemView.findViewById(R.id.list_Sold);
 
         }
+    }
+
+    private void setWidth(View view) {
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        layoutParams.width = 600;
+        view.setLayoutParams(layoutParams);
     }
 }

@@ -134,12 +134,15 @@ public class ViewBookDetails extends AppCompatActivity {
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful()) {
                     List<Book> bookList = response.body();
-                    for (Book bookInList : bookList) {
-                        if (bookInList.getId().equals(book.getId())) {
-                            bookList.remove(bookInList);
-                            break;
+                    if(book != null) {
+                        for (Book bookInList : bookList) {
+                            if (bookInList.getId().equals(book.getId())) {
+                                bookList.remove(bookInList);
+                                break;
+                            }
                         }
                     }
+
                     for (Book book : bookList) {
                         String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
                         book.setHinhAnh(imageUrl);

@@ -52,7 +52,7 @@ public class ViewBookList extends AppCompatActivity {
                         book.setHinhAnh(imageUrl);
                     }
 
-                    BookAdapter adapter = new BookAdapter(ViewBookList.this, bookList, recyclerView);
+                    BookAdapter adapter = new BookAdapter(ViewBookList.this, bookList, recyclerView, false);
                     recyclerView.setLayoutManager(new GridLayoutManager(ViewBookList.this, 2));
                     recyclerView.setAdapter(adapter);
                 }

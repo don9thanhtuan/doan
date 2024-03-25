@@ -38,6 +38,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     private List<Boolean> isChecked = new ArrayList<>();
     private Button paymentBtn;
     private TextView totalPriceTxtView;
+    private CheckBox totalCheckBox;
+
 
     public CartItemAdapter(Context context, List<CartItem> itemList, RecyclerView mRecyclerView) {
         this.context = context;
@@ -54,6 +56,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
 
     public void setTotalPriceTxtView(TextView totalPriceTxtView) {
         this.totalPriceTxtView = totalPriceTxtView;
+    }
+
+    public void setTotalCheckBox(CheckBox totalCheckBox) {
+        this.totalCheckBox = totalCheckBox;
     }
 
     @NonNull
@@ -80,6 +86,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         CartItem cartItem = itemList.get(position);
         Book book = cartItem.getBook();
 
+        holder.bookId = cartItem.getBookID();
+
         int quantity = cartItem.getQuantity();
         EditText quantity_EditText = holder.quantity_EditText;
         quantity_EditText.setText(String.valueOf(quantity));
@@ -90,94 +98,14 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             holder.price_TxtView.setText(book.getGia());
 
             Glide.with(context)
-                    .load(book.getHinhAnh())
-                    .into(holder.imageView);
-
-            quantity_EditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    String quantityRaw = s.toString();
-                    int quantity = 0;
-                    if (!quantityRaw.isEmpty()) {
-                        quantity = Integer.parseInt(quantityRaw);
-                    }
-
-                    if (quantity <= 0) {
-                        Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
-                        cartItem.setQuantity(1);
-                        addItemToCart(holder.bookId, 1);
-                    } else if (book.getTonKho() < quantity) {
-                        Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                        cartItem.setQuantity(book.getTonKho());
-                        addItemToCart(holder.bookId, book.getTonKho());
-                    }
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
-            });
-
+                 .load(book.getHinhAnh())
+                 .into(holder.imageView);
         }
-        holder.bookId = cartItem.getBookID();
-
-        holder.plusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw) + 1;
-
-                if (book.getTonKho() < quantity) {
-                    Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                } else {
-                    cartItem.setQuantity(quantity);
-                    addItemToCart(holder.bookId, quantity);
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
-            }
-        });
-        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw) - 1;
-
-                if (quantity <= 0) {
-                    Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
-                } else {
-                    cartItem.setQuantity(quantity);
-                    addItemToCart(holder.bookId, quantity);
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
-            }
-        });
 
         boolean isCheck = isChecked.get(position);
         holder.checkBox.setChecked(isCheck);
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isCheck) {
-                RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
 
-                int adapterPosition = holder.getAdapterPosition();
-                if (adapterPosition >= firstVisibleItemPosition && adapterPosition <= lastVisibleItemPosition) {
-                    isChecked.set(position, isCheck);
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
-            }
-        });
+        setListener(holder);
     }
 
     @Override
@@ -203,16 +131,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             cartDB.addToCart(id, quantity);
         }
         notifyDataSetChanged();
-    }
-
-    public int getTotalQuantityOfCheckedItems() {
-        int totalQuantity = 0;
-        for (int i = 0; i < itemList.size(); i++) {
-            if (isChecked.get(i)) {
-                totalQuantity += itemList.get(i).getQuantity();
-            }
-        }
-        return totalQuantity;
     }
 
     private void getTotalQuantity() {
@@ -267,6 +185,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             getTotalQuantity();
             getTotalPrice();
         }
+        for (int i = 0; i < itemList.size(); i++) {
+            isChecked.set(i, false);
+        }
+
         notifyDataSetChanged();
     }
 
@@ -297,5 +219,106 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             minusBtn = itemView.findViewById(R.id.minusBtn);
             checkBox = itemView.findViewById(R.id.checkBox);
         }
+    }
+
+    private void setListener(ViewHolder holder) {
+        int position = holder.getAdapterPosition();
+        CartItem cartItem = itemList.get(position);
+        Book book = cartItem.getBook();
+
+        EditText quantity_EditText = holder.quantity_EditText;
+        if(book != null) {
+            quantity_EditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String quantityRaw = s.toString();
+                    int quantity = 0;
+                    if (!quantityRaw.isEmpty()) {
+                        quantity = Integer.parseInt(quantityRaw);
+                    }
+
+                    if (quantity <= 0) {
+                        Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+                        cartItem.setQuantity(1);
+                        addItemToCart(holder.bookId, 1);
+                    } else if (book.getTonKho() < quantity) {
+                        Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                        cartItem.setQuantity(book.getTonKho());
+                        addItemToCart(holder.bookId, book.getTonKho());
+                    }
+                    getTotalQuantity();
+                    getTotalPrice();
+                }
+            });
+        }
+
+        holder.plusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String quantityRaw = quantity_EditText.getText().toString();
+                int quantity = Integer.parseInt(quantityRaw) + 1;
+
+                if (book.getTonKho() < quantity) {
+                    Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                } else {
+                    cartItem.setQuantity(quantity);
+                    addItemToCart(holder.bookId, quantity);
+                    getTotalQuantity();
+                    getTotalPrice();
+                }
+            }
+        });
+
+        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String quantityRaw = quantity_EditText.getText().toString();
+                int quantity = Integer.parseInt(quantityRaw) - 1;
+
+                if (quantity <= 0) {
+                    Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+                } else {
+                    cartItem.setQuantity(quantity);
+                    addItemToCart(holder.bookId, quantity);
+                    getTotalQuantity();
+                    getTotalPrice();
+                }
+            }
+        });
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isCheck) {
+                RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition >= firstVisibleItemPosition && adapterPosition <= lastVisibleItemPosition) {
+                    isChecked.set(position, isCheck);
+                    getTotalQuantity();
+                    getTotalPrice();
+                }
+                setCheckedTotal();
+            }
+        });
+    }
+
+    private void setCheckedTotal() {
+        for (boolean check : isChecked) {
+            if (!check) {
+                return;
+            }
+        }
+        totalCheckBox.setChecked(true);
     }
 }
