@@ -46,27 +46,20 @@ public class AddBook extends AppCompatActivity {
 
         imagePreview = findViewById(R.id.imagePreview);
 
-        findViewById(R.id.addImageButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE);
-            }
+        findViewById(R.id.addImageButton).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PICK_IMAGE);
         });
 
-        findViewById(R.id.add_book_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addBook();
-            }
-        });
+        findViewById(R.id.add_book_button).setOnClickListener(v -> addBook());
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     @Override
@@ -96,12 +89,11 @@ public class AddBook extends AppCompatActivity {
 
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
-        Book newBook = new ExceptionHandler().handleException(this);
+        Book newBook = new ExceptionHandler().handleExceptionBook(this);
         RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<BookResponse> call = bookService.addBook(imagePart, newBook_RB);
-
         call.enqueue(new Callback<BookResponse>() {
             @Override
             public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {

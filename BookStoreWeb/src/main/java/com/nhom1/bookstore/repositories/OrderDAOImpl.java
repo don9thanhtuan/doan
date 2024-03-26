@@ -16,12 +16,14 @@ import com.nhom1.bookstore.entity.OrderDetail.BookInOrder;
 import com.nhom1.bookstore.services.ConverterCurrency;
 
 @Repository
-public class OrderDAOImpl implements OrderDAO{
+public class OrderDAOImpl implements OrderDAO {
     private Connection conn;
 
     public OrderDAOImpl() {
         this.conn = JDBC.getConnection();
-        if(conn != null) {System.out.println("Order connect success");}
+        if (conn != null) {
+            System.out.println("Order connect success");
+        }
     }
 
     @Override
@@ -32,7 +34,7 @@ public class OrderDAOImpl implements OrderDAO{
             statement.setString(2, currentID);
 
             statement.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -53,7 +55,7 @@ public class OrderDAOImpl implements OrderDAO{
                     return new Order(maDonHang, idNguoiDat, trangThai, thanhTien);
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -71,16 +73,12 @@ public class OrderDAOImpl implements OrderDAO{
                 while (resultSet.next()) {
                     String idSach = resultSet.getString("IDSach");
                     int soLuong = resultSet.getInt("SoLuong");
-                    String soDienThoai = resultSet.getString("SoDienThoai");
-                    orderDetail.setSoDienThoai(soDienThoai);
-                    String diaChi = resultSet.getString("DiaChi");
-                    orderDetail.setDiaChi(diaChi);
                     OrderDetail.BookInOrder bookInOrder = orderDetail.new BookInOrder(idSach, soLuong);
                     orderDetail.getBookList().add(bookInOrder);
                 }
                 return orderDetail;
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -101,10 +99,13 @@ public class OrderDAOImpl implements OrderDAO{
                     String thanhTien = ConverterCurrency.numberToCurrency(thanhTienRaw);
                     String idSachDau = resultSet.getString("IDSachDau");
                     int soSanPham = resultSet.getInt("SoSanPham");
-                    orderList.add(new Order(maDonHang, idNguoiDat, thoiGianDat, trangThai, thanhTien, idSachDau, soSanPham));
-                }
+                    String soDienThoai = resultSet.getString("SoDienThoai");
+                    String diaChi = resultSet.getString("DiaChi");
+                    orderList.add(
+                        new Order(maDonHang, idNguoiDat, thoiGianDat, trangThai, thanhTien, idSachDau, soSanPham, soDienThoai, diaChi));
+                    }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return orderList;
@@ -113,13 +114,25 @@ public class OrderDAOImpl implements OrderDAO{
     @Override
     public List<Order> search(String tuKhoa) {
         List<Order> result = new ArrayList<>();
-        String sql = "SELECT * FROM DonHang WHERE LOWER(MaDonHang) LIKE LOWER(?) OR LOWER(IDNguoiDat) LIKE LOWER(?) OR LOWER(ThoiGianDat) LIKE LOWER(?) OR LOWER(IDSachDau) LIKE LOWER(?) OR LOWER(SoSanPham) LIKE LOWER(?)";
+        String sql = 
+        "SELECT * FROM DonHang " +
+        "WHERE " + 
+            "LOWER(MaDonHang) LIKE LOWER(?) OR " +
+            "LOWER(IDNguoiDat) LIKE LOWER(?) OR " +
+            "LOWER(ThoiGianDat) LIKE LOWER(?) OR " +
+            "LOWER(IDSachDau) LIKE LOWER(?) OR " +
+            "LOWER(SoSanPham) LIKE LOWER(?) OR " +
+            "LOWER(SoDienThoai) LIKE LOWER(?) OR " +
+            "LOWER(DiaChi) LIKE LOWER(?)";
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, "%" + tuKhoa + "%");
             preparedStatement.setString(2, "%" + tuKhoa + "%");
             preparedStatement.setString(3, "%" + tuKhoa + "%");
             preparedStatement.setString(4, "%" + tuKhoa + "%");
             preparedStatement.setString(5, "%" + tuKhoa + "%");
+            preparedStatement.setString(6, "%" + tuKhoa + "%");
+            preparedStatement.setString(7, "%" + tuKhoa + "%");
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -133,7 +146,10 @@ public class OrderDAOImpl implements OrderDAO{
 
                     String idSachDau = resultSet.getString("IDSachDau");
                     int soSanPham = resultSet.getInt("SoSanPham");
-                    result.add(new Order(maDonHang, idNguoiDat, thoiGianDat, trangThai, thanhTien, idSachDau, soSanPham));
+                    String soDienThoai = resultSet.getString("SoDienThoai");
+                    String diaChi = resultSet.getString("DiaChi");
+                    result.add(
+                            new Order(maDonHang, idNguoiDat, thoiGianDat, trangThai, thanhTien, idSachDau, soSanPham, soDienThoai, diaChi));
                 }
             }
         } catch (SQLException e) {
@@ -144,8 +160,9 @@ public class OrderDAOImpl implements OrderDAO{
 
     @Override
     public void createOrder(Order newOrder) {
-        String sql = "INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham) " +
-                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi) "
+                +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, newOrder.getMaDonHang());
             statement.setString(2, newOrder.getIdNguoiDat());
@@ -156,26 +173,26 @@ public class OrderDAOImpl implements OrderDAO{
             statement.setInt(5, thanhTien);
             statement.setString(6, newOrder.getIdSachDau());
             statement.setInt(7, newOrder.getSoSanPham());
+            statement.setString(8, newOrder.getSoDienThoai());
+            statement.setString(9, newOrder.getDiaChi());
 
             statement.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void createOrderDetail(OrderDetail newOrderDetail) {
-        String sql = "INSERT INTO chitietdonhang (MaDonHang, SoDienThoai, DiaChi, IDSach, SoLuong) VALUES (?, ?, ?, ?, ?)";
-        List<OrderDetail.BookInOrder> bookList =  newOrderDetail.getBookList();
+        String sql = "INSERT INTO chitietdonhang (MaDonHang, IDSach, SoLuong) VALUES (?, ?, ?)";
+        List<OrderDetail.BookInOrder> bookList = newOrderDetail.getBookList();
 
         for (BookInOrder bookInOrder : bookList) {
             try (PreparedStatement statement = conn.prepareStatement(sql)) {
                 statement.setString(1, newOrderDetail.getMaDonHang());
-                statement.setString(2, newOrderDetail.getSoDienThoai());
-                statement.setString(3, newOrderDetail.getDiaChi());
 
-                statement.setString(4, bookInOrder.getIdSach());
-                statement.setInt(5, bookInOrder.getSoLuong());
+                statement.setString(2, bookInOrder.getIdSach());
+                statement.setInt(3, bookInOrder.getSoLuong());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

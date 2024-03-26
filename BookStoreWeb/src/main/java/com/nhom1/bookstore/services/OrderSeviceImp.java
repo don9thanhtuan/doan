@@ -74,12 +74,12 @@ public class OrderSeviceImp implements OrderService {
         order.setThanhTien(newOrder.getPrice());
         order.setIdSachDau(newOrder.getBookList().get(0));
         order.setSoSanPham(newOrder.getBookList().size());
+        order.setSoDienThoai(newOrder.getPhone());
+        order.setDiaChi(newOrder.getAddress());
         orderDAOController.createOrder(order);
 
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setMaDonHang(maDonHang);
-        orderDetail.setSoDienThoai(newOrder.getPhone());
-        orderDetail.setDiaChi(newOrder.getAddress());
 
         orderDetail.setBookList(new ArrayList<>());
         

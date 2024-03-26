@@ -9,7 +9,7 @@ import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
 
 public class ExceptionHandler {
-    public Book handleException(Activity activity) {
+    public Book handleExceptionBook(Activity activity) {
         EditText nameEditText = activity.findViewById(R.id.add_name);
         EditText priceEditText = activity.findViewById(R.id.add_price);
         EditText authorEditText = activity.findViewById(R.id.add_author);
@@ -67,16 +67,13 @@ public class ExceptionHandler {
         newBook.setTacGia(author);
         newBook.setNhaCungCap(publisher);
         newBook.setKichThuoc(size);
+        newBook.setTonKho(Integer.parseInt(stock));
         newBook.setGioiThieu(introduction);
 
-        if (weight != null) {
+        if (!weight.isEmpty()) {
             newBook.setTrongLuong(Double.parseDouble(weight));
-        }
-        if (stock != null) {
-            newBook.setTonKho(Integer.parseInt(stock));
         }
 
         return newBook;
     }
-
 }

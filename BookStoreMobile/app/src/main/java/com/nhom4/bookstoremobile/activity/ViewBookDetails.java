@@ -29,7 +29,7 @@ import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
-import com.nhom4.bookstoremobile.sqlite.CartDB;
+import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.List;
 
@@ -49,61 +49,16 @@ public class ViewBookDetails extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         String id = getIntent().getStringExtra("book_id");
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            }
-        });
-        findViewById(R.id.cartBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewBookDetails.this, ViewCart.class);
-                startActivity(intent);
-            }
-        });
-        findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater inflater = getLayoutInflater();
-                addCart_Layout = inflater.inflate(R.layout.main_add_cart_item_layout, null);
-                FrameLayout layoutContainer = findViewById(R.id.addCart_Layout);
-                layoutContainer.addView(addCart_Layout);
-
-                addCart_Layout.setClickable(true);
-                addCart_Layout.setFocusable(true);
-                findViewById(R.id.overlayLayout).setVisibility(View.VISIBLE);
-
-                setDataToAddCart();
-
-                handlerExcreption(addCart_Layout);
-
-
-                Animation slideUpAnimation = AnimationUtils.loadAnimation(ViewBookDetails.this, R.anim.slide_up);
-                addCart_Layout.startAnimation(slideUpAnimation);
-            }
-        });
-
-        findViewById(R.id.overlayLayout).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                closeAddCart();
-                return false;
-            }
-        });
-
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                recreate();
-                pullToRefresh.setRefreshing(false);
-            }
-        });
+        setListenerMainLayout();
 
         getBookDetailFromAPI(id);
         getBookListFromAPI();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     private void getBookDetailFromAPI(String bookID) {
@@ -134,7 +89,7 @@ public class ViewBookDetails extends AppCompatActivity {
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful()) {
                     List<Book> bookList = response.body();
-                    if(book != null) {
+                    if (book != null) {
                         for (Book bookInList : bookList) {
                             if (bookInList.getId().equals(book.getId())) {
                                 bookList.remove(bookInList);
@@ -192,26 +147,6 @@ public class ViewBookDetails extends AppCompatActivity {
         introductionTextView.setText(book.getGioiThieu());
     }
 
-    private void deleteBookByAPi() {
-        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<ResponseBody> call = bookService.deleteBook(book.getId());
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(ViewBookDetails.this, "Xóa thành công sản phẩm " + book.getId(), Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(ViewBookDetails.this, "Failed to delete book", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-            }
-        });
-    }
-
     private void closeAddCart() {
         FrameLayout layoutContainer = findViewById(R.id.addCart_Layout);
 
@@ -224,19 +159,19 @@ public class ViewBookDetails extends AppCompatActivity {
     }
 
     private void addItemToCart(String id, int quantity) {
-        CartDB cartDB = new CartDB(ViewBookDetails.this);
-        Cursor cursor = cartDB.findCartItem(id);
+        CartTable cartTable = new CartTable(ViewBookDetails.this);
+        Cursor cursor = cartTable.findCartItem(id);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int current_Quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
 
-                cartDB.updateQuantityItem(id, current_Quantity + quantity);
+                cartTable.updateQuantityItem(id, current_Quantity + quantity);
             } while (cursor.moveToNext());
 
             cursor.close();
         } else {
-            cartDB.addToCart(id, quantity);
+            cartTable.addToCart(id, quantity);
         }
     }
 
@@ -256,24 +191,16 @@ public class ViewBookDetails extends AppCompatActivity {
         priceTextView.setText(book.getGia());
     }
 
-    private void handlerExcreption(View addCart_Layout) {
+    private void setListenerAddLayout(View addCart_Layout) {
         EditText quantity_EditText = addCart_Layout.findViewById(R.id.quantity_EditText);
 
-        addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeAddCart();
-            }
-        });
-        addCart_Layout.findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw);
-                addItemToCart(book.getId(), quantity);
-                Toast.makeText(ViewBookDetails.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
-                closeAddCart();
-            }
+        addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(v -> closeAddCart());
+        addCart_Layout.findViewById(R.id.addToCartBtn).setOnClickListener(v -> {
+            String quantityRaw = quantity_EditText.getText().toString();
+            int quantity = Integer.parseInt(quantityRaw);
+            addItemToCart(book.getId(), quantity);
+            Toast.makeText(ViewBookDetails.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+            closeAddCart();
         });
         quantity_EditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -302,32 +229,70 @@ public class ViewBookDetails extends AppCompatActivity {
             }
         });
 
-        addCart_Layout.findViewById(R.id.plusBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw) + 1;
+        addCart_Layout.findViewById(R.id.plusBtn).setOnClickListener(v -> {
+            String quantityRaw = quantity_EditText.getText().toString();
+            int quantity = Integer.parseInt(quantityRaw) + 1;
 
-                if (book.getTonKho() < quantity) {
-                    Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                } else {
-                    quantity_EditText.setText(String.valueOf(quantity));
-                }
+            if (book.getTonKho() < quantity) {
+                Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+            } else {
+                quantity_EditText.setText(String.valueOf(quantity));
             }
         });
 
-        addCart_Layout.findViewById(R.id.minusBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw) - 1;
+        addCart_Layout.findViewById(R.id.minusBtn).setOnClickListener(v -> {
+            String quantityRaw = quantity_EditText.getText().toString();
+            int quantity = Integer.parseInt(quantityRaw) - 1;
 
-                if (quantity <= 0) {
-                    Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
-                } else {
-                    quantity_EditText.setText(String.valueOf(quantity));
-                }
+            if (quantity <= 0) {
+                Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+            } else {
+                quantity_EditText.setText(String.valueOf(quantity));
             }
+        });
+    }
+
+    private void setListenerMainLayout() {
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        });
+
+        findViewById(R.id.cartBtn).setOnClickListener(v -> {
+            Intent intent = new Intent(ViewBookDetails.this, ViewCart.class);
+            startActivity(intent);
+        });
+
+        findViewById(R.id.addToCartBtn).setOnClickListener(v -> {
+            LayoutInflater inflater = getLayoutInflater();
+            addCart_Layout = inflater.inflate(R.layout.main_add_cart_item_layout, null);
+            FrameLayout layoutContainer = findViewById(R.id.addCart_Layout);
+            layoutContainer.addView(addCart_Layout);
+
+            addCart_Layout.setClickable(true);
+            addCart_Layout.setFocusable(true);
+            findViewById(R.id.overlayLayout).setVisibility(View.VISIBLE);
+
+            setDataToAddCart();
+
+            setListenerAddLayout(addCart_Layout);
+
+            Animation slideUpAnimation = AnimationUtils.loadAnimation(ViewBookDetails.this, R.anim.slide_up);
+            addCart_Layout.startAnimation(slideUpAnimation);
+        });
+
+        findViewById(R.id.overlayLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                closeAddCart();
+                return false;
+            }
+        });
+
+        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(() -> {
+            recreate();
+            pullToRefresh.setRefreshing(false);
         });
     }
 }

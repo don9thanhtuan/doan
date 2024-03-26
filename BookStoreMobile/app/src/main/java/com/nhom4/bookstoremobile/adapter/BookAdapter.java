@@ -24,28 +24,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private final List<Book> bookList;
     private final RecyclerView mRecyclerView;
     private final boolean setWidth;
-    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            int itemPosition = mRecyclerView.getChildLayoutPosition(view);
-            Book book = bookList.get(itemPosition);
-            Intent intent = new Intent(context, ViewBookDetails.class);
-            intent.putExtra("book_id", book.getId());
-            context.startActivity(intent);
-        }
-    };
 
     public BookAdapter(Context context, List<Book> bookList, RecyclerView recyclerView) {
         this.context = context;
         this.bookList = bookList;
-        mRecyclerView = recyclerView;
+        this.mRecyclerView = recyclerView;
         this.setWidth = true;
     }
 
     public BookAdapter(Context context, List<Book> bookList, RecyclerView recyclerView, boolean setWidth) {
         this.context = context;
         this.bookList = bookList;
-        mRecyclerView = recyclerView;
+        this.mRecyclerView = recyclerView;
         this.setWidth = setWidth;
     }
 
@@ -53,9 +43,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_page_book_layout, parent, false);
-        view.setOnClickListener(mOnClickListener);
 
-        if(setWidth) {
+        view.setOnClickListener(v -> {
+            int itemPosition = mRecyclerView.getChildLayoutPosition(view);
+            Book book = bookList.get(itemPosition);
+            Intent intent = new Intent(context, ViewBookDetails.class);
+            intent.putExtra("book_id", book.getId());
+            context.startActivity(intent);
+        });
+
+        if (setWidth) {
             setWidth(view);
         }
 
@@ -73,13 +70,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.list_Sold.setText("Đã bán " + book.getDaBan());
 
         Glide.with(context)
-                .load(book.getHinhAnh())
-                .into(holder.BookImageMainPage);
+             .load(book.getHinhAnh())
+             .into(holder.BookImageMainPage);
     }
 
     @Override
     public int getItemCount() {
         return bookList.size();
+    }
+
+    private void setWidth(View view) {
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        layoutParams.width = 600;
+        view.setLayoutParams(layoutParams);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,11 +102,5 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             list_Sold = itemView.findViewById(R.id.list_Sold);
 
         }
-    }
-
-    private void setWidth(View view) {
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        layoutParams.width = 600;
-        view.setLayoutParams(layoutParams);
     }
 }

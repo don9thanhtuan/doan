@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:background="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/cartItemList"
+        app:layout_constraintBottom_toTopOf="@id/pullToRefresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -56,8 +56,8 @@
             app:srcCompat="@drawable/baseline_delete_outline_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cartItemList"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="4dp"
@@ -65,7 +65,14 @@
         app:layout_constraintBottom_toTopOf="@+id/totalLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLayout" />
+        app:layout_constraintTop_toBottomOf="@id/topLayout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartItemList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/totalLayout"

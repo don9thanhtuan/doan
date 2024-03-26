@@ -4,8 +4,6 @@ import java.util.List;
 
 public class OrderDetail {
     private String maDonHang;
-    private String soDienThoai;
-    private String diaChi;
     private List<BookInOrder> bookList;
 
     public OrderDetail(){}
@@ -57,18 +55,5 @@ public class OrderDetail {
 
     public void setBookList(List<BookInOrder> bookList) {
         this.bookList = bookList;
-    }
-    public String getSoDienThoai() {
-        return soDienThoai;
-    }
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
-    }
-    public String getDiaChi() {
-        return diaChi;
-    }
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-    
+    } 
 }

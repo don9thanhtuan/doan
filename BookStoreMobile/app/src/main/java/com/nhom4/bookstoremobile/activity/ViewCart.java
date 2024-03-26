@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
@@ -23,7 +24,7 @@ import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
-import com.nhom4.bookstoremobile.sqlite.CartDB;
+import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,44 +35,63 @@ import retrofit2.Response;
 
 public class ViewCart extends AppCompatActivity {
     private final List<CartItem> cart = new ArrayList<>();
-    private CartDB cartDB;
+    private CartTable cartTable;
     private CartItemAdapter adapter;
     private CheckBox totalCheckBox;
+    private boolean isFromMain;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
+        isFromMain = getIntent().getBooleanExtra("main", false);
+
         totalCheckBox = findViewById(R.id.totalCheckBox);
         setListener();
 
-        cartDB = new CartDB(this);
+        cartTable = new CartTable(this);
 
-//        cartDB.deleteAllCartItems();
-//        cartDB.addToCart("BXFLU747", 10);
-//        cartDB.addToCart("BWNPW735", 10);
-//        cartDB.addToCart("BPNOW492", 10);
-//        cartDB.addToCart("BLYVL195", 10);
-//        cartDB.addToCart("BLSVL608", 10);
-//        cartDB.addToCart("BHXGU988", 10);
-//        cartDB.addToCart("BHKKX073", 10);
-//        cartDB.addToCart("BGRMC730", 10);
-//        cartDB.addToCart("BGEHN704", 10);
-//        cartDB.addToCart("BEVKS715", 10);
+//        cartTable.deleteAllCartItems();
+//        cartTable.addToCart("BXFLU747", 10);
+//        cartTable.addToCart("BWNPW735", 10);
+//        cartTable.addToCart("BPNOW492", 10);
+//        cartTable.addToCart("BLYVL195", 10);
+//        cartTable.addToCart("BLSVL608", 10);
+//        cartTable.addToCart("BHXGU988", 10);
+//        cartTable.addToCart("BHKKX073", 10);
+//        cartTable.addToCart("BGRMC730", 10);
+//        cartTable.addToCart("BGEHN704", 10);
+//        cartTable.addToCart("BEVKS715", 10);
 
         getCartData();
 
         RecyclerView recyclerView = findViewById(R.id.cartItemList);
         adapter = new CartItemAdapter(this, cart, recyclerView);
-        adapter.setTotalCheckBox(totalCheckBox);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
 
+        adapter.setTotalCheckBox(totalCheckBox);
         adapter.setPaymentBtn(findViewById(R.id.paymentBtn));
         adapter.setTotalPriceTxtView(findViewById(R.id.totalPrice));
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isFromMain) {
+            redirectToMain();
+
+        }
+        super.onBackPressed();
+    }
+
+    private void redirectToMain() {
+        Intent intent = new Intent(ViewCart.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void getCartData() {
-        Cursor cursor = cartDB.getAllCartItems();
+        Cursor cursor = cartTable.getAllCartItems();
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String bookID = cursor.getString(cursor.getColumnIndex("bookID"));
@@ -97,10 +117,14 @@ public class ViewCart extends AppCompatActivity {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
                     Book book = response.body();
-                    String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-                    book.setHinhAnh(imageUrl);
-                    cartItem.setBook(book);
-                    adapter.notifyDataSetChanged();
+                    if(book != null) {
+                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
+                        book.setHinhAnh(imageUrl);
+                        cartItem.setBook(book);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        cartTable.removeFromCart(cartItem.getBookID());
+                    }
                 }
             }
 
@@ -121,52 +145,35 @@ public class ViewCart extends AppCompatActivity {
     }
 
     private void showConfirmationPopup() {
-        showConfirmationPopup(this, "Xác nhận", "Bạn muốn xóa những sản phẩm được chọn?", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                adapter.deleteCartItem();
-                totalCheckBox.setChecked(false);
-            }
+        showConfirmationPopup(this, "Xác nhận", "Bạn muốn xóa những sản phẩm được chọn?", (dialog, which) -> {
+            adapter.deleteCartItem();
+            totalCheckBox.setChecked(false);
         });
     }
 
     private void setListener() {
-        findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewCart.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        findViewById(R.id.homeBtn).setOnClickListener(v -> redirectToMain());
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
+        totalCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> adapter.checkAllCartItem(isChecked));
+
+        findViewById(R.id.deleteBtn).setOnClickListener(v -> showConfirmationPopup());
+
+        findViewById(R.id.accountBtn).setOnClickListener(v -> {
+            Intent intent = new Intent(ViewCart.this, ViewAccount.class);
+            startActivity(intent);
+            finish();
         });
 
-        totalCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                adapter.checkAllCartItem(isChecked);
-            }
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         });
 
-        findViewById(R.id.deleteBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationPopup();
-            }
-        });
-
-        findViewById(R.id.accountBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewCart.this, ViewAccount.class);
-                startActivity(intent);
-                finish();
-            }
+        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(() -> {
+            recreate();
+            pullToRefresh.setRefreshing(false);
         });
     }
 }

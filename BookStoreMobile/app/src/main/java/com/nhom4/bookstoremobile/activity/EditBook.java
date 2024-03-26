@@ -40,7 +40,7 @@ public class EditBook extends AppCompatActivity {
     boolean changeImage = false;
     ImageView imagePreview;
     Uri selectedImage;
-    Book current_Book;
+    Book book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,48 +48,30 @@ public class EditBook extends AppCompatActivity {
         setContentView(R.layout.activity_add_book);
         TextView addBook = findViewById(R.id.titleTxtView);
         addBook.setText("Chỉnh sửa sản phẩm");
-
-        String book_ID = getIntent().getStringExtra("book_id");
-        String book_Name = getIntent().getStringExtra("book_name");
-        String book_HinhAnh = DefaultURL.getUrl() + getIntent().getStringExtra("book_HinhAnh");
-        String book_TacGia = getIntent().getStringExtra("book_TacGia");
-        String book_NhaCungCap = getIntent().getStringExtra("book_NhaCungCap");
-        int book_TonKho = getIntent().getIntExtra("book_TonKho", 0);
-        String book_GiaR = getIntent().getStringExtra("book_Gia");
-        double book_TrongLuong = getIntent().getDoubleExtra("book_TrongLuong", 0.0);
-        String book_KickThuoc = getIntent().getStringExtra("book_KickThuoc");
-        String book_GioiThieu = getIntent().getStringExtra("book_GioiThieu");
-
-        current_Book = new Book(book_ID, book_Name, book_HinhAnh, book_TacGia, book_NhaCungCap, book_TonKho, book_GiaR, book_TrongLuong, book_KickThuoc, book_GioiThieu);
+        getDataFromIntent();
 
         imagePreview = findViewById(R.id.imagePreview);
-
-        findViewById(R.id.addImageButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE);
-            }
+        findViewById(R.id.addImageButton).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PICK_IMAGE);
         });
         Button saveBtn = findViewById(R.id.add_book_button);
         saveBtn.setText("Lưu");
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editBookByAPI();
-            }
-        });
+        saveBtn.setOnClickListener(v -> editBookByAPI());
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
-                intent.putExtra("book_id", book_ID);
-                startActivity(intent);
-                finish();
-            }
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
+            intent.putExtra("book_id", book.getId());
+            startActivity(intent);
+            finish();
         });
-        setBookData(current_Book);
+        setBookData(book);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     @Override
@@ -108,16 +90,31 @@ public class EditBook extends AppCompatActivity {
         }
     }
 
+    private void getDataFromIntent() {
+        String book_ID = getIntent().getStringExtra("book_id");
+        String book_Name = getIntent().getStringExtra("book_name");
+        String book_HinhAnh = DefaultURL.getUrl() + getIntent().getStringExtra("book_HinhAnh");
+        String book_TacGia = getIntent().getStringExtra("book_TacGia");
+        String book_NhaCungCap = getIntent().getStringExtra("book_NhaCungCap");
+        int book_TonKho = getIntent().getIntExtra("book_TonKho", 0);
+        String book_GiaR = getIntent().getStringExtra("book_Gia");
+        double book_TrongLuong = getIntent().getDoubleExtra("book_TrongLuong", 0.0);
+        String book_KickThuoc = getIntent().getStringExtra("book_KickThuoc");
+        String book_GioiThieu = getIntent().getStringExtra("book_GioiThieu");
+
+        book = new Book(book_ID, book_Name, book_HinhAnh, book_TacGia, book_NhaCungCap, book_TonKho, book_GiaR, book_TrongLuong, book_KickThuoc, book_GioiThieu);
+    }
+
     private void editBookByAPI() {
         if (selectedImage == null) {
             Toast.makeText(this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
-        Book newBook = new ExceptionHandler().handleException(this);
+        Book newBook = new ExceptionHandler().handleExceptionBook(this);
         if (newBook == null) {
             return;
         }
-        newBook.setId(current_Book.getId());
+        newBook.setId(book.getId());
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
         RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
@@ -132,7 +129,7 @@ public class EditBook extends AppCompatActivity {
                     if (response.body() != null) {
                         Toast.makeText(EditBook.this, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
-                        intent.putExtra("book_id", current_Book.getId());
+                        intent.putExtra("book_id", book.getId());
                         startActivity(intent);
                         finish();
                     }
@@ -145,7 +142,7 @@ public class EditBook extends AppCompatActivity {
             public void onFailure(Call<String> call, Throwable t) {
                 //Toast.makeText(EditBook.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
-                intent.putExtra("book_id", current_Book.getId());
+                intent.putExtra("book_id", book.getId());
                 startActivity(intent);
             }
         });

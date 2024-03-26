@@ -34,14 +34,14 @@ CREATE TABLE DonHang (
     ThanhTien int,
     IDSachDau varchar(8),
     SoSanPham int,
+	SoDienThoai VARCHAR(15),
+    DiaChi VARCHAR(255),
     FOREIGN KEY (idSachDau) REFERENCES Sach(ID),
     FOREIGN KEY (IDNguoiDat) REFERENCES TaiKhoan(TenTaiKhoan)
 );
 
 CREATE TABLE ChiTietDonHang (
     MaDonHang varchar(8),
-	SoDienThoai VARCHAR(15),
-    DiaChi VARCHAR(255),
     IDSach varchar(8),
     SoLuong INT,
     FOREIGN KEY (MaDonHang) REFERENCES DonHang(MaDonHang),
@@ -72,21 +72,58 @@ VALUES
 ('user1', 'Tester1', '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM', false, 'user1'),
 ('user2', 'Tester2', '0987654321', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM', false, 'user2');
 
-INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham)
-VALUES ('OCFEI004', 'user1', '2023-01-15', 0, 360000, 'BHXGU988', 3);
-INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong, SoDienThoai, DiaChi) 
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('OCFEI004', 'user1', '2023-03-01', 0, 360000, 'BLYVL195', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong) 
 VALUES 
-('OCFEI004',  'BHXGU988', 2, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('OCFEI004', 'BWNPW735' , 1, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('OCFEI004', 'BGEHN704', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+('OCFEI004',  'BLYVL195', 2),
+('OCFEI004', 'BXFLU747' , 1),
+('OCFEI004', 'BEVKS715', 3);
 
-INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham)
-VALUES ('ORCYN729', 'user1', '2023-05-30', 0, 900000, 'BGRMC730', 6);
-INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong, SoDienThoai, DiaChi)
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('ORCYN789', 'user1', '2023-03-02', 1, 900000, 'BXFLU747', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong)
 VALUES
-('ORCYN729', 'BGRMC730' , 2, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('ORCYN729', 'BPNOW492' , 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('ORCYN729', 'BXFLU747' , 1, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('ORCYN729', 'BLSVL608' , 5, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('ORCYN729', 'BWNPW735' , 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM'),
-('ORCYN729', 'BHXGU988' , 1, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+('ORCYN789', 'BXFLU747' , 2),
+('ORCYN789', 'BEVKS715' , 3),
+('ORCYN789', 'BHKKX073' , 1);
+
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('ORCYN729', 'user1', '2023-03-03', 2, 900000, 'BEVKS715', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong)
+VALUES
+('ORCYN729', 'BEVKS715' , 2),
+('ORCYN729', 'BHKKX073' , 3),
+('ORCYN729', 'BPNOW492' , 1);
+
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('OCFEI084', 'user1', '2023-03-04', 3, 360000, 'BHKKX073', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong) 
+VALUES 
+('OCFEI084',  'BHKKX073', 2),
+('OCFEI084', 'BPNOW492' , 1),
+('OCFEI084', 'BGRMC730', 3);
+
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('OCFEI584', 'user1', '2023-03-05', 0, 360000, 'BPNOW492', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong) 
+VALUES 
+('OCFEI584',  'BPNOW492', 2),
+('OCFEI584', 'BGRMC730' , 1),
+('OCFEI584', 'BGEHN704', 3);
+
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('OCFGI084', 'user1', '2023-03-06', 1, 360000, 'BGRMC730', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong) 
+VALUES 
+('OCFGI084',  'BGRMC730', 2),
+('OCFGI084', 'BGEHN704' , 1),
+('OCFGI084', 'BWNPW735', 3);
+
+INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
+VALUES ('OCBEI084', 'user1', '2023-03-07', 2, 360000, 'BGEHN704', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong) 
+VALUES 
+('OCBEI084',  'BGEHN704', 2),
+('OCBEI084', 'BWNPW735' , 1),
+('OCBEI084', 'BHXGU988', 3);

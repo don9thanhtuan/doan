@@ -1,12 +1,12 @@
-package com.nhom1.bookstore.apis;
+package com.nhom4.bookstoremobile.entities;
 
 public class AccountResponse {
     private String userID;
-    private boolean isAdmin;
+    private boolean admin;
 
-    public AccountResponse(String userID, boolean isAdmin) {
+    public AccountResponse(String userID, boolean admin) {
         this.userID = userID;
-        this.isAdmin = isAdmin;
+        this.admin = admin;
     }
 
     public String getUserID() {
@@ -18,10 +18,10 @@ public class AccountResponse {
     }
 
     public boolean isAdmin() {
-        return isAdmin;
+        return admin;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }

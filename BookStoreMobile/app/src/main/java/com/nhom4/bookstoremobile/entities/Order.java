@@ -1,4 +1,4 @@
-package com.nhom1.bookstore.entity;
+package com.nhom4.bookstoremobile.entities;
 
 import java.util.Date;
 
@@ -6,8 +6,6 @@ public class Order {
     private String maDonHang;
     private String idNguoiDat;
     private Date thoiGianDat;
-    private String soDienThoai;
-    private String diaChi;
     private String trangThai;
     private String thanhTien;
     private String idSachDau;
@@ -15,7 +13,7 @@ public class Order {
     private int soSanPham;
 
     public Order() {}
-    public Order(String MaDonHang, String nguoiDat, Date thoiGianDat, int trangThai, String thanhTien, String cuonSachDau, int soSanPham, String soDienThoai, String diaChi) {
+    public Order(String MaDonHang, String nguoiDat, Date thoiGianDat, int trangThai, String thanhTien, String cuonSachDau, int soSanPham) {
         this.maDonHang = MaDonHang;
         this.idNguoiDat = nguoiDat;
         this.thoiGianDat = thoiGianDat;
@@ -23,8 +21,6 @@ public class Order {
         this.thanhTien = thanhTien;
         this.idSachDau = cuonSachDau;
         this.soSanPham = soSanPham;
-        this.soDienThoai = soDienThoai;
-        this.diaChi = diaChi;
     }
     public Order(String MaDonHang, String nguoiDat, int trangThai, String thanhTien) {
         this.maDonHang = MaDonHang;
@@ -83,6 +79,9 @@ public class Order {
     public String getTrangThai() {
         return trangThai;
     }
+    public int getTrangThaiInt() {
+        return convertTrangThaiString(trangThai);
+    }
     public void setTrangThai(int trangThai) {
         this.trangThai = convertTrangThaiInt(trangThai);
     }
@@ -109,17 +108,5 @@ public class Order {
     }
     public void setSoSanPham(int soSanPham) {
         this.soSanPham = soSanPham;
-    }
-    public String getSoDienThoai() {
-        return soDienThoai;
-    }
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
-    }
-    public String getDiaChi() {
-        return diaChi;
-    }
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
     }
 }

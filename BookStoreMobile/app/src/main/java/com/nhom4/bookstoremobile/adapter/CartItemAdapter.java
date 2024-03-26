@@ -26,7 +26,7 @@ import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
-import com.nhom4.bookstoremobile.sqlite.CartDB;
+import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +35,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     private final Context context;
     private final List<CartItem> itemList;
     private final RecyclerView mRecyclerView;
-    private List<Boolean> isChecked = new ArrayList<>();
+    private final List<Boolean> isChecked = new ArrayList<>();
     private Button paymentBtn;
     private TextView totalPriceTxtView;
     private CheckBox totalCheckBox;
-
 
     public CartItemAdapter(Context context, List<CartItem> itemList, RecyclerView mRecyclerView) {
         this.context = context;
@@ -66,15 +65,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     @Override
     public CartItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_cart_item_layout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int itemPosition = mRecyclerView.getChildLayoutPosition(view);
-                CartItem cartItem = itemList.get(itemPosition);
-                Intent intent = new Intent(context, ViewBookDetails.class);
-                intent.putExtra("book_id", cartItem.getBookID());
-                context.startActivity(intent);
-            }
+        view.setOnClickListener(view1 -> {
+            int itemPosition = mRecyclerView.getChildLayoutPosition(view1);
+            CartItem cartItem = itemList.get(itemPosition);
+            Intent intent = new Intent(context, ViewBookDetails.class);
+            intent.putExtra("book_id", cartItem.getBookID());
+            context.startActivity(intent);
         });
 
         return new CartItemAdapter.ViewHolder(view);
@@ -121,14 +117,14 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     }
 
     private void addItemToCart(String id, int quantity) {
-        CartDB cartDB = new CartDB(context);
-        Cursor cursor = cartDB.findCartItem(id);
+        CartTable cartTable = new CartTable(context);
+        Cursor cursor = cartTable.findCartItem(id);
 
         if (cursor != null && cursor.moveToFirst()) {
-            cartDB.updateQuantityItem(id, quantity);
+            cartTable.updateQuantityItem(id, quantity);
             cursor.close();
         } else {
-            cartDB.addToCart(id, quantity);
+            cartTable.addToCart(id, quantity);
         }
         notifyDataSetChanged();
     }
@@ -173,21 +169,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             if (isChecked.get(i)) {
                 CartItem cartItem = itemList.get(i);
 
-                CartDB cartDB = new CartDB(context);
-                cartDB.removeFromCart(cartItem.getBookID());
+                CartTable cartTable = new CartTable(context);
+                cartTable.removeFromCart(cartItem.getBookID());
 
                 isChecked.remove(i);
                 itemList.remove(i);
                 i--;
             }
         }
-        if (itemList.size() == 0) {
-            getTotalQuantity();
-            getTotalPrice();
-        }
-        for (int i = 0; i < itemList.size(); i++) {
-            isChecked.set(i, false);
-        }
+        getTotalQuantity();
+        getTotalPrice();
 
         notifyDataSetChanged();
     }
@@ -197,45 +188,19 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         getTotalPrice();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        String bookId;
-        ImageView imageView;
-        TextView name_TxtView;
-        TextView author_TxtView;
-        TextView price_TxtView;
-        EditText quantity_EditText;
-        ImageButton plusBtn;
-        ImageButton minusBtn;
-        CheckBox checkBox;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
-            name_TxtView = itemView.findViewById(R.id.name_TxtView);
-            author_TxtView = itemView.findViewById(R.id.author_TxtView);
-            price_TxtView = itemView.findViewById(R.id.price_TxtView);
-            quantity_EditText = itemView.findViewById(R.id.quantity_EditText);
-            plusBtn = itemView.findViewById(R.id.plusBtn);
-            minusBtn = itemView.findViewById(R.id.minusBtn);
-            checkBox = itemView.findViewById(R.id.checkBox);
-        }
-    }
-
     private void setListener(ViewHolder holder) {
         int position = holder.getAdapterPosition();
         CartItem cartItem = itemList.get(position);
         Book book = cartItem.getBook();
 
         EditText quantity_EditText = holder.quantity_EditText;
-        if(book != null) {
+        if (book != null) {
             quantity_EditText.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
                 @Override
                 public void afterTextChanged(Editable s) {
@@ -260,56 +225,47 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             });
         }
 
-        holder.plusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw) + 1;
+        holder.plusBtn.setOnClickListener(v -> {
+            String quantityRaw = quantity_EditText.getText().toString();
+            int quantity = Integer.parseInt(quantityRaw) + 1;
 
-                if (book.getTonKho() < quantity) {
-                    Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                } else {
-                    cartItem.setQuantity(quantity);
-                    addItemToCart(holder.bookId, quantity);
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
+            if (book.getTonKho() < quantity) {
+                Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+            } else {
+                cartItem.setQuantity(quantity);
+                addItemToCart(holder.bookId, quantity);
+                getTotalQuantity();
+                getTotalPrice();
             }
         });
 
-        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantityRaw = quantity_EditText.getText().toString();
-                int quantity = Integer.parseInt(quantityRaw) - 1;
+        holder.minusBtn.setOnClickListener(v -> {
+            String quantityRaw = quantity_EditText.getText().toString();
+            int quantity = Integer.parseInt(quantityRaw) - 1;
 
-                if (quantity <= 0) {
-                    Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
-                } else {
-                    cartItem.setQuantity(quantity);
-                    addItemToCart(holder.bookId, quantity);
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
+            if (quantity <= 0) {
+                Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
+            } else {
+                cartItem.setQuantity(quantity);
+                addItemToCart(holder.bookId, quantity);
+                getTotalQuantity();
+                getTotalPrice();
             }
         });
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isCheck) {
-                RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isCheck) -> {
+            RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+            int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+            int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
 
-                int adapterPosition = holder.getAdapterPosition();
-                if (adapterPosition >= firstVisibleItemPosition && adapterPosition <= lastVisibleItemPosition) {
-                    isChecked.set(position, isCheck);
-                    getTotalQuantity();
-                    getTotalPrice();
-                }
-                setCheckedTotal();
+            int adapterPosition = holder.getAdapterPosition();
+            if (adapterPosition >= firstVisibleItemPosition && adapterPosition <= lastVisibleItemPosition) {
+                isChecked.set(position, isCheck);
+                getTotalQuantity();
+                getTotalPrice();
             }
+            setCheckedTotal();
         });
     }
 
@@ -320,5 +276,29 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             }
         }
         totalCheckBox.setChecked(true);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        String bookId;
+        ImageView imageView;
+        TextView name_TxtView;
+        TextView author_TxtView;
+        TextView price_TxtView;
+        EditText quantity_EditText;
+        ImageButton plusBtn;
+        ImageButton minusBtn;
+        CheckBox checkBox;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
+            name_TxtView = itemView.findViewById(R.id.name_TxtView);
+            author_TxtView = itemView.findViewById(R.id.author_TxtView);
+            price_TxtView = itemView.findViewById(R.id.price_TxtView);
+            quantity_EditText = itemView.findViewById(R.id.quantity_EditText);
+            plusBtn = itemView.findViewById(R.id.plusBtn);
+            minusBtn = itemView.findViewById(R.id.minusBtn);
+            checkBox = itemView.findViewById(R.id.checkBox);
+        }
     }
 }

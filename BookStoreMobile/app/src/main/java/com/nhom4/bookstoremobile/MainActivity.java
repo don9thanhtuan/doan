@@ -8,7 +8,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.nhom4.bookstoremobile.activity.AddBook;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewBookList;
 import com.nhom4.bookstoremobile.activity.ViewCart;
@@ -33,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setListener();
 
-        RecyclerView recyclerView = findViewById(R.id.home_RecyclerView);
-        getTopSellingFromAPI(recyclerView);
+        findViewById(R.id.addBtn).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AddBook.class)));
+
+        getTopSellingFromAPI();
     }
 
     @Override
@@ -47,12 +50,7 @@ public class MainActivity extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
-    private void redirectToCart() {
-        Intent intent = new Intent(MainActivity.this, ViewCart.class);
-        startActivity(intent);
-    }
-
-    private void getTopSellingFromAPI(RecyclerView recyclerView) {
+    private void getTopSellingFromAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<List<Book>> call = bookService.getBookTopSellingFromRestAPI();
         call.enqueue(new Callback<List<Book>>() {
@@ -64,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                         String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
                         book.setHinhAnh(imageUrl);
                     }
+
+                    RecyclerView recyclerView = findViewById(R.id.home_RecyclerView);
 
                     BookAdapter adapter = new BookAdapter(MainActivity.this, bookList, recyclerView);
 
@@ -79,38 +79,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListener() {
-        findViewById(R.id.viewListButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ViewBookList.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-            }
+        findViewById(R.id.viewListButton).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ViewBookList.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         });
-        findViewById(R.id.homeBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recreate();
-            }
+        findViewById(R.id.homeBtn).setOnClickListener(v -> recreate());
+        findViewById(R.id.top_cartBtn).setOnClickListener(v -> redirectToCart());
+        findViewById(R.id.bottom_cartBtn).setOnClickListener(v -> redirectToCart());
+        findViewById(R.id.accountBtn).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ViewAccount.class);
+            startActivity(intent);
+            finish();
         });
-        findViewById(R.id.top_cartBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                redirectToCart();
-            }
+
+        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(() -> {
+            recreate();
+            pullToRefresh.setRefreshing(false);
         });
-        findViewById(R.id.bottom_cartBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                redirectToCart();
-            }
-        });
-        findViewById(R.id.accountBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ViewAccount.class);
-                startActivity(intent);
-            }
-        });
+    }
+
+    private void redirectToCart() {
+        Intent intent = new Intent(MainActivity.this, ViewCart.class);
+        intent.putExtra("main", true);
+        startActivity(intent);
+        finish();
     }
 }

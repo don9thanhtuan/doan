@@ -37,6 +37,10 @@
         <activity android:name=".activity.EditBook" />
         <activity android:name=".activity.ViewCart" />
         <activity android:name=".activity.ViewAccount" />
+        <activity android:name=".activity.ViewLogin" />
+        <activity android:name=".activity.ViewOrderList" />
+        <activity android:name=".activity.ViewSetting" />
+        <activity android:name=".activity.ViewSettingInfo" />
 
     </application>
 

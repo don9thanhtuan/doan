@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class CartDB extends SQLiteOpenHelper {
+public class CartTable extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
-    public CartDB(Context context) {
+    public CartTable(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -18,7 +18,6 @@ public class CartDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String cartTable = "CREATE TABLE IF NOT EXISTS cart (bookID TEXT PRIMARY KEY, quantity INTEGER)";
         db.execSQL(cartTable);
-
     }
 
     @Override

@@ -42,3 +42,23 @@ findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
                     }
                 });
             }
+
+            private void deleteBookByAPi() {
+                    BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
+                    Call<ResponseBody> call = bookService.deleteBook(book.getId());
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(ViewBookDetails.this, "Xóa thành công sản phẩm " + book.getId(), Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(ViewBookDetails.this, "Failed to delete book", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        }
+                    });
+                }

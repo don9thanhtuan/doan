@@ -8,6 +8,7 @@
 
     <include
         layout="@layout/overlay_layout"
+        android:elevation="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,6 +118,7 @@
                         android:id="@+id/book_Image"
                         android:layout_width="match_parent"
                         android:layout_height="400dp"
+                        android:paddingVertical="2dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
