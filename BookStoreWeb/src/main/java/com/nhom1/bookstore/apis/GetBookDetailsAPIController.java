@@ -10,10 +10,10 @@ import com.nhom1.bookstore.entity.Book;
 import com.nhom1.bookstore.services.BookService;
 
 @RestController
-public class GetBookDetailsController {
+public class GetBookDetailsAPIController {
     private final BookService bookService;
 
-    public GetBookDetailsController(BookService bookService) {
+    public GetBookDetailsAPIController(BookService bookService) {
         this.bookService = bookService;
     }
 

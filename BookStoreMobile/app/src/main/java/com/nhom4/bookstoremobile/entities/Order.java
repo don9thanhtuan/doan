@@ -12,7 +12,9 @@ public class Order {
     private Book cuonSachDau;
     private int soSanPham;
 
-    public Order() {}
+    public Order() {
+    }
+
     public Order(String MaDonHang, String nguoiDat, Date thoiGianDat, int trangThai, String thanhTien, String cuonSachDau, int soSanPham) {
         this.maDonHang = MaDonHang;
         this.idNguoiDat = nguoiDat;
@@ -22,6 +24,7 @@ public class Order {
         this.idSachDau = cuonSachDau;
         this.soSanPham = soSanPham;
     }
+
     public Order(String MaDonHang, String nguoiDat, int trangThai, String thanhTien) {
         this.maDonHang = MaDonHang;
         this.idNguoiDat = nguoiDat;
@@ -58,54 +61,71 @@ public class Order {
                 return 10;
         }
     }
+
     public String getMaDonHang() {
         return maDonHang;
     }
+
     public void setMaDonHang(String maDonHang) {
         this.maDonHang = maDonHang;
     }
+
     public String getIdNguoiDat() {
         return idNguoiDat;
     }
+
     public void setIdNguoiDat(String idNguoiDat) {
         this.idNguoiDat = idNguoiDat;
     }
+
     public Date getThoiGianDat() {
         return thoiGianDat;
     }
+
     public void setThoiGianDat(Date thoiGianDat) {
         this.thoiGianDat = thoiGianDat;
     }
+
     public String getTrangThai() {
         return trangThai;
     }
-    public int getTrangThaiInt() {
-        return convertTrangThaiString(trangThai);
-    }
+
     public void setTrangThai(int trangThai) {
         this.trangThai = convertTrangThaiInt(trangThai);
     }
+
+    public int getTrangThaiInt() {
+        return convertTrangThaiString(trangThai);
+    }
+
     public String getThanhTien() {
         return thanhTien;
     }
+
     public void setThanhTien(String thanhTien) {
         this.thanhTien = thanhTien;
     }
+
     public String getIdSachDau() {
         return idSachDau;
     }
+
     public void setIdSachDau(String idSachDau) {
         this.idSachDau = idSachDau;
     }
+
     public Book getCuonSachDau() {
         return cuonSachDau;
     }
+
     public void setCuonSachDau(Book cuonSachDau) {
         this.cuonSachDau = cuonSachDau;
     }
+
     public int getSoSanPham() {
         return soSanPham;
     }
+
     public void setSoSanPham(int soSanPham) {
         this.soSanPham = soSanPham;
     }

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -85,8 +85,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         holder.bookId = cartItem.getBookID();
 
         int quantity = cartItem.getQuantity();
-        EditText quantity_EditText = holder.quantity_EditText;
-        quantity_EditText.setText(String.valueOf(quantity));
+        holder.quantity_EditText.setText(String.valueOf(quantity));
 
         if (book != null) {
             holder.name_TxtView.setText(book.getTen());
@@ -94,8 +93,11 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             holder.price_TxtView.setText(book.getGia());
 
             Glide.with(context)
-                 .load(book.getHinhAnh())
-                 .into(holder.imageView);
+                    .load(book.getHinhAnh())
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .fitCenter()
+                    .into(holder.imageView);
         }
 
         boolean isCheck = isChecked.get(position);
@@ -107,6 +109,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    private void setTotalCheckBox() {
+        for (boolean check : isChecked) {
+            if (!check) {
+                totalCheckBox.setChecked(false);
+                return;
+            }
+        }
+        totalCheckBox.setChecked(true);
     }
 
     public void checkAllCartItem(boolean isCheckedAll) {
@@ -126,6 +138,24 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         } else {
             cartTable.addToCart(id, quantity);
         }
+    }
+
+    public void deleteCartItem() {
+        for (int i = 0; i < itemList.size(); i++) {
+            if (isChecked.get(i)) {
+                CartItem cartItem = itemList.get(i);
+
+                CartTable cartTable = new CartTable(context);
+                cartTable.removeFromCart(cartItem.getBookID());
+
+                isChecked.remove(i);
+                itemList.remove(i);
+                i--;
+            }
+        }
+        getTotalQuantity();
+        getTotalPrice();
+
         notifyDataSetChanged();
     }
 
@@ -164,29 +194,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         totalPriceTxtView.setText(totalPriceString);
     }
 
-    public void deleteCartItem() {
-        for (int i = 0; i < itemList.size(); i++) {
-            if (isChecked.get(i)) {
-                CartItem cartItem = itemList.get(i);
-
-                CartTable cartTable = new CartTable(context);
-                cartTable.removeFromCart(cartItem.getBookID());
-
-                isChecked.remove(i);
-                itemList.remove(i);
-                i--;
-            }
-        }
-        getTotalQuantity();
-        getTotalPrice();
-
-        notifyDataSetChanged();
-    }
-
-    public void updateTotal() {
-        getTotalQuantity();
-        getTotalPrice();
-    }
 
     private void setListener(ViewHolder holder) {
         int position = holder.getAdapterPosition();
@@ -197,10 +204,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         if (book != null) {
             quantity_EditText.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
@@ -232,6 +241,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             if (book.getTonKho() < quantity) {
                 Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
             } else {
+                holder.quantity_EditText.setText(String.valueOf(quantity));
                 cartItem.setQuantity(quantity);
                 addItemToCart(holder.bookId, quantity);
                 getTotalQuantity();
@@ -246,6 +256,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             if (quantity <= 0) {
                 Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
             } else {
+                holder.quantity_EditText.setText(String.valueOf(quantity));
                 cartItem.setQuantity(quantity);
                 addItemToCart(holder.bookId, quantity);
                 getTotalQuantity();
@@ -265,17 +276,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
                 getTotalQuantity();
                 getTotalPrice();
             }
-            setCheckedTotal();
+            setTotalCheckBox();
         });
-    }
-
-    private void setCheckedTotal() {
-        for (boolean check : isChecked) {
-            if (!check) {
-                return;
-            }
-        }
-        totalCheckBox.setChecked(true);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

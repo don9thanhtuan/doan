@@ -1,7 +1,5 @@
 package com.nhom4.bookstoremobile.service;
 
-import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
 
 import java.util.List;

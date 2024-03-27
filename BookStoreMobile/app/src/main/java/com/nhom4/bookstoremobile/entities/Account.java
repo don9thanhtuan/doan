@@ -9,7 +9,9 @@ public class Account {
     private boolean admin;
     private String matKhau;
 
-    public Account() {}
+    public Account() {
+    }
+
     public Account(String tenTaiKhoan, String hoTen, String soDienThoai, String email, String diaChi, boolean admin) {
         this.tenTaiKhoan = tenTaiKhoan;
         this.hoTen = hoTen;

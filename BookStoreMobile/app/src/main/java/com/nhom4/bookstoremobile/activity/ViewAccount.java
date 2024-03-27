@@ -2,23 +2,17 @@ package com.nhom4.bookstoremobile.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.adapter.OrderAdapter;
 import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
@@ -32,8 +26,6 @@ import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +33,7 @@ import retrofit2.Response;
 public class ViewAccount extends AppCompatActivity {
     private AccountTable accountTable;
     private Account account;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +48,6 @@ public class ViewAccount extends AppCompatActivity {
             setContentView(R.layout.activity_view_account_user);
             setListenerAccount();
             getAccountFromAPI(accountResponse.getUserID());
-
         }
         setBaseListener();
     }
@@ -69,6 +61,7 @@ public class ViewAccount extends AppCompatActivity {
     private void redirectToMain() {
         Intent intent = new Intent(ViewAccount.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void setBaseListener() {
@@ -117,7 +110,6 @@ public class ViewAccount extends AppCompatActivity {
     private void setListenerAccount() {
         findViewById(R.id.settingBtn).setOnClickListener(v -> {
             Intent intent = new Intent(ViewAccount.this, ViewSetting.class);
-            intent.putExtra("userID", account.getTenTaiKhoan());
             intent.putExtra("isAdmin", account.isAdmin());
             startActivity(intent);
             finish();
@@ -154,7 +146,8 @@ public class ViewAccount extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {}
+            public void onFailure(Call<Account> call, Throwable t) {
+            }
         });
     }
 
@@ -199,7 +192,8 @@ public class ViewAccount extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Order>> call, Throwable t) {}
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+            }
         });
     }
 }

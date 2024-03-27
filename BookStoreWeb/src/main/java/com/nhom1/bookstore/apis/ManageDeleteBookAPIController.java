@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nhom1.bookstore.services.BookService;
 
 @RestController
-public class DeleteBookController {
+public class ManageDeleteBookAPIController {
     private final BookService bookService;
 
-    public DeleteBookController(BookService bookService) {
+    public ManageDeleteBookAPIController(BookService bookService) {
         this.bookService = bookService;
     }
 

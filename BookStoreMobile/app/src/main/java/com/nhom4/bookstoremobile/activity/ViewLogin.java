@@ -3,7 +3,6 @@ package com.nhom4.bookstoremobile.activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,12 +23,14 @@ import retrofit2.Response;
 
 public class ViewLogin extends AppCompatActivity {
     private AccountResponse accountResponse;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setListener();
     }
+
     @Override
     public void onBackPressed() {
         redirectToAccount();
@@ -90,7 +91,7 @@ public class ViewLogin extends AppCompatActivity {
                         Toast.makeText(ViewLogin.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                         loginSuccess();
                         redirectToAccount();
-                    }else {
+                    } else {
                         Toast.makeText(ViewLogin.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -110,7 +111,7 @@ public class ViewLogin extends AppCompatActivity {
         AccountTable accountTable = new AccountTable(ViewLogin.this);
         accountTable.clear();
         int isAdminInt = 0;
-        if(accountResponse.isAdmin()) {
+        if (accountResponse.isAdmin()) {
             isAdminInt = 1;
         }
         accountTable.addAccount(accountResponse.getUserID(), isAdminInt);

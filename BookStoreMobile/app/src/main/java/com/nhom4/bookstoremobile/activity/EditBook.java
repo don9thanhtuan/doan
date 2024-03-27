@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -117,35 +117,30 @@ public class EditBook extends AppCompatActivity {
         newBook.setId(book.getId());
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
-        RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
-
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<String> call = bookService.editBook(newBook.getId(), imagePart, newBook_RB);
+        Call<String> call = bookService.editBook(newBook.getId(), imagePart, newBook);
 
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        Toast.makeText(EditBook.this, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
-                        intent.putExtra("book_id", book.getId());
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    Toast.makeText(EditBook.this, "Chỉnh sửa thất bại", Toast.LENGTH_SHORT).show();
+                    redirectToCart();
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                //Toast.makeText(EditBook.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
-                intent.putExtra("book_id", book.getId());
-                startActivity(intent);
+                redirectToCart();
             }
         });
+    }
+
+    private void redirectToCart() {
+        Toast.makeText(EditBook.this, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(EditBook.this, ViewBookDetails.class);
+        intent.putExtra("book_id", book.getId());
+        startActivity(intent);
+        finish();
     }
 
     private MultipartBody.Part prepareFilePart(Uri uri) {
@@ -173,6 +168,9 @@ public class EditBook extends AppCompatActivity {
 
         Glide.with(this)
                 .load(book.getHinhAnh())
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .fitCenter()
                 .into(imagePreview);
 
         nameEditText.setText(book.getTen());

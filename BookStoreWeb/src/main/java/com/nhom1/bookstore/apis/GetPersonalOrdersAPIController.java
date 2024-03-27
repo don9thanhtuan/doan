@@ -14,11 +14,11 @@ import com.nhom1.bookstore.services.BookService;
 import com.nhom1.bookstore.services.OrderService;
 
 @RestController
-public class GetPersonalOrdersController {
+public class GetPersonalOrdersAPIController {
     private final OrderService orderService;
     private final BookService bookService;
 
-    public GetPersonalOrdersController(OrderService orderService, BookService bookService) {
+    public GetPersonalOrdersAPIController(OrderService orderService, BookService bookService) {
         this.orderService = orderService;
         this.bookService = bookService;
     }

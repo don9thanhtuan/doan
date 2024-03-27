@@ -12,6 +12,8 @@ public class CartTable extends SQLiteOpenHelper {
 
     public CartTable(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        SQLiteDatabase db = this.getReadableDatabase();
+        onCreate(db);
     }
 
     @Override

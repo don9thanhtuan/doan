@@ -12,17 +12,17 @@ import com.nhom1.bookstore.entity.Book;
 import com.nhom1.bookstore.services.BookService;
 
 @RestController
-@RequestMapping("/api/topselling")
-public class GetTopSellingController {
+@RequestMapping("/api/books")
+public class GetBookListAPIController {
     private final BookService bookService;
 
-    public GetTopSellingController(BookService bookService) {
+    public GetBookListAPIController(BookService bookService) {
         this.bookService = bookService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getTopSelling() {
-        List<Book> bookList = bookService.getTopSelling();
+    public ResponseEntity<List<Book>> getAllBooks() {
+        List<Book> bookList = bookService.getBookList();
         if (bookList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

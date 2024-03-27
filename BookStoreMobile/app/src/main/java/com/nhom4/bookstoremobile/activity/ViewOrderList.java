@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.OrderAdapter;
-import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
@@ -29,6 +27,7 @@ import retrofit2.Response;
 public class ViewOrderList extends AppCompatActivity {
     private final List<TextView> btnList = new ArrayList<>();
     private String userID;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +87,7 @@ public class ViewOrderList extends AppCompatActivity {
 
     private void setEffect(TextView clickedBtn) {
         for (TextView textView : btnList) {
-            if(textView == clickedBtn) {
+            if (textView == clickedBtn) {
                 textView.setBackgroundResource(R.drawable.bottom_border_black);
                 textView.setTextColor(Color.parseColor("#000000"));
                 continue;
@@ -108,7 +107,7 @@ public class ViewOrderList extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<Order> orderList = response.body();
 
-                    if(choice != 4) {
+                    if (choice != 4) {
                         for (int i = 0; i < orderList.size(); i++) {
                             if (orderList.get(i).getTrangThaiInt() != choice) {
                                 orderList.remove(i);

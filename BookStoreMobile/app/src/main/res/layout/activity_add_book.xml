@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:inputType="none"
-                android:text="Trọng Lượng (kg):"
+                android:text="Trọng Lượng (gr):"
                 android:textSize="20sp" />
 
             <EditText

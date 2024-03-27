@@ -26,6 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
@@ -33,7 +34,6 @@ import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +41,7 @@ import retrofit2.Response;
 public class ViewBookDetails extends AppCompatActivity {
     private Book book;
     private View addCart_Layout;
+    private CartTable cartTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,18 +159,21 @@ public class ViewBookDetails extends AppCompatActivity {
         layoutContainer.removeAllViewsInLayout();
     }
 
-    private void addItemToCart(String id, int quantity) {
-        CartTable cartTable = new CartTable(ViewBookDetails.this);
+    private CartItem getItemCart(String id) {
         Cursor cursor = cartTable.findCartItem(id);
 
         if (cursor != null && cursor.moveToFirst()) {
-            do {
-                int current_Quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            return new CartItem(id, quantity);
+        }
+        return null;
+    }
 
-                cartTable.updateQuantityItem(id, current_Quantity + quantity);
-            } while (cursor.moveToNext());
+    private void addItemToCart(String id, int quantity) {
+        CartItem cartItem = getItemCart(id);
 
-            cursor.close();
+        if (cartItem != null) {
+            cartTable.updateQuantityItem(id, cartItem.getQuantity() + quantity);
         } else {
             cartTable.addToCart(id, quantity);
         }
@@ -184,6 +188,9 @@ public class ViewBookDetails extends AppCompatActivity {
 
         Glide.with(this)
                 .load(book.getHinhAnh())
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .fitCenter()
                 .into(imageView);
 
         nameTextView.setText(book.getTen());
@@ -193,6 +200,7 @@ public class ViewBookDetails extends AppCompatActivity {
 
     private void setListenerAddLayout(View addCart_Layout) {
         EditText quantity_EditText = addCart_Layout.findViewById(R.id.quantity_EditText);
+        CartItem cartItem = getItemCart(book.getId());
 
         addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(v -> closeAddCart());
         addCart_Layout.findViewById(R.id.addToCartBtn).setOnClickListener(v -> {
@@ -219,21 +227,31 @@ public class ViewBookDetails extends AppCompatActivity {
                     quantity = Integer.parseInt(quantityRaw);
                 }
 
+                int quantityInCart = 0;
+                if (cartItem != null) {
+                    quantityInCart = cartItem.getQuantity();
+                }
+
                 if (quantity <= 0) {
                     Toast.makeText(ViewBookDetails.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                     quantity_EditText.setText("1");
-                } else if (book.getTonKho() < quantity) {
+                } else if (book.getTonKho() < (quantity + quantityInCart)) {
                     Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                    quantity_EditText.setText(String.valueOf(book.getTonKho()));
+                    int remain = book.getTonKho() - quantityInCart;
+                    quantity_EditText.setText(String.valueOf(remain));
                 }
             }
         });
 
         addCart_Layout.findViewById(R.id.plusBtn).setOnClickListener(v -> {
             String quantityRaw = quantity_EditText.getText().toString();
-            int quantity = Integer.parseInt(quantityRaw) + 1;
+            int quantityInCart = 0;
+            if (cartItem != null) {
+                quantityInCart = cartItem.getQuantity();
+            }
 
-            if (book.getTonKho() < quantity) {
+            int quantity = Integer.parseInt(quantityRaw) + 1;
+            if (book.getTonKho() < (quantity + quantityInCart)) {
                 Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
             } else {
                 quantity_EditText.setText(String.valueOf(quantity));
@@ -261,9 +279,19 @@ public class ViewBookDetails extends AppCompatActivity {
         findViewById(R.id.cartBtn).setOnClickListener(v -> {
             Intent intent = new Intent(ViewBookDetails.this, ViewCart.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         });
 
         findViewById(R.id.addToCartBtn).setOnClickListener(v -> {
+            cartTable = new CartTable(ViewBookDetails.this);
+            CartItem cartItem = getItemCart(book.getId());
+            if (cartItem != null) {
+                if (cartItem.getQuantity() >= book.getTonKho()) {
+                    Toast.makeText(ViewBookDetails.this, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
             LayoutInflater inflater = getLayoutInflater();
             addCart_Layout = inflater.inflate(R.layout.main_add_cart_item_layout, null);
             FrameLayout layoutContainer = findViewById(R.id.addCart_Layout);

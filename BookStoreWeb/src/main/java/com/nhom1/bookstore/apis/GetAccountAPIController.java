@@ -11,10 +11,10 @@ import com.nhom1.bookstore.services.AccountService;
 
 
 @Controller
-public class GetAccountController {
+public class GetAccountAPIController {
     private final AccountService accountService;
     
-    public GetAccountController(AccountService accountService) {
+    public GetAccountAPIController(AccountService accountService) {
         this.accountService = accountService;
     }
     

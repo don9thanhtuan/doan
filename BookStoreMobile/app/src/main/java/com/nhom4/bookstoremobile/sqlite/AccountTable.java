@@ -12,8 +12,8 @@ public class AccountTable extends SQLiteOpenHelper {
 
     public AccountTable(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        onCreate(db);
+        SQLiteDatabase db = this.getReadableDatabase();
+        onCreate(db);
     }
 
     @Override

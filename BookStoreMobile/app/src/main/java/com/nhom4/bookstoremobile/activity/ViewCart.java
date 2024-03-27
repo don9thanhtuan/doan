@@ -6,9 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,14 +79,16 @@ public class ViewCart extends AppCompatActivity {
     public void onBackPressed() {
         if (isFromMain) {
             redirectToMain();
-
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         }
-        super.onBackPressed();
     }
 
     private void redirectToMain() {
         Intent intent = new Intent(ViewCart.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void getCartData() {
@@ -102,7 +103,6 @@ public class ViewCart extends AppCompatActivity {
         }
 
         if (cart.size() != 0) {
-
             for (CartItem cartItem : cart) {
                 getBookDetailFromAPI(cartItem);
             }
@@ -117,15 +117,17 @@ public class ViewCart extends AppCompatActivity {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
                     Book book = response.body();
-                    if(book != null) {
+                    if (book != null) {
                         String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
                         book.setHinhAnh(imageUrl);
                         cartItem.setBook(book);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        cartTable.removeFromCart(cartItem.getBookID());
                     }
+                } else {
+                    cartTable.removeFromCart(cartItem.getBookID());
+                    cart.remove(cartItem);
+                    Toast.makeText(ViewCart.this, "Sản phẩm " + cartItem.getBookID() + " không còn được bán", Toast.LENGTH_SHORT).show();
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -153,9 +155,16 @@ public class ViewCart extends AppCompatActivity {
 
     private void setListener() {
         findViewById(R.id.homeBtn).setOnClickListener(v -> redirectToMain());
-        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            if (isFromMain) {
+                redirectToMain();
+            } else {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            }
+        });
 
-        totalCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> adapter.checkAllCartItem(isChecked));
+        totalCheckBox.setOnClickListener(view -> adapter.checkAllCartItem(totalCheckBox.isChecked()));
 
         findViewById(R.id.deleteBtn).setOnClickListener(v -> showConfirmationPopup());
 
@@ -165,15 +174,12 @@ public class ViewCart extends AppCompatActivity {
             finish();
         });
 
-        findViewById(R.id.backButton).setOnClickListener(v -> {
-            finish();
-            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-        });
-
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> {
             recreate();
             pullToRefresh.setRefreshing(false);
         });
+
+        findViewById(R.id.paymentBtn).setOnClickListener(v -> startActivity(new Intent(ViewCart.this, CheckOut.class)));
     }
 }

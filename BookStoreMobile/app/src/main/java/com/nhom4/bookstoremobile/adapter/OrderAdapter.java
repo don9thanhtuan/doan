@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
-import com.nhom4.bookstoremobile.entities.Order; // Đổi thành package của lớp Order
-import com.nhom4.bookstoremobile.retrofit.DefaultURL;
+import com.nhom4.bookstoremobile.entities.Order;
 
 import java.util.List;
 
@@ -47,6 +47,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
         Glide.with(mContext)
                 .load(book.getHinhAnh())
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .fitCenter()
                 .into(holder.imageViewFirstBook);
 
         holder.textViewFirstBook.setText(book.getTen());
