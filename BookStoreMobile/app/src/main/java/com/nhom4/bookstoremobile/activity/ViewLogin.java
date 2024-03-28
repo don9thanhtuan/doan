@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
@@ -77,13 +76,12 @@ public class ViewLogin extends AppCompatActivity {
             return;
         }
 
-        Account account = new Account();
-        account.setTenTaiKhoan(userID);
-        account.setMatKhau(userPassword);
+        RequestBody userIDRB = RequestBody.create(MediaType.parse("text/plain"), userID);
+        RequestBody userPasswordRB = RequestBody.create(MediaType.parse("text/plain"), userPassword);
 
         AccountService accountService = RetrofitAPI.getInstance().create(AccountService.class);
 
-        Call<AccountResponse> call = accountService.login(account);
+        Call<AccountResponse> call = accountService.login(userIDRB, userPasswordRB);
         call.enqueue(new Callback<AccountResponse>() {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {

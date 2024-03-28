@@ -17,7 +17,10 @@ import retrofit2.http.Path;
 public interface AccountService {
     @Multipart
     @POST("login")
-    Call<AccountResponse> login(@Body Account account);
+    Call<AccountResponse> login(
+            @Part("username") RequestBody userID,
+            @Part("password") RequestBody userPassword
+    );
 
     @GET("accounts/{username}")
     Call<Account> getAccount(@Path("username") String userID);
