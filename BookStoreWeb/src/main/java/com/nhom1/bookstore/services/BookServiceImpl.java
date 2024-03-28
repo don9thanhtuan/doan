@@ -35,7 +35,9 @@ public class BookServiceImpl implements BookService{
     @Override
     public void editBook(Book newBook) {
         Book currentBook = bookDAOController.getBook(newBook.getId());
-        deleteImage(currentBook.getHinhAnh());
+        if(!newBook.getHinhAnh().equals(currentBook.getHinhAnh())) {
+            deleteImage(currentBook.getHinhAnh());
+        }
         bookDAOController.editBook(newBook);
     }
 

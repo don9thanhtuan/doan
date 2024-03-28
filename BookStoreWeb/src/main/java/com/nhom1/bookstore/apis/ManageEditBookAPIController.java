@@ -23,10 +23,12 @@ public class ManageEditBookAPIController {
             @RequestParam("image") MultipartFile file,
             @RequestParam("book") String bookJSON) {
         Book newBook = ConverterJSON.jsonToBookEntity(bookJSON);
-
-        String path = bookService.fileToFilePathConverter(file);
-        newBook.setHinhAnh(path);
-                
+        
+        if(file.getOriginalFilename().isEmpty()) {
+            String path = bookService.fileToFilePathConverter(file);
+            newBook.setHinhAnh(path);
+        }
+        
         bookService.editBook(newBook);
         return "Book edited successfully";
     }

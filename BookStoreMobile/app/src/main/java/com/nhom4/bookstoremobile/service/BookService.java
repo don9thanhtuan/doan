@@ -1,16 +1,16 @@
 package com.nhom4.bookstoremobile.service;
 
 
+import androidx.annotation.Nullable;
+
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.BookResponse;
 
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -40,7 +40,7 @@ public interface BookService {
     @PUT("books/{id}")
     Call<String> editBook(
             @Path("id") String bookId,
-            @Part MultipartBody.Part image,
+            @Part @Nullable MultipartBody.Part image,
             @Part("book") Book book
     );
 

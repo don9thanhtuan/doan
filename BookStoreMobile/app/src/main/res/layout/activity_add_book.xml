@@ -228,7 +228,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/add_book_button"
+                android:id="@+id/addBookBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="30dp"

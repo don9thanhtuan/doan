@@ -54,13 +54,13 @@ public class ViewRegister extends AppCompatActivity {
         String userPassword = userPasswordEditText.getText().toString();
         String userConfirmPassword = userConfirmPasswordEditText.getText().toString();
 
-        if(userPassword.equals(userConfirmPassword)) {
+        if (userPassword.equals(userConfirmPassword)) {
             EditText userIDEditText = findViewById(R.id.userID);
             String userID = userIDEditText.getText().toString();
 
 
         } else {
-            Toast.makeText(ViewRegister.this, "Vui lòng xác nhận lại mật khẩu",Toast.LENGTH_LONG).show();
+            Toast.makeText(ViewRegister.this, "Vui lòng xác nhận lại mật khẩu", Toast.LENGTH_LONG).show();
         }
     }
 }

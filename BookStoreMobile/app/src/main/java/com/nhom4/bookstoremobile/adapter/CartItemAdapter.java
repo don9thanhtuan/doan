@@ -280,6 +280,15 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         });
     }
 
+    public boolean[] checkOut() {
+        boolean[] booleanArray = new boolean[isChecked.size()];
+        for (int i = 0; i < isChecked.size(); i++) {
+            booleanArray[i] = isChecked.get(i);
+        }
+
+        return booleanArray;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         String bookId;
         ImageView imageView;
