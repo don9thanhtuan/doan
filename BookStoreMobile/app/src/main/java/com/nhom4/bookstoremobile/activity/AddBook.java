@@ -89,10 +89,9 @@ public class AddBook extends AppCompatActivity {
         MultipartBody.Part imagePart = prepareFilePart(selectedImage);
 
         Book newBook = new ExceptionHandler().handleExceptionBook(this);
-        RequestBody newBook_RB = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(newBook));
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<BookResponse> call = bookService.addBook(imagePart, newBook_RB);
+        Call<BookResponse> call = bookService.addBook(imagePart, newBook);
         call.enqueue(new Callback<BookResponse>() {
             @Override
             public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {

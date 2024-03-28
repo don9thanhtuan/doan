@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,8 +54,6 @@ public class ViewSettingInfo extends AppCompatActivity {
     }
 
     private void redirectToAccountSetting() {
-        Intent intent = new Intent(ViewSettingInfo.this, ViewSetting.class);
-        startActivity(intent);
         finish();
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
@@ -145,6 +144,7 @@ public class ViewSettingInfo extends AppCompatActivity {
             case 2:
                 choiceString = "Email";
                 editInfo = account.getEmail();
+                infoEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 break;
             case 3:
                 choiceString = "Số điện thoại";
@@ -154,6 +154,7 @@ public class ViewSettingInfo extends AppCompatActivity {
                 filters[0] = new InputFilter.LengthFilter(10);
 
                 infoEditText.setFilters(filters);
+                infoEditText.setInputType(InputType.TYPE_CLASS_PHONE);
                 break;
             case 4:
                 choiceString = "Địa chỉ";
@@ -229,7 +230,7 @@ public class ViewSettingInfo extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         Toast.makeText(ViewSettingInfo.this, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-                        recreate();
+                        getAccountData();
                     }
                 }
             }
@@ -237,7 +238,7 @@ public class ViewSettingInfo extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(ViewSettingInfo.this, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-                recreate();
+                getAccountData();
             }
         });
     }

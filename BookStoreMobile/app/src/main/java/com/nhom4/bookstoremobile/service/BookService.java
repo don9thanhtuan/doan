@@ -33,7 +33,7 @@ public interface BookService {
     @POST("books")
     Call<BookResponse> addBook(
             @Part MultipartBody.Part image,
-            @Part("book") RequestBody newBookJson
+            @Part("book") Book book
     );
 
     @Multipart
@@ -41,7 +41,7 @@ public interface BookService {
     Call<String> editBook(
             @Path("id") String bookId,
             @Part MultipartBody.Part image,
-            @Body Book book
+            @Part("book") Book book
     );
 
     @DELETE("books/{id}")

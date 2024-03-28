@@ -3,9 +3,10 @@ package com.nhom1.bookstore.apis;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nhom1.bookstore.entity.Account;
 import com.nhom1.bookstore.services.AccountService;
 
 
@@ -18,8 +19,10 @@ public class LoginAPIController {
     }
     
     @PostMapping("/api/login")
-    public ResponseEntity<AccountResponse> authentication(@RequestParam("username") String username,
-    @RequestParam("password") String password) {
+    public ResponseEntity<AccountResponse> authentication(@RequestBody Account account) {
+        String username = account.getTenTaiKhoan();
+        String password = account.getMatKhau();
+
         int ketqua = accountService.authentication(username, password);
         AccountResponse response = new AccountResponse(null, false);
         if (ketqua != 0) {

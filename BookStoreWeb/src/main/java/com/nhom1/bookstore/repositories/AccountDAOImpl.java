@@ -34,12 +34,13 @@ public class AccountDAOImpl implements AccountDAO{
 
     @Override
     public void editAccount(String currentID, Account newAccount) {
-        String sql = "UPDATE TaiKhoan SET HoTen=?, SoDienThoai=?, DiaChi=? WHERE TenTaiKhoan = ?";
+        String sql = "UPDATE TaiKhoan SET HoTen=?, SoDienThoai=?, DiaChi=?, Email=? WHERE TenTaiKhoan = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, newAccount.getHoTen());
             statement.setString(2, newAccount.getSoDienThoai());
             statement.setString(3, newAccount.getDiaChi());
-            statement.setString(4, currentID);
+            statement.setString(4, newAccount.getEmail());
+            statement.setString(5, currentID);
 
             statement.executeUpdate();
         }catch (SQLException e) {
