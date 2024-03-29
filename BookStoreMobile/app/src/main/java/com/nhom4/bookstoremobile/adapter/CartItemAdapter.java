@@ -49,6 +49,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         }
     }
 
+    public List<Boolean> getIsChecked() {
+        return isChecked;
+    }
+
     public void setPaymentBtn(Button paymentBtn) {
         this.paymentBtn = paymentBtn;
     }

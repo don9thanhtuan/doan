@@ -1,12 +1,12 @@
 package com.nhom4.bookstoremobile.controller;
 
+import android.app.Activity;
 import android.content.Intent;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.nhom4.bookstoremobile.MainActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewBookList;
@@ -24,9 +24,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivityController {
-    private final MainActivity view;
+    private final Activity view;
 
-    public MainActivityController(MainActivity view) {
+    public MainActivityController(Activity view) {
         this.view = view;
     }
 

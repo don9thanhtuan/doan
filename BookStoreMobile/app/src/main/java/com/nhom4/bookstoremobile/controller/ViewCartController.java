@@ -1,5 +1,6 @@
 package com.nhom4.bookstoremobile.controller;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.widget.CheckBox;
@@ -31,16 +32,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ViewCartController {
-    private final ViewCart view;
+    private final Activity activity;
     private final CartTable cartTable;
     private final CheckBox totalCheckBox;
-    private List<CartItem> cart;
+    private final List<CartItem> cart;
     private CartItemAdapter adapter;
 
-    public ViewCartController(ViewCart view) {
-        this.view = view;
-        cartTable = new CartTable(view);
-        totalCheckBox = view.findViewById(R.id.totalCheckBox);
+    public ViewCartController(ViewCart activity) {
+        this.activity = activity;
+        cartTable = new CartTable(activity);
+        totalCheckBox = activity.findViewById(R.id.totalCheckBox);
         cart = new ArrayList<>();
     }
 
@@ -60,15 +61,15 @@ public class ViewCartController {
                 getBookDetailFromAPI(cartItem);
             }
 
-            RecyclerView recyclerView = view.findViewById(R.id.cartItemList);
+            RecyclerView recyclerView = activity.findViewById(R.id.cartItemList);
 
-            adapter = new CartItemAdapter(view, cart, recyclerView);
+            adapter = new CartItemAdapter(activity, cart, recyclerView);
 
             adapter.setTotalCheckBox(totalCheckBox);
-            adapter.setPaymentBtn(view.findViewById(R.id.paymentBtn));
-            adapter.setTotalPriceTxtView(view.findViewById(R.id.totalPrice));
+            adapter.setPaymentBtn(activity.findViewById(R.id.paymentBtn));
+            adapter.setTotalPriceTxtView(activity.findViewById(R.id.totalPrice));
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(view, LinearLayoutManager.VERTICAL, false));
+            recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
             recyclerView.setAdapter(adapter);
         }
     }
@@ -89,7 +90,7 @@ public class ViewCartController {
                 } else {
                     cartTable.removeFromCart(cartItem.getBookID());
                     cart.remove(cartItem);
-                    Toast.makeText(view, "Sản phẩm " + cartItem.getBookID() + " không còn được bán", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Sản phẩm " + cartItem.getBookID() + " không còn được bán", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -102,16 +103,16 @@ public class ViewCartController {
     }
 
     public void showConfirmationPopup() {
-        ConfirmPopup.show(view, "Xác nhận", "Bạn muốn xóa những sản phẩm được chọn?", (dialog, which) -> {
+        ConfirmPopup.show(activity, "Xác nhận", "Bạn muốn xóa những sản phẩm được chọn?", (dialog, which) -> {
             adapter.deleteCartItem();
             totalCheckBox.setChecked(false);
         });
     }
 
     public void redirectToMain() {
-        Intent intent = new Intent(view, MainActivity.class);
-        view.startActivity(intent);
-        view.finish();
+        Intent intent = new Intent(activity, MainActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
     public void checkAll() {
@@ -122,26 +123,49 @@ public class ViewCartController {
         if (isFromMain) {
             redirectToMain();
         } else {
-            view.finish();
-            view.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            activity.finish();
+            activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         }
     }
 
     public void redirectToAccount() {
-        Intent intent = new Intent(view, ViewAccount.class);
-        view.startActivity(intent);
-        view.finish();
+        Intent intent = new Intent(activity, ViewAccount.class);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        view.recreate();
+        activity.recreate();
         pullToRefresh.setRefreshing(false);
     }
 
     public void redirectToCheckOut() {
-        Intent intent = new Intent(view, CheckOut.class);
-        intent.putExtra("orderList", adapter.checkOut());
-        view.startActivity(intent);
-        view.finish();
+        ViewAccountController controller = new ViewAccountController(activity);
+
+        if (controller.getAccountData() == null) {
+            Toast.makeText(activity, "Vui lòng đăng nhập để đặt hàng", Toast.LENGTH_SHORT).show();
+            redirectToAccount();
+            return;
+        }
+
+        if (adapter != null) {
+            boolean hasOne = false;
+
+            for (Boolean b : adapter.getIsChecked()) {
+                if (b) {
+                    hasOne = true;
+                    Intent intent = new Intent(activity, CheckOut.class);
+                    intent.putExtra("orderList", adapter.checkOut());
+                    activity.startActivity(intent);
+                    activity.finish();
+                }
+            }
+
+            if (!hasOne) {
+                Toast.makeText(activity, "Vui lòng chọn ít nhất 1 sản phẩm", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(activity, "Giỏ hàng hiện đang trống", Toast.LENGTH_SHORT).show();
+        }
     }
 }

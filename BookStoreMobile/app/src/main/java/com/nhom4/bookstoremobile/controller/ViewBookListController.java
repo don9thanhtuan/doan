@@ -1,11 +1,12 @@
 package com.nhom4.bookstoremobile.controller;
 
+import android.app.Activity;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.activity.ViewBookList;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
@@ -19,10 +20,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ViewBookListController {
-    private final ViewBookList view;
+    private final Activity activity;
 
-    public ViewBookListController(ViewBookList view) {
-        this.view = view;
+    public ViewBookListController(Activity activity) {
+        this.activity = activity;
     }
 
     public void getBookListFromAPI() {
@@ -40,11 +41,11 @@ public class ViewBookListController {
                         book.setHinhAnh(imageUrl);
                     }
 
-                    RecyclerView recyclerView = view.findViewById(R.id.list_RecyclerView);
+                    RecyclerView recyclerView = activity.findViewById(R.id.list_RecyclerView);
 
-                    BookAdapter adapter = new BookAdapter(view, bookList, recyclerView, false);
+                    BookAdapter adapter = new BookAdapter(activity, bookList, recyclerView, false);
 
-                    recyclerView.setLayoutManager(new GridLayoutManager(view, 2));
+                    recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -56,12 +57,12 @@ public class ViewBookListController {
     }
 
     public void redirectToMain() {
-        view.finish();
-        view.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        activity.finish();
+        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        view.recreate();
+        activity.recreate();
         pullToRefresh.setRefreshing(false);
     }
 }

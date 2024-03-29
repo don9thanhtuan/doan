@@ -138,13 +138,13 @@ public class AccountDAOImpl implements AccountDAO{
 
     @Override
     public void registerAccount(Account newAccount) {
-        String sql = "INSERT INTO TaiKhoan (TenTaiKhoan, MatKhau, Email, isAdmin) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO TaiKhoan (TenTaiKhoan, MatKhau, Email, isAdmin, HoTen) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, newAccount.getTenTaiKhoan());
             preparedStatement.setString(2, newAccount.getMatKhau());
             preparedStatement.setString(3, newAccount.getEmail());
             preparedStatement.setBoolean(4, false);
-
+            preparedStatement.setString(5, newAccount.getTenTaiKhoan());
             preparedStatement.execute();
         }catch (SQLException e) {
             e.printStackTrace();

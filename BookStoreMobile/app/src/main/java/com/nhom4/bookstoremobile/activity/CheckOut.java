@@ -1,119 +1,87 @@
 package com.nhom4.bookstoremobile.activity;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.controller.CheckOutController;
+import com.nhom4.bookstoremobile.controller.ViewSettingInfoController;
+import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.entities.CartItem;
-import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
-import com.nhom4.bookstoremobile.service.BookService;
-import com.nhom4.bookstoremobile.sqlite.CartTable;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CheckOut extends AppCompatActivity {
-    private final List<TextView> btnList = new ArrayList<>();
-    private List<CartItem> cart = new ArrayList<>();
+    private CheckOutController orderController;
+    private ViewSettingInfoController infoController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        boolean[] booleanArray = getIntent().getBooleanArrayExtra("orderList");
+        infoController = new ViewSettingInfoController(this);
+        AccountResponse accountResponse = infoController.getAccountData();
+        infoController.getAccountFromAPI(accountResponse.getUserID());
 
+        orderController = new CheckOutController(this);
+        if (getIntent().getBooleanExtra("isBuyNow", false)) {
+            String bookID = getIntent().getStringExtra("bookID");
+            int quantity = getIntent().getIntExtra("quantity", 0);
+            CartItem cartItem = new CartItem(bookID, quantity);
+            orderController.buyNow(cartItem);
+        } else {
+            boolean[] checkedArray = getIntent().getBooleanArrayExtra("orderList");
+            orderController.getOrderItemList(checkedArray);
+        }
 
         setListener();
     }
 
     private void setListener() {
-        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+
+        pullToRefresh.setOnRefreshListener(() -> orderController.reload(pullToRefresh));
+        findViewById(R.id.phoneChange).setOnClickListener(v -> infoController.openEditor(3));
+        findViewById(R.id.addressChange).setOnClickListener(v -> infoController.openEditor(4));
+        findViewById(R.id.backButton).setOnClickListener(v -> orderController.redirectToCart());
+        findViewById(R.id.overlayLayout).setOnTouchListener((v, event) -> {
+            v.performClick();
+            infoController.closeEditor();
+            return false;
+        });
 
         TextView codBtn = findViewById(R.id.codBtn);
         TextView waitBtn = findViewById(R.id.zaloBtn);
         TextView momoBtn = findViewById(R.id.momoBtn);
         TextView creditBtn = findViewById(R.id.creditBtn);
 
-        btnList.add(codBtn);
-        btnList.add(waitBtn);
-        btnList.add(momoBtn);
-        btnList.add(creditBtn);
+        orderController.addBtnToList(codBtn);
+        orderController.addBtnToList(waitBtn);
+        orderController.addBtnToList(momoBtn);
+        orderController.addBtnToList(creditBtn);
 
         codBtn.setOnClickListener(v -> {
-            setEffect(codBtn);
+            orderController.setEffect(codBtn);
         });
         waitBtn.setOnClickListener(v -> {
-            setEffect(waitBtn);
+            orderController.setEffect(waitBtn);
         });
         momoBtn.setOnClickListener(v -> {
-            setEffect(momoBtn);
+            orderController.setEffect(momoBtn);
         });
         creditBtn.setOnClickListener(v -> {
-            setEffect(creditBtn);
+            orderController.setEffect(creditBtn);
         });
+
+        orderController.setEffect(codBtn);
+        findViewById(R.id.orderBtn).setOnClickListener(v -> orderController.createOrder(infoController.getAccount()));
     }
 
     @Override
     public void onBackPressed() {
-//        redirectToAccount();
+        orderController.redirectToCart();
         super.onBackPressed();
-    }
-
-    private void setEffect(TextView clickedBtn) {
-        for (TextView button : btnList) {
-            if (button == clickedBtn) {
-                button.setBackgroundResource(R.drawable.selection_border_rounded);
-                continue;
-            }
-            button.setBackgroundResource(R.drawable.gray_border_rounded);
-        }
-    }
-
-    private void getCartData(boolean[] booleans) {
-        List<CartItem> cart = new ArrayList<>();
-
-        CartTable cartTable = new CartTable(this);
-        Cursor cursor = cartTable.getAllCartItems();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String bookID = cursor.getString(cursor.getColumnIndex("bookID"));
-                int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-                cart.add(new CartItem(bookID, quantity));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-
-        if (cart.size() != 0) {
-            for (CartItem cartItem : cart) {
-                getBookDetailFromAPI(cartItem);
-            }
-        }
-    }
-
-    private void getBookDetailFromAPI(CartItem cartItem) {
-        BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<Book> call = bookService.getBookDetailsFromRestAPI(cartItem.getBookID());
-        call.enqueue(new Callback<Book>() {
-            @Override
-            public void onResponse(Call<Book> call, Response<Book> response) {
-                if (response.isSuccessful()) {
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Book> call, Throwable t) {
-
-            }
-        });
     }
 }

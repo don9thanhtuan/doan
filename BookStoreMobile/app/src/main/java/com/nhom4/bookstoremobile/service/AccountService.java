@@ -26,4 +26,7 @@ public interface AccountService {
 
     @PUT("accounts/{username}")
     Call<String> editAccount(@Path("username") String userID, @Body Account account);
+
+    @POST("register")
+    Call<String> register(@Body Account account);
 }

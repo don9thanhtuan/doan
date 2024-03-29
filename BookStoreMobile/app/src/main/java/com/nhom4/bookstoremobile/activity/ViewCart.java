@@ -9,13 +9,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewCartController;
-import com.nhom4.bookstoremobile.entities.CartItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ViewCart extends AppCompatActivity {
-    private final List<CartItem> cart = new ArrayList<>();
     private ViewCartController controller;
     private boolean isFromMain;
 

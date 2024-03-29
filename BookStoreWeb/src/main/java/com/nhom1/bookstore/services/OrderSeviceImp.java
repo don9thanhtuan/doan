@@ -66,9 +66,9 @@ public class OrderSeviceImp implements OrderService {
         order.setMaDonHang(maDonHang);
         order.setIdNguoiDat(idNguoiDat);
         order.setThoiGianDat(new Date());
-        int trangThai = 0;
-        if(newOrder.getPaymentMethod().equals("momo")) {
-            trangThai = 1;
+        int trangThai = 1;
+        if(newOrder.getPaymentMethod().equals("cod")) {
+            trangThai = 0;
         }
         order.setTrangThai(trangThai);
         order.setThanhTien(newOrder.getPrice());
@@ -85,7 +85,7 @@ public class OrderSeviceImp implements OrderService {
         
         for(int i = 0; i < newOrder.getBookList().size(); i++){
             String idSach = newOrder.getBookList().get(i);
-            String soLuongRaw = newOrder.getPriceList().get(i);
+            String soLuongRaw = newOrder.getQuantityList().get(i);
             int soLuong = Integer.parseInt(soLuongRaw);
 
             OrderDetail.BookInOrder bookInOrder = orderDetail.new BookInOrder(idSach, soLuong);

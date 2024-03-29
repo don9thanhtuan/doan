@@ -54,7 +54,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
         holder.textViewFirstBook.setText(book.getTen());
         holder.textViewOrderPrice.setText(order.getThanhTien());
-        String soSP = "Và " + order.getSoSanPham() + " cuốn sách khác";
+        String soSP = "";
+        if (order.getSoSanPham() != 0) {
+            soSP = "Và " + order.getSoSanPham() + " cuốn sách khác";
+        }
         holder.textViewOtherBook.setText(soSP);
     }
 

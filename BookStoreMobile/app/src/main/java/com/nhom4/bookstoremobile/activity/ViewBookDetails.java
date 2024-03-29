@@ -38,7 +38,8 @@ public class ViewBookDetails extends AppCompatActivity {
 
         findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectToBookList());
         findViewById(R.id.cartBtn).setOnClickListener(v -> controller.redirectToCart());
-        findViewById(R.id.addToCartBtn).setOnClickListener(v -> controller.openAddCartView());
+        findViewById(R.id.addToCartBtn).setOnClickListener(v -> controller.openAddCartView(2));
+        findViewById(R.id.buyNowBtn).setOnClickListener(v -> controller.openAddCartView(1));
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
 
         findViewById(R.id.overlayLayout).setOnTouchListener((v, event) -> {

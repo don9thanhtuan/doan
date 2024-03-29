@@ -19,7 +19,6 @@ public class AddBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     private AddBookController controller;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +32,13 @@ public class AddBook extends AppCompatActivity {
     private void setListener() {
         findViewById(R.id.addImageButton).setOnClickListener(v -> openImagePickLayout());
         findViewById(R.id.addBookBtn).setOnClickListener(v -> controller.addBook());
-        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
     }
 
     @Override
     public void onBackPressed() {
+        controller.redirectBack();
         super.onBackPressed();
-        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     public void openImagePickLayout() {
