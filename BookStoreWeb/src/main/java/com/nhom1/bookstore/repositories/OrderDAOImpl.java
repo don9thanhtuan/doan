@@ -48,11 +48,15 @@ public class OrderDAOImpl implements OrderDAO {
                 while (resultSet.next()) {
                     String maDonHang = resultSet.getString("MaDonHang");
                     String idNguoiDat = resultSet.getString("IDNguoiDat");
+                    Date thoiGianDat = resultSet.getTimestamp("ThoiGianDat");
                     int trangThai = resultSet.getInt("TrangThai");
                     int thanhTienRaw = resultSet.getInt("ThanhTien");
                     String thanhTien = ConverterCurrency.numberToCurrency(thanhTienRaw);
-
-                    return new Order(maDonHang, idNguoiDat, trangThai, thanhTien);
+                    String idSachDau = resultSet.getString("IDSachDau");
+                    int soSanPham = resultSet.getInt("SoSanPham");
+                    String soDienThoai = resultSet.getString("SoDienThoai");
+                    String diaChi = resultSet.getString("DiaChi");
+                    return new Order(maDonHang, idNguoiDat, thoiGianDat, trangThai, thanhTien, idSachDau, soSanPham, soDienThoai, diaChi);
                 }
             }
         } catch (SQLException e) {
@@ -113,7 +117,13 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public List<Order> search(String tuKhoa) {
+        List<Order> result = searchDetails(tuKhoa);
+        return result;
+    }
+
+    private List<Order> searchGeneral(String tuKhoa) {
         List<Order> result = new ArrayList<>();
+        
         String sql = 
         "SELECT * FROM DonHang " +
         "WHERE " + 
@@ -155,6 +165,42 @@ public class OrderDAOImpl implements OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return result;
+    }
+
+    private List<Order> searchDetails(String tuKhoa) {
+        List<Order> result = searchGeneral(tuKhoa);
+
+        String sql = 
+        "SELECT * FROM ChiTietDonHang " +
+        "WHERE " + 
+            "LOWER(MaDonHang) LIKE LOWER(?) OR " +
+            "LOWER(IDSach) LIKE LOWER(?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, "%" + tuKhoa + "%");
+            preparedStatement.setString(2, "%" + tuKhoa + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String maDonHang = resultSet.getString("MaDonHang");
+                    Boolean isMatch = false;
+                    for(Order order : result) {
+                        if(order.getMaDonHang() == maDonHang) {
+                            isMatch = true;
+                            break;
+                        }
+                    }
+                    if(!isMatch) {
+                        result.add(getOrder(maDonHang));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         return result;
     }
 
@@ -197,6 +243,27 @@ public class OrderDAOImpl implements OrderDAO {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void deleteOrder(String id) {
+        String sql = "Delete from ChiTietDonHang WHERE MaDonHang  = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, id);
+
+            statement.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        sql = "Delete from DonHang WHERE MaDonHang = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, id);
+
+            statement.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

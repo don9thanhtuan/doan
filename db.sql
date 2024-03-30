@@ -78,18 +78,18 @@ INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong)
 VALUES 
 ('OCFEI004',  'BLYVL195', 2),
 ('OCFEI004', 'BXFLU747' , 1),
-('OCFEI004', 'BEVKS715', 3);
+('OCFEI004', 'BHXGU988', 3);
 
 INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
 VALUES ('ORCYN789', 'user1', '2023-03-02', 1, 900000, 'BXFLU747', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
 INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong)
 VALUES
 ('ORCYN789', 'BXFLU747' , 2),
-('ORCYN789', 'BEVKS715' , 3),
+('ORCYN789', 'BHXGU988' , 3),
 ('ORCYN789', 'BHKKX073' , 1);
 
 INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
-VALUES ('ORCYN729', 'user1', '2023-03-03', 2, 900000, 'BEVKS715', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+VALUES ('ORCYN729', 'user1', '2023-03-03', 3, 900000, 'BEVKS715', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
 INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong)
 VALUES
 ('ORCYN729', 'BEVKS715' , 2),

@@ -94,4 +94,9 @@ public class OrderSeviceImp implements OrderService {
 
         orderDAOController.createOrderDetail(orderDetail);
     }
+
+    @Override
+    public void deleteOrder(String id) {
+        orderDAOController.deleteOrder(id);
+    }
 }

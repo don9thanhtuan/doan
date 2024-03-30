@@ -48,4 +48,9 @@ public class OrderDAOControllerImpl implements OrderDAOController{
     public void createOrderDetail(OrderDetail newOrderDetail) {
         orderDAO.createOrderDetail(newOrderDetail);
     }
+
+    @Override
+    public void deleteOrder(String id) {
+        orderDAO.deleteOrder(id);
+    }
 }

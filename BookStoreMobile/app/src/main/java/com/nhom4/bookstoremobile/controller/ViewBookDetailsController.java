@@ -71,35 +71,25 @@ public class ViewBookDetailsController {
             public void onFailure(Call<Book> call, Throwable t) {
             }
         });
-
-        activity.findViewById(R.id.editBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, EditBook.class);
-                intent.putExtra("book_id", book.getId());
-                intent.putExtra("book_name", book.getTen());
-                intent.putExtra("book_HinhAnh", book.getHinhAnh());
-                intent.putExtra("book_TacGia", book.getTacGia());
-                intent.putExtra("book_NhaCungCap", book.getNhaCungCap());
-                intent.putExtra("book_TonKho", book.getTonKho());
-                intent.putExtra("book_Gia", book.getGia());
-                intent.putExtra("book_TrongLuong", book.getTrongLuong());
-                intent.putExtra("book_KickThuoc", book.getKichThuoc());
-                intent.putExtra("book_GioiThieu", book.getGioiThieu());
-                activity.startActivity(intent);
-                activity.finish();
-            }
-        });
-
-        activity.findViewById(R.id.deleteBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationPopup();
-            }
-        });
     }
 
-    private void showConfirmationPopup() {
+    public void redirectToEditBook() {
+        Intent intent = new Intent(activity, EditBook.class);
+        intent.putExtra("book_id", book.getId());
+        intent.putExtra("book_name", book.getTen());
+        intent.putExtra("book_HinhAnh", book.getHinhAnh());
+        intent.putExtra("book_TacGia", book.getTacGia());
+        intent.putExtra("book_NhaCungCap", book.getNhaCungCap());
+        intent.putExtra("book_TonKho", book.getTonKho());
+        intent.putExtra("book_Gia", book.getGia());
+        intent.putExtra("book_TrongLuong", book.getTrongLuong());
+        intent.putExtra("book_KickThuoc", book.getKichThuoc());
+        intent.putExtra("book_GioiThieu", book.getGioiThieu());
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
+    public void showDeleteConfirm() {
         TextView idTextView = activity.findViewById(R.id.id_TxtView);
         String id = idTextView.getText().toString();
         ConfirmPopup.show(activity, "Xác nhận", "Bạn muốn xóa sản phẩm " + id + "?", new DialogInterface.OnClickListener() {
@@ -120,7 +110,7 @@ public class ViewBookDetailsController {
                     Toast.makeText(activity, "Xóa thành công sản phẩm " + book.getId(), Toast.LENGTH_SHORT).show();
                     activity.finish();
                 } else {
-                    Toast.makeText(activity, "Failed to delete book", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Vui lòng hoàn thành các đơn hàng có sản phẩm " + book.getId() + " để xóa", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -198,8 +188,15 @@ public class ViewBookDetailsController {
     public void openAddCartView(int choice) {
         CartItem cartItem = getCartItem(bookID);
         if (cartItem != null) {
-            if (cartItem.getQuantity() >= book.getTonKho()) {
-                Toast.makeText(activity, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+            if (cartItem.getQuantity() >= book.getTonKho() || book.getTonKho() <= 0) {
+                Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if(book != null) {
+            if (book.getTonKho() <= 0) {
+                Toast.makeText(activity, "Sản phẩm đã hết hàng", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
@@ -312,7 +309,7 @@ public class ViewBookDetailsController {
                     Toast.makeText(activity, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                     quantity_EditText.setText("1");
                 } else if (book.getTonKho() < (quantity + quantityInCart)) {
-                    Toast.makeText(activity, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
                     int remain = book.getTonKho() - quantityInCart;
                     quantity_EditText.setText(String.valueOf(remain));
                 }
@@ -342,7 +339,7 @@ public class ViewBookDetailsController {
 
         int quantity = Integer.parseInt(quantityRaw) + 1;
         if (book.getTonKho() < (quantity + quantityInCart)) {
-            Toast.makeText(activity, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
         } else {
             quantity_EditText.setText(String.valueOf(quantity));
         }

@@ -24,7 +24,7 @@ public class ManageEditBookAPIController {
             @RequestParam("book") String bookJSON) {
         Book newBook = ConverterJSON.jsonToBookEntity(bookJSON);
         
-        if(file.getOriginalFilename().isEmpty()) {
+        if(file.getOriginalFilename() != "") {
             String path = bookService.fileToFilePathConverter(file);
             newBook.setHinhAnh(path);
         }

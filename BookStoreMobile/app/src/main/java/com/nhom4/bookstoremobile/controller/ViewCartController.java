@@ -83,6 +83,20 @@ public class ViewCartController {
                 if (response.isSuccessful()) {
                     Book book = response.body();
                     if (book != null) {
+                        if(book.getTonKho() <= 0) {
+                            Toast.makeText(activity, "Sản phẩm " + cartItem.getBookID() + " đã được bán hết", Toast.LENGTH_SHORT).show();
+                            cartTable.removeFromCart(cartItem.getBookID());
+                            cart.remove(cartItem);
+                            getCartData();
+                            return;
+                        }
+
+                        if(cartItem.getQuantity() >= book.getTonKho()) {
+                            Toast.makeText(activity, "Số lượng sản phẩm " + cartItem.getBookID() + " đã được thay đổi", Toast.LENGTH_SHORT).show();
+                            cartTable.updateQuantityItem(cartItem.getBookID(), book.getTonKho());
+                            cartItem.setQuantity(book.getTonKho());
+                        }
+
                         String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
                         book.setHinhAnh(imageUrl);
                         cartItem.setBook(book);

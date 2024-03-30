@@ -13,4 +13,5 @@ public interface OrderDAOController {
     List<Order> search(String tuKhoa);
     void createOrder(Order newOrder);
     void createOrderDetail(OrderDetail newOrderDetail);
+    void deleteOrder(String id);
 }

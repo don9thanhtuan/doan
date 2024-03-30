@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService{
         Book currentBook = bookDAOController.getBook(newBook.getId());
         if(!newBook.getHinhAnh().equals(currentBook.getHinhAnh())) {
             deleteImage(currentBook.getHinhAnh());
-        }
+        } 
         bookDAOController.editBook(newBook);
     }
 
@@ -50,6 +50,7 @@ public class BookServiceImpl implements BookService{
     public void deleteBook(String id) {
         Book currentBook = bookDAOController.getBook(id);
         deleteImage(currentBook.getHinhAnh());
+        
         bookDAOController.deleteBook(id);
     }
 

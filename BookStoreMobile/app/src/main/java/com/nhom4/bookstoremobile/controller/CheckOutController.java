@@ -220,6 +220,7 @@ public class CheckOutController {
                 totalPrice += (item.getQuantity() * price);
             }
         }
+        totalPrice += 20000;
         return String.format("%,d", totalPrice).replace(',', '.') + " ₫";
     }
 

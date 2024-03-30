@@ -83,6 +83,9 @@ public class Order {
     public String getTrangThai() {
         return trangThai;
     }
+    public int getTrangThaiInt() {
+        return convertTrangThaiString(trangThai);
+    }
     public void setTrangThai(int trangThai) {
         this.trangThai = convertTrangThaiInt(trangThai);
     }
