@@ -1,7 +1,13 @@
 # android-book-store
 - Trang chủ
-- Xem danh sách
-- Xem chi tiết
+- Xem danh sách sản phẩm
+- Xem chi tiết sản phẩm
 - Thêm sản phẩm
 - Chỉnh sửa sản phẩm
 - Xóa sản phẩm
+- Đăng kí/đăng nhập
+- Thêm sản phẩm vào giỏ hàng/mua ngay
+- Thanh toán
+- Xem/sửa thông tin tài khoản
+- Xem danh sách đơn hàng
+- Xem chi tiết đơn hàng
