@@ -3,37 +3,52 @@ package com.nhom4.bookstoremobile.entities;
 import java.util.Date;
 
 public class Order {
-    private String maDonHang;
-    private String idNguoiDat;
-    private Date thoiGianDat;
-    private String trangThai;
-    private String thanhTien;
-    private String idSachDau;
-    private Book cuonSachDau;
-    private int soSanPham;
+    private String orderID;
+    private String userID;
+    private Date orderTime;
+    private String orderPhone;
+    private String orderAddress;
+    private String orderStatus;
+    private String orderPrice;
+    private String orderFirstBookID;
+    private Book orderFirstBook;
+    private int orderItemQuantity;
 
     public Order() {
     }
 
-    public Order(String MaDonHang, String nguoiDat, Date thoiGianDat, int trangThai, String thanhTien, String cuonSachDau, int soSanPham) {
-        this.maDonHang = MaDonHang;
-        this.idNguoiDat = nguoiDat;
-        this.thoiGianDat = thoiGianDat;
-        this.trangThai = convertTrangThaiInt(trangThai);
-        this.thanhTien = thanhTien;
-        this.idSachDau = cuonSachDau;
-        this.soSanPham = soSanPham;
+    public Order(String orderID, String userID, Date orderTime, int orderStatus, String orderPrice, String orderFirstBookID, int orderItemQuantity, String orderPhone, String orderAddress) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.orderTime = orderTime;
+        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderPrice = orderPrice;
+        this.orderFirstBookID = orderFirstBookID;
+        this.orderItemQuantity = orderItemQuantity;
+        this.orderPhone = orderPhone;
+        this.orderAddress = orderAddress;
     }
 
-    public Order(String MaDonHang, String nguoiDat, int trangThai, String thanhTien) {
-        this.maDonHang = MaDonHang;
-        this.idNguoiDat = nguoiDat;
-        this.trangThai = convertTrangThaiInt(trangThai);
-        this.thanhTien = thanhTien;
+    public Order(String orderID, String userID, int orderStatus, String orderPrice) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderPrice = orderPrice;
     }
 
-    private String convertTrangThaiInt(int trangThai) {
-        switch (trangThai) {
+    public Order(String orderID, String userID, Date orderTime, String orderPhone, String orderAddress, String orderStatus, String orderPrice, int orderItemQuantity) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.orderTime = orderTime;
+        this.orderStatus = orderStatus;
+        this.orderPrice = orderPrice;
+        this.orderItemQuantity = orderItemQuantity;
+        this.orderPhone = orderPhone;
+        this.orderAddress = orderAddress;
+    }
+
+    private String convertTrangThaiInt(int orderStatus) {
+        switch (orderStatus) {
             case 0:
                 return "Chưa xác nhận";
             case 1:
@@ -47,8 +62,8 @@ public class Order {
         }
     }
 
-    public int convertTrangThaiString(String trangThai) {
-        switch (trangThai) {
+    public int convertTrangThaiString(String orderStatus) {
+        switch (orderStatus) {
             case "Chưa xác nhận":
                 return 0;
             case "Đã xác nhận":
@@ -62,71 +77,87 @@ public class Order {
         }
     }
 
-    public String getMaDonHang() {
-        return maDonHang;
+    public String getOrderID() {
+        return orderID;
     }
 
-    public void setMaDonHang(String maDonHang) {
-        this.maDonHang = maDonHang;
+    public void setOrderID(String maDonHang) {
+        this.orderID = maDonHang;
     }
 
-    public String getIdNguoiDat() {
-        return idNguoiDat;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setIdNguoiDat(String idNguoiDat) {
-        this.idNguoiDat = idNguoiDat;
+    public void setUserID(String idNguoiDat) {
+        this.userID = idNguoiDat;
     }
 
-    public Date getThoiGianDat() {
-        return thoiGianDat;
+    public Date getOrderTime() {
+        return orderTime;
     }
 
-    public void setThoiGianDat(Date thoiGianDat) {
-        this.thoiGianDat = thoiGianDat;
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
     }
 
-    public String getTrangThai() {
-        return trangThai;
+    public String getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setTrangThai(int trangThai) {
-        this.trangThai = convertTrangThaiInt(trangThai);
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = convertTrangThaiInt(orderStatus);
     }
 
-    public int getTrangThaiInt() {
-        return convertTrangThaiString(trangThai);
+    public int getOrderStatusInt() {
+        return convertTrangThaiString(orderStatus);
     }
 
-    public String getThanhTien() {
-        return thanhTien;
+    public String getOrderPrice() {
+        return orderPrice;
     }
 
-    public void setThanhTien(String thanhTien) {
-        this.thanhTien = thanhTien;
+    public void setOrderPrice(String orderPrice) {
+        this.orderPrice = orderPrice;
     }
 
-    public String getIdSachDau() {
-        return idSachDau;
+    public String getOrderFirstBookID() {
+        return orderFirstBookID;
     }
 
-    public void setIdSachDau(String idSachDau) {
-        this.idSachDau = idSachDau;
+    public void setOrderFirstBookID(String idSachDau) {
+        this.orderFirstBookID = idSachDau;
     }
 
-    public Book getCuonSachDau() {
-        return cuonSachDau;
+    public Book getOrderFirstBook() {
+        return orderFirstBook;
     }
 
-    public void setCuonSachDau(Book cuonSachDau) {
-        this.cuonSachDau = cuonSachDau;
+    public void setOrderFirstBook(Book orderFirstBookID) {
+        this.orderFirstBook = orderFirstBookID;
     }
 
-    public int getSoSanPham() {
-        return soSanPham;
+    public int getOrderItemQuantity() {
+        return orderItemQuantity;
     }
 
-    public void setSoSanPham(int soSanPham) {
-        this.soSanPham = soSanPham;
+    public void setOrderItemQuantity(int orderItemQuantity) {
+        this.orderItemQuantity = orderItemQuantity;
+    }
+
+    public String getOrderPhone() {
+        return orderPhone;
+    }
+
+    public void setOrderPhone(String orderPhone) {
+        this.orderPhone = orderPhone;
+    }
+
+    public String getOrderAddress() {
+        return orderAddress;
+    }
+
+    public void setOrderAddress(String orderAddress) {
+        this.orderAddress = orderAddress;
     }
 }

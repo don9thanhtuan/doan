@@ -34,9 +34,9 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void editBook(Book newBook) {
-        Book currentBook = bookDAOController.getBook(newBook.getId());
-        if(!newBook.getHinhAnh().equals(currentBook.getHinhAnh())) {
-            deleteImage(currentBook.getHinhAnh());
+        Book currentBook = bookDAOController.getBook(newBook.getBookID());
+        if(!newBook.getBookImage().equals(currentBook.getBookImage())) {
+            deleteImage(currentBook.getBookImage());
         } 
         bookDAOController.editBook(newBook);
     }
@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService{
     @Override
     public void deleteBook(String id) {
         Book currentBook = bookDAOController.getBook(id);
-        deleteImage(currentBook.getHinhAnh());
+        deleteImage(currentBook.getBookImage());
         
         bookDAOController.deleteBook(id);
     }
@@ -79,7 +79,7 @@ public class BookServiceImpl implements BookService{
     @Override
     public List<Book> getTopSelling() {
         List<Book> booklist = bookDAOController.getBookList();
-        Collections.sort(booklist, Comparator.comparingInt(Book::getDaBan).reversed());
+        Collections.sort(booklist, Comparator.comparingInt(Book::getBookSold).reversed());
         
         return booklist.subList(0, Math.min(5, booklist.size()));
     }

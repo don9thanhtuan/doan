@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nhom1.bookstore.entity.Book;
 import com.nhom1.bookstore.entity.OrderDetail;
-import com.nhom1.bookstore.entity.OrderDetail.BookInOrder;
+import com.nhom1.bookstore.entity.OrderDetail.OrderItem;
 import com.nhom1.bookstore.services.BookService;
 import com.nhom1.bookstore.services.OrderService;
 
@@ -30,9 +30,9 @@ public class UpdateOrderStatusController {
         if(orderStatus == 3) {
             OrderDetail orderDetail = orderService.getOrderDetail(maDonHang);
 
-            for (BookInOrder bookInOrder : orderDetail.getBookList()) {
-                Book book = bookService.getBook(bookInOrder.getIdSach());
-                bookService.updateSoldQuantity(book.getId(), book.getDaBan() + bookInOrder.getSoLuong());
+            for (OrderItem bookInOrder : orderDetail.getOrderItemList()) {
+                Book book = bookService.getBook(bookInOrder.getBookID());
+                bookService.updateSoldQuantity(book.getBookID(), book.getBookSold() + bookInOrder.getQuantity());
             }
         }
         orderService.editStatusOrder(maDonHang, orderStatus);

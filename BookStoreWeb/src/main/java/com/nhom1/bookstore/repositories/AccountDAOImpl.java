@@ -36,10 +36,10 @@ public class AccountDAOImpl implements AccountDAO{
     public void editAccount(String currentID, Account newAccount) {
         String sql = "UPDATE TaiKhoan SET HoTen=?, SoDienThoai=?, DiaChi=?, Email=? WHERE TenTaiKhoan = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, newAccount.getHoTen());
-            statement.setString(2, newAccount.getSoDienThoai());
-            statement.setString(3, newAccount.getDiaChi());
-            statement.setString(4, newAccount.getEmail());
+            statement.setString(1, newAccount.getUserName());
+            statement.setString(2, newAccount.getUserPhone());
+            statement.setString(3, newAccount.getUserAddress());
+            statement.setString(4, newAccount.getUserEmail());
             statement.setString(5, currentID);
 
             statement.executeUpdate();
@@ -122,11 +122,11 @@ public class AccountDAOImpl implements AccountDAO{
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Account account = new Account();
-                    account.setTenTaiKhoan(resultSet.getString("TenTaiKhoan"));
-                    account.setHoTen(resultSet.getString("HoTen"));
-                    account.setSoDienThoai(resultSet.getString("SoDienThoai"));
-                    account.setEmail(resultSet.getString("Email"));
-                    account.setDiaChi(resultSet.getString("DiaChi"));
+                    account.setUserID(resultSet.getString("TenTaiKhoan"));
+                    account.setUserName(resultSet.getString("HoTen"));
+                    account.setUserPhone(resultSet.getString("SoDienThoai"));
+                    account.setUserEmail(resultSet.getString("Email"));
+                    account.setUserAddress(resultSet.getString("DiaChi"));
                     result.add(account);
                 }
             }
@@ -140,11 +140,11 @@ public class AccountDAOImpl implements AccountDAO{
     public void registerAccount(Account newAccount) {
         String sql = "INSERT INTO TaiKhoan (TenTaiKhoan, MatKhau, Email, isAdmin, HoTen) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setString(1, newAccount.getTenTaiKhoan());
-            preparedStatement.setString(2, newAccount.getMatKhau());
-            preparedStatement.setString(3, newAccount.getEmail());
+            preparedStatement.setString(1, newAccount.getUserID());
+            preparedStatement.setString(2, newAccount.getUserPassword());
+            preparedStatement.setString(3, newAccount.getUserEmail());
             preparedStatement.setBoolean(4, false);
-            preparedStatement.setString(5, newAccount.getTenTaiKhoan());
+            preparedStatement.setString(5, newAccount.getUserID());
             preparedStatement.execute();
         }catch (SQLException e) {
             e.printStackTrace();

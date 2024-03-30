@@ -26,7 +26,7 @@ public class ManageEditBookAPIController {
         
         if(file.getOriginalFilename() != "") {
             String path = bookService.fileToFilePathConverter(file);
-            newBook.setHinhAnh(path);
+            newBook.setBookImage(path);
         }
         
         bookService.editBook(newBook);

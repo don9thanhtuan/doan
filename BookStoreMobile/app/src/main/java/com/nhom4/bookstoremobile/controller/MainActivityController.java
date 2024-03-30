@@ -39,8 +39,8 @@ public class MainActivityController {
                 if (response.isSuccessful()) {
                     List<Book> bookList = response.body();
                     for (Book book : bookList) {
-                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-                        book.setHinhAnh(imageUrl);
+                        String imageUrl = DefaultURL.getUrl() + book.getBookImage();
+                        book.setBookImage(imageUrl);
                     }
 
                     RecyclerView recyclerView = view.findViewById(R.id.home_RecyclerView);

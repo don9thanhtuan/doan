@@ -1,119 +1,119 @@
 package com.nhom4.bookstoremobile.entities;
 
 public class Book {
-    private String id;
-    private String ten;
-    private String hinhAnh;
-    private String tacGia;
-    private String nhaCungCap;
-    private int tonKho;
-    private int daBan;
-    private String gia;
-    private double trongLuong;
-    private String kichThuoc;
-    private String gioiThieu;
+    private String bookID;
+    private String bookName;
+    private String bookImage;
+    private String bookAuthor;
+    private String bookPublisher;
+    private int bookStock;
+    private int bookSold;
+    private String bookPrice;
+    private double bookWeight;
+    private String bookSize;
+    private String bookIntroduction;
 
     public Book() {
     }
 
-    public Book(String id, String ten, String hinhAnh, String tacGia, String nhaCungCap, int tonKho, String gia, double trongLuong, String kichThuoc, String gioiThieu) {
-        this.id = id;
-        this.ten = ten;
-        this.hinhAnh = hinhAnh;
-        this.tacGia = tacGia;
-        this.nhaCungCap = nhaCungCap;
-        this.tonKho = tonKho;
-        this.gia = gia;
-        this.trongLuong = trongLuong;
-        this.kichThuoc = kichThuoc;
-        this.gioiThieu = gioiThieu;
+    public Book(String bookID, String bookName, String bookImage, String bookAuthor, String bookPublisher, int bookStock, String bookPrice, double bookWeight, String bookSize, String bookIntroduction) {
+        this.bookID = bookID;
+        this.bookName = bookName;
+        this.bookImage = bookImage;
+        this.bookAuthor = bookAuthor;
+        this.bookPublisher = bookPublisher;
+        this.bookStock = bookStock;
+        this.bookPrice = bookPrice;
+        this.bookWeight = bookWeight;
+        this.bookSize = bookSize;
+        this.bookIntroduction = bookIntroduction;
     }
 
-    public String getId() {
-        return id;
+    public String getBookID() {
+        return bookID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBookID(String bookID) {
+        this.bookID = bookID;
     }
 
-    public String getTen() {
-        return ten;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
-    public String getHinhAnh() {
-        return hinhAnh;
+    public String getBookImage() {
+        return bookImage;
     }
 
-    public void setHinhAnh(String hinhAnh) {
-        this.hinhAnh = hinhAnh;
+    public void setBookImage(String bookImage) {
+        this.bookImage = bookImage;
     }
 
-    public String getTacGia() {
-        return tacGia;
+    public String getBookAuthor() {
+        return bookAuthor;
     }
 
-    public void setTacGia(String tacGia) {
-        this.tacGia = tacGia;
+    public void setBookAuthor(String bookAuthor) {
+        this.bookAuthor = bookAuthor;
     }
 
-    public String getNhaCungCap() {
-        return nhaCungCap;
+    public String getBookPublisher() {
+        return bookPublisher;
     }
 
-    public void setNhaCungCap(String nhaCungCap) {
-        this.nhaCungCap = nhaCungCap;
+    public void setBookPublisher(String bookPublisher) {
+        this.bookPublisher = bookPublisher;
     }
 
-    public int getTonKho() {
-        return tonKho;
+    public int getBookStock() {
+        return bookStock;
     }
 
-    public void setTonKho(int tonKho) {
-        this.tonKho = tonKho;
+    public void setBookStock(int bookStock) {
+        this.bookStock = bookStock;
     }
 
-    public int getDaBan() {
-        return daBan;
+    public int getBookSold() {
+        return bookSold;
     }
 
-    public void setDaBan(int daBan) {
-        this.daBan = daBan;
+    public void setBookSold(int bookSold) {
+        this.bookSold = bookSold;
     }
 
-    public String getGia() {
-        return gia;
+    public String getBookPrice() {
+        return bookPrice;
     }
 
-    public void setGia(String gia) {
-        this.gia = gia;
+    public void setBookPrice(String bookPrice) {
+        this.bookPrice = bookPrice;
     }
 
-    public double getTrongLuong() {
-        return trongLuong;
+    public double getBookWeight() {
+        return bookWeight;
     }
 
-    public void setTrongLuong(double trongLuong) {
-        this.trongLuong = trongLuong;
+    public void setBookWeight(double bookWeight) {
+        this.bookWeight = bookWeight;
     }
 
-    public String getKichThuoc() {
-        return kichThuoc;
+    public String getBookSize() {
+        return bookSize;
     }
 
-    public void setKichThuoc(String kichThuoc) {
-        this.kichThuoc = kichThuoc;
+    public void setBookSize(String bookSize) {
+        this.bookSize = bookSize;
     }
 
-    public String getGioiThieu() {
-        return gioiThieu;
+    public String getBookIntroduction() {
+        return bookIntroduction;
     }
 
-    public void setGioiThieu(String gioiThieu) {
-        this.gioiThieu = gioiThieu;
+    public void setBookIntroduction(String bookIntroduction) {
+        this.bookIntroduction = bookIntroduction;
     }
 }

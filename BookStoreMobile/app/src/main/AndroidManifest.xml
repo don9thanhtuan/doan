@@ -45,6 +45,7 @@
         <activity android:name=".activity.ViewSettingInfo" />
         <activity android:name=".activity.CheckOut" />
         <activity android:name=".activity.ViewRegister" />
+        <activity android:name=".activity.ViewOrderDetails" />
     </application>
 
 </manifest>

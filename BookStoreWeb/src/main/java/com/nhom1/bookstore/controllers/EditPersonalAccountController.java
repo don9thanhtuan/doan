@@ -23,9 +23,9 @@ public class EditPersonalAccountController {
     @RequestParam("sdt") String sdt, 
     @RequestParam("diachi") String diachi) {
         Account account = new Account();
-        account.setHoTen(hoten);
-        account.setSoDienThoai(sdt);
-        account.setDiaChi(diachi);
+        account.setUserName(hoten);
+        account.setUserPhone(sdt);
+        account.setUserAddress(diachi);
 
         Object loggedInUser = session.getAttribute("loggedInUser");
         accountService.editAccount(loggedInUser.toString(), account);

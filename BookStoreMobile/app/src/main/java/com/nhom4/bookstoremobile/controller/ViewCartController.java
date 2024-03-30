@@ -83,7 +83,7 @@ public class ViewCartController {
                 if (response.isSuccessful()) {
                     Book book = response.body();
                     if (book != null) {
-                        if(book.getTonKho() <= 0) {
+                        if (book.getBookStock() <= 0) {
                             Toast.makeText(activity, "Sản phẩm " + cartItem.getBookID() + " đã được bán hết", Toast.LENGTH_SHORT).show();
                             cartTable.removeFromCart(cartItem.getBookID());
                             cart.remove(cartItem);
@@ -91,14 +91,14 @@ public class ViewCartController {
                             return;
                         }
 
-                        if(cartItem.getQuantity() >= book.getTonKho()) {
+                        if (cartItem.getQuantity() >= book.getBookStock()) {
                             Toast.makeText(activity, "Số lượng sản phẩm " + cartItem.getBookID() + " đã được thay đổi", Toast.LENGTH_SHORT).show();
-                            cartTable.updateQuantityItem(cartItem.getBookID(), book.getTonKho());
-                            cartItem.setQuantity(book.getTonKho());
+                            cartTable.updateQuantityItem(cartItem.getBookID(), book.getBookStock());
+                            cartItem.setQuantity(book.getBookStock());
                         }
 
-                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-                        book.setHinhAnh(imageUrl);
+                        String imageUrl = DefaultURL.getUrl() + book.getBookImage();
+                        book.setBookImage(imageUrl);
                         cartItem.setBook(book);
                     }
                 } else {

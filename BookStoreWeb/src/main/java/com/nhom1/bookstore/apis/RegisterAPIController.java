@@ -17,7 +17,7 @@ public class RegisterAPIController {
     
     @PostMapping("/api/register")
     public String registerAccount(@RequestBody Account account) {
-        if(accountService.checkUsername(account.getTenTaiKhoan())){
+        if(accountService.checkUsername(account.getUserID())){
             accountService.registerAccount(account);
             return "Success";             
         }

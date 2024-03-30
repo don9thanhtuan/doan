@@ -15,7 +15,7 @@ public class Optimization {
             List<String> fileNames = getAllImageFileName();
             boolean found = false;
             for (Book book : bookList) {
-                if (fileNames.get(i).equals(book.getHinhAnh())) {
+                if (fileNames.get(i).equals(book.getBookImage())) {
                     found = true;
                     break;
                 }

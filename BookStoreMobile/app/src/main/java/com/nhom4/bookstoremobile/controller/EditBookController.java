@@ -93,9 +93,9 @@ public class EditBookController {
         if (newBook == null) {
             return;
         }
-        newBook.setId(book.getId());
-        String imageURL = book.getHinhAnh().replace("http://10.0.2.2:8080", "");
-        newBook.setHinhAnh(imageURL);
+        newBook.setBookID(book.getBookID());
+        String imageURL = book.getBookImage().replace("http://10.0.2.2:8080", "");
+        newBook.setBookImage(imageURL);
 
         MultipartBody.Part imagePart;
 
@@ -108,7 +108,7 @@ public class EditBookController {
         }
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<String> call = bookService.editBook(newBook.getId(), imagePart, newBook);
+        Call<String> call = bookService.editBook(newBook.getBookID(), imagePart, newBook);
 
         call.enqueue(new Callback<String>() {
             @Override
@@ -149,37 +149,37 @@ public class EditBookController {
         EditText introductionEditText = activity.findViewById(R.id.add_introduction);
 
         Glide.with(activity)
-                .load(book.getHinhAnh())
+                .load(book.getBookImage())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()
                 .into(imagePreview);
 
-        nameEditText.setText(book.getTen());
+        nameEditText.setText(book.getBookName());
 
-        String priceRaw = book.getGia();
+        String priceRaw = book.getBookPrice();
         String price = priceRaw.replaceAll("[^0-9]", "");
         priceEditText.setText(price);
 
-        authorEditText.setText(book.getTacGia());
-        publisherEditText.setText(book.getNhaCungCap());
-        weightEditText.setText(String.valueOf(book.getTrongLuong()));
-        sizeEditText.setText(book.getKichThuoc());
-        stockEditText.setText(String.valueOf(book.getTonKho()));
-        introductionEditText.setText(book.getGioiThieu());
+        authorEditText.setText(book.getBookAuthor());
+        publisherEditText.setText(book.getBookPublisher());
+        weightEditText.setText(String.valueOf(book.getBookWeight()));
+        sizeEditText.setText(book.getBookSize());
+        stockEditText.setText(String.valueOf(book.getBookStock()));
+        introductionEditText.setText(book.getBookIntroduction());
     }
 
     private void redirectToCart() {
         Toast.makeText(activity, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(activity, ViewBookDetails.class);
-        intent.putExtra("book_id", book.getId());
+        intent.putExtra("book_id", book.getBookID());
         activity.startActivity(intent);
         activity.finish();
     }
 
     public void redirectBack() {
         Intent intent = new Intent(activity, ViewBookDetails.class);
-        intent.putExtra("book_id", book.getId());
+        intent.putExtra("book_id", book.getBookID());
         activity.startActivity(intent);
         activity.finish();
     }

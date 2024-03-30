@@ -28,19 +28,19 @@ public class BookDAOImpl implements BookDAO{
             "INSERT INTO Sach (ID, Ten, HinhAnh, TacGia, NhaXuatBan, Gia, DaBan, TonKho, TrongLuong, KichThuoc, GioiThieu) " +
             "VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, newBook.getId());
-            statement.setString(2, newBook.getTen());
-            statement.setString(3, newBook.getHinhAnh());
-            statement.setString(4, newBook.getTacGia());
-            statement.setString(5, newBook.getNhaCungCap());
+            statement.setString(1, newBook.getBookID());
+            statement.setString(2, newBook.getBookName());
+            statement.setString(3, newBook.getBookImage());
+            statement.setString(4, newBook.getBookAuthor());
+            statement.setString(5, newBook.getBookPublisher());
             
-            int gia = ConverterCurrency.currencyToNumber(newBook.getGia());
+            int gia = ConverterCurrency.currencyToNumber(newBook.getBookPrice());
             statement.setInt(6, gia);
 
-            statement.setInt(7, newBook.getTonKho());
-            statement.setDouble(8, newBook.getTrongLuong());
-            statement.setString(9, newBook.getKichThuoc());
-            statement.setString(10, newBook.getGioiThieu());
+            statement.setInt(7, newBook.getBookStock());
+            statement.setDouble(8, newBook.getBookWeight());
+            statement.setString(9, newBook.getBookSize());
+            statement.setString(10, newBook.getBookIntroduction());
 
             statement.executeUpdate();
         }catch (SQLException e) {
@@ -67,19 +67,19 @@ public class BookDAOImpl implements BookDAO{
             "TrongLuong = ?, KichThuoc = ?, GioiThieu = ? WHERE ID = ?";
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, newBook.getTen());
-            statement.setString(2, newBook.getHinhAnh());
-            statement.setString(3, newBook.getTacGia());
-            statement.setString(4, newBook.getNhaCungCap());
+            statement.setString(1, newBook.getBookName());
+            statement.setString(2, newBook.getBookImage());
+            statement.setString(3, newBook.getBookAuthor());
+            statement.setString(4, newBook.getBookPublisher());
             
-            int gia = ConverterCurrency.currencyToNumber(newBook.getGia());
+            int gia = ConverterCurrency.currencyToNumber(newBook.getBookPrice());
             statement.setInt(5, gia);
 
-            statement.setInt(6, newBook.getTonKho());
-            statement.setDouble(7, newBook.getTrongLuong());
-            statement.setString(8, newBook.getKichThuoc());
-            statement.setString(9, newBook.getGioiThieu());
-            statement.setString(10, newBook.getId());
+            statement.setInt(6, newBook.getBookStock());
+            statement.setDouble(7, newBook.getBookWeight());
+            statement.setString(8, newBook.getBookSize());
+            statement.setString(9, newBook.getBookIntroduction());
+            statement.setString(10, newBook.getBookID());
 
             statement.executeUpdate();
         }catch (SQLException e) {
@@ -93,7 +93,7 @@ public class BookDAOImpl implements BookDAO{
         Book book = getBook(id);
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, daBan);
-            statement.setInt(2, book.getTonKho() - daBan);
+            statement.setInt(2, book.getBookStock() - daBan);
             statement.setString(3, id);
 
             statement.executeUpdate();

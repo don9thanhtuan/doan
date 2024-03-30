@@ -2,6 +2,7 @@ package com.nhom4.bookstoremobile.service;
 
 import com.nhom4.bookstoremobile.entities.Order;
 import com.nhom4.bookstoremobile.entities.OrderDTO;
+import com.nhom4.bookstoremobile.entities.OrderDetails;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface OrderService {
 
     @POST("accounts/{username}/orders")
     Call<String> createOrder(@Path("username") String userID, @Body OrderDTO orderDTO);
+
+    @GET("orders/{orderID}")
+    Call<OrderDetails> getOrdersDetails(@Path("orderID") String orderID);
 }

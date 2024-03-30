@@ -20,28 +20,28 @@ public class EditPersonalAccountAPIController {
     public String changeInformation(@PathVariable("userid") String userid, @RequestBody Account newAccount) {        
             Account currentAccount = accountService.getAccount(userid);
         
-        if(newAccount.getHoTen() != null) {
-            newAccount.setSoDienThoai(currentAccount.getSoDienThoai());
-            newAccount.setDiaChi(currentAccount.getDiaChi());
-            newAccount.setEmail(currentAccount.getEmail());   
+        if(newAccount.getUserName() != null) {
+            newAccount.setUserPhone(currentAccount.getUserPhone());
+            newAccount.setUserAddress(currentAccount.getUserAddress());
+            newAccount.setUserEmail(currentAccount.getUserEmail());   
 
-        } else if(newAccount.getSoDienThoai() != null) {
-            newAccount.setHoTen(currentAccount.getHoTen());
-            newAccount.setDiaChi(currentAccount.getDiaChi());
-            newAccount.setEmail(currentAccount.getEmail());  
+        } else if(newAccount.getUserPhone() != null) {
+            newAccount.setUserName(currentAccount.getUserName());
+            newAccount.setUserAddress(currentAccount.getUserAddress());
+            newAccount.setUserEmail(currentAccount.getUserEmail());  
 
-        } else if(newAccount.getDiaChi() != null) {
-            newAccount.setHoTen(currentAccount.getHoTen());
-            newAccount.setSoDienThoai(currentAccount.getSoDienThoai());
-            newAccount.setEmail(currentAccount.getEmail());  
+        } else if(newAccount.getUserAddress() != null) {
+            newAccount.setUserName(currentAccount.getUserName());
+            newAccount.setUserPhone(currentAccount.getUserPhone());
+            newAccount.setUserEmail(currentAccount.getUserEmail());  
 
-        } else if(newAccount.getEmail() != null) {
-            newAccount.setHoTen(currentAccount.getHoTen());
-            newAccount.setSoDienThoai(currentAccount.getSoDienThoai());
-            newAccount.setDiaChi(currentAccount.getDiaChi());
+        } else if(newAccount.getUserEmail() != null) {
+            newAccount.setUserName(currentAccount.getUserName());
+            newAccount.setUserPhone(currentAccount.getUserPhone());
+            newAccount.setUserAddress(currentAccount.getUserAddress());
         }
 
-        accountService.editAccount(currentAccount.getTenTaiKhoan(), newAccount);
+        accountService.editAccount(currentAccount.getUserID(), newAccount);
 
         return "Account edited successfully";
     }

@@ -1,77 +1,77 @@
 package com.nhom1.bookstore.entity;
 
 public class Account {
-    private String tenTaiKhoan;
-    private String hoTen;
-    private String soDienThoai;
-    private String email;
-    private String diaChi;
+    private String userID;
+    private String userName;
+    private String userPhone;
+    private String userEmail;
+    private String userAddress;
     private boolean isAdmin;
-    private String matKhau;
+    private String userPassword;
 
     public Account() {}
-    public Account(String tenTaiKhoan, String hoTen, String soDienThoai, String email, String diaChi, boolean isAdmin) {
-        this.tenTaiKhoan = tenTaiKhoan;
-        this.hoTen = hoTen;
-        this.soDienThoai = soDienThoai;
-        this.email = email;
-        this.diaChi = diaChi;
+    public Account(String userID, String userName, String userPhone, String userEmail, String userAddress, boolean isAdmin) {
+        this.userID = userID;
+        this.userName = userName;
+        this.userPhone = userPhone;
+        this.userEmail = userEmail;
+        this.userAddress = userAddress;
         this.isAdmin = isAdmin;
     }
     
-    public Account(String id, String hoTen, String soDienThoai, String email, String diaChi, boolean isAdmin, String matKhau) {
-        this.tenTaiKhoan = id;
-        this.hoTen = hoTen;
-        this.soDienThoai = soDienThoai;
-        this.email = email;
-        this.diaChi = diaChi;
+    public Account(String id, String userName, String userPhone, String userEmail, String userAddress, boolean isAdmin, String userPassword) {
+        this.userID = id;
+        this.userName = userName;
+        this.userPhone = userPhone;
+        this.userEmail = userEmail;
+        this.userAddress = userAddress;
         this.isAdmin = isAdmin;
-        this.matKhau = matKhau;
+        this.userPassword = userPassword;
     }
-    public Account(String tenTaiKhoan, String email, String matKhau) {
-        this.tenTaiKhoan = tenTaiKhoan;
-        this.email = email;
-        this.matKhau = matKhau;
-    }
-
-    public String getTenTaiKhoan() {
-        return tenTaiKhoan;
+    public Account(String userID, String userEmail, String userPassword) {
+        this.userID = userID;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
     }
 
-    public void setTenTaiKhoan(String Id) {
-        this.tenTaiKhoan = Id;
+    public String getUserID() {
+        return userID;
     }
 
-    public String getHoTen() {
-        return hoTen;
+    public void setUserID(String Id) {
+        this.userID = Id;
     }
 
-    public void setHoTen(String HoTen) {
-        this.hoTen = HoTen;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getSoDienThoai() {
-        return soDienThoai;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setSoDienThoai(String SoDienThoai) {
-        this.soDienThoai = SoDienThoai;
+    public String getUserPhone() {
+        return userPhone;
     }
 
-    public String getEmail() {
-        return email;
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
-    public void setEmail(String Email) {
-        this.email = Email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public void setUserEmail(String Email) {
+        this.userEmail = Email;
     }
 
-    public void setDiaChi(String DiaChi) {
-        this.diaChi = DiaChi;
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String DiaChi) {
+        this.userAddress = DiaChi;
     }
 
     public boolean isAdmin() {
@@ -82,12 +82,12 @@ public class Account {
         this.isAdmin = isAdmin;
     }
 
-    public String getMatKhau() {
-        return matKhau;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setMatKhau(String MatKhau) {
-        this.matKhau = MatKhau;
+    public void setUserPassword(String MatKhau) {
+        this.userPassword = MatKhau;
     }
 }
 

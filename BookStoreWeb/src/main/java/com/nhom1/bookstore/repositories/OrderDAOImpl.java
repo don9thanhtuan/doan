@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.nhom1.bookstore.entity.Order;
 import com.nhom1.bookstore.entity.OrderDetail;
-import com.nhom1.bookstore.entity.OrderDetail.BookInOrder;
+import com.nhom1.bookstore.entity.OrderDetail.OrderItem;
 import com.nhom1.bookstore.services.ConverterCurrency;
 
 @Repository
@@ -68,8 +68,8 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public OrderDetail getOrderDetail(String id) {
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setMaDonHang(id);
-        orderDetail.setBookList(new ArrayList<>());
+        orderDetail.setOrderID(id);
+        orderDetail.setOrderItemList(new ArrayList<>());
         String sql = "SELECT * FROM ChiTietDonHang where MaDonHang = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, id);
@@ -77,8 +77,8 @@ public class OrderDAOImpl implements OrderDAO {
                 while (resultSet.next()) {
                     String idSach = resultSet.getString("IDSach");
                     int soLuong = resultSet.getInt("SoLuong");
-                    OrderDetail.BookInOrder bookInOrder = orderDetail.new BookInOrder(idSach, soLuong);
-                    orderDetail.getBookList().add(bookInOrder);
+                    OrderDetail.OrderItem bookInOrder = orderDetail.new OrderItem(idSach, soLuong);
+                    orderDetail.getOrderItemList().add(bookInOrder);
                 }
                 return orderDetail;
             }
@@ -187,7 +187,7 @@ public class OrderDAOImpl implements OrderDAO {
                     String maDonHang = resultSet.getString("MaDonHang");
                     Boolean isMatch = false;
                     for(Order order : result) {
-                        if(order.getMaDonHang() == maDonHang) {
+                        if(order.getOrderID() == maDonHang) {
                             isMatch = true;
                             break;
                         }
@@ -210,17 +210,17 @@ public class OrderDAOImpl implements OrderDAO {
                 +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, newOrder.getMaDonHang());
-            statement.setString(2, newOrder.getIdNguoiDat());
-            statement.setObject(3, newOrder.getThoiGianDat());
-            statement.setInt(4, newOrder.convertTrangThaiString(newOrder.getTrangThai()));
+            statement.setString(1, newOrder.getOrderID());
+            statement.setString(2, newOrder.getUserID());
+            statement.setObject(3, newOrder.getOrderTime());
+            statement.setInt(4, newOrder.convertTrangThaiString(newOrder.getOrderStatus()));
 
-            int thanhTien = ConverterCurrency.currencyToNumber(newOrder.getThanhTien());
+            int thanhTien = ConverterCurrency.currencyToNumber(newOrder.getOrderPrice());
             statement.setInt(5, thanhTien);
-            statement.setString(6, newOrder.getIdSachDau());
-            statement.setInt(7, newOrder.getSoSanPham());
-            statement.setString(8, newOrder.getSoDienThoai());
-            statement.setString(9, newOrder.getDiaChi());
+            statement.setString(6, newOrder.getOrderFirstBookID());
+            statement.setInt(7, newOrder.getOrderItemQuantity());
+            statement.setString(8, newOrder.getOrderPhone());
+            statement.setString(9, newOrder.getOrderAddress());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -231,14 +231,14 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public void createOrderDetail(OrderDetail newOrderDetail) {
         String sql = "INSERT INTO chitietdonhang (MaDonHang, IDSach, SoLuong) VALUES (?, ?, ?)";
-        List<OrderDetail.BookInOrder> bookList = newOrderDetail.getBookList();
+        List<OrderDetail.OrderItem> bookList = newOrderDetail.getOrderItemList();
 
-        for (BookInOrder bookInOrder : bookList) {
+        for (OrderItem bookInOrder : bookList) {
             try (PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.setString(1, newOrderDetail.getMaDonHang());
+                statement.setString(1, newOrderDetail.getOrderID());
 
-                statement.setString(2, bookInOrder.getIdSach());
-                statement.setInt(3, bookInOrder.getSoLuong());
+                statement.setString(2, bookInOrder.getBookID());
+                statement.setInt(3, bookInOrder.getQuantity());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

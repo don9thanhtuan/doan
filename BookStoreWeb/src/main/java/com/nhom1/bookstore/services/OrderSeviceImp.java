@@ -32,7 +32,7 @@ public class OrderSeviceImp implements OrderService {
         Collections.sort(orderList, new Comparator<Order>() {
             @Override
             public int compare(Order order1, Order order2) {
-                return order2.getThoiGianDat().compareTo(order1.getThoiGianDat());
+                return order2.getOrderTime().compareTo(order1.getOrderTime());
             }
         });
     }
@@ -63,33 +63,33 @@ public class OrderSeviceImp implements OrderService {
     public void createOrder(String idNguoiDat, OrderDTO newOrder) {
         String maDonHang = IDGenerator.IDOrder();
         Order order = new Order();
-        order.setMaDonHang(maDonHang);
-        order.setIdNguoiDat(idNguoiDat);
-        order.setThoiGianDat(new Date());
+        order.setOrderID(maDonHang);
+        order.setUserID(idNguoiDat);
+        order.setOrderTime(new Date());
         int trangThai = 1;
         if(newOrder.getPaymentMethod().equals("cod")) {
             trangThai = 0;
         }
         order.setTrangThai(trangThai);
-        order.setThanhTien(newOrder.getPrice());
-        order.setIdSachDau(newOrder.getBookList().get(0));
-        order.setSoSanPham(newOrder.getBookList().size());
-        order.setSoDienThoai(newOrder.getPhone());
-        order.setDiaChi(newOrder.getAddress());
+        order.setOrderPrice(newOrder.getPrice());
+        order.setOrderFirstBookID(newOrder.getBookList().get(0));
+        order.setOrderItemQuantity(newOrder.getBookList().size());
+        order.setOrderPhone(newOrder.getPhone());
+        order.setOrderAddress(newOrder.getAddress());
         orderDAOController.createOrder(order);
 
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setMaDonHang(maDonHang);
+        orderDetail.setOrderID(maDonHang);
 
-        orderDetail.setBookList(new ArrayList<>());
+        orderDetail.setOrderItemList(new ArrayList<>());
         
         for(int i = 0; i < newOrder.getBookList().size(); i++){
             String idSach = newOrder.getBookList().get(i);
             String soLuongRaw = newOrder.getQuantityList().get(i);
             int soLuong = Integer.parseInt(soLuongRaw);
 
-            OrderDetail.BookInOrder bookInOrder = orderDetail.new BookInOrder(idSach, soLuong);
-            orderDetail.getBookList().add(bookInOrder);
+            OrderDetail.OrderItem bookInOrder = orderDetail.new OrderItem(idSach, soLuong);
+            orderDetail.getOrderItemList().add(bookInOrder);
         }
 
         orderDAOController.createOrderDetail(orderDetail);

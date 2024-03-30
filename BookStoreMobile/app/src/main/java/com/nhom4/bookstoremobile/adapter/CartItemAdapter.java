@@ -69,8 +69,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     @Override
     public CartItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_cart_item_layout, parent, false);
-        view.setOnClickListener(view1 -> {
-            int itemPosition = mRecyclerView.getChildLayoutPosition(view1);
+        view.setOnClickListener(v -> {
+            int itemPosition = mRecyclerView.getChildLayoutPosition(v);
             CartItem cartItem = itemList.get(itemPosition);
             Intent intent = new Intent(context, ViewBookDetails.class);
             intent.putExtra("book_id", cartItem.getBookID());
@@ -92,12 +92,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         holder.quantity_EditText.setText(String.valueOf(quantity));
 
         if (book != null) {
-            holder.name_TxtView.setText(book.getTen());
-            holder.author_TxtView.setText(book.getTacGia());
-            holder.price_TxtView.setText(book.getGia());
+            holder.name_TxtView.setText(book.getBookName());
+            holder.author_TxtView.setText(book.getBookAuthor());
+            holder.price_TxtView.setText(book.getBookPrice());
 
             Glide.with(context)
-                    .load(book.getHinhAnh())
+                    .load(book.getBookImage())
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .fitCenter()
@@ -183,7 +183,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             if (isChecked.get(i)) {
                 Book book = itemList.get(i).getBook();
                 if (book != null) {
-                    String priceRaw = book.getGia();
+                    String priceRaw = book.getBookPrice();
                     priceRaw = priceRaw.replace("₫", "");
                     priceRaw = priceRaw.replaceAll("\\s+", "");
                     priceRaw = priceRaw.replace(".", "");
@@ -227,10 +227,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
                         Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                         cartItem.setQuantity(1);
                         addItemToCart(holder.bookId, 1);
-                    } else if (book.getTonKho() < quantity) {
+                    } else if (book.getBookStock() < quantity) {
                         Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                        cartItem.setQuantity(book.getTonKho());
-                        addItemToCart(holder.bookId, book.getTonKho());
+                        cartItem.setQuantity(book.getBookStock());
+                        addItemToCart(holder.bookId, book.getBookStock());
                     }
                     getTotalQuantity();
                     getTotalPrice();
@@ -242,7 +242,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             String quantityRaw = quantity_EditText.getText().toString();
             int quantity = Integer.parseInt(quantityRaw) + 1;
 
-            if (book.getTonKho() < quantity) {
+            if (book.getBookStock() < quantity) {
                 Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
             } else {
                 holder.quantity_EditText.setText(String.valueOf(quantity));

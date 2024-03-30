@@ -31,9 +31,9 @@ public class ManageEditAccountController {
     @RequestParam("accountPhone") String sdt, 
     @RequestParam("accountAdress") String diachi) {
         Account account = new Account();
-        account.setHoTen(hoten);
-        account.setSoDienThoai(sdt);
-        account.setDiaChi(diachi);
+        account.setUserName(hoten);
+        account.setUserPhone(sdt);
+        account.setUserAddress(diachi);
 
         accountService.editAccount(id, account);
         return "redirect:/quantri/taikhoan";

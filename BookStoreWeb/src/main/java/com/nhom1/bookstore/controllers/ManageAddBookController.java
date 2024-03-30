@@ -37,27 +37,27 @@ public class ManageAddBookController {
         @RequestParam("introduction") String introduction
     ) {
         Book newBook = new Book();
-        newBook.setId(IDGenerator.IDBook());
-        newBook.setTen(name);
-        newBook.setGia(price);
-        newBook.setTacGia(author);
-        newBook.setNhaCungCap(publisher);
+        newBook.setBookID(IDGenerator.IDBook());
+        newBook.setBookName(name);
+        newBook.setBookPrice(price);
+        newBook.setBookAuthor(author);
+        newBook.setBookPublisher(publisher);
        
         double weight = 0;
         if(!weightRaw.isBlank()) {weight = Double.parseDouble(weightRaw);}
-        newBook.setTrongLuong(weight);
+        newBook.setBookWeight(weight);
 
-        newBook.setKichThuoc(size);
+        newBook.setBookSize(size);
 
         int stock = Integer.parseInt(stockRaw);
-        newBook.setTonKho(stock);
+        newBook.setBookStock(stock);
 
-        newBook.setGioiThieu(introduction);
+        newBook.setBookIntroduction(introduction);
 
         String filePath = bookService.fileToFilePathConverter(file);
-        newBook.setHinhAnh(filePath);
+        newBook.setBookImage(filePath);
         
         bookService.addBook(newBook);
-        return "redirect:/quantri/sanpham/"+ newBook.getId();
+        return "redirect:/quantri/sanpham/"+ newBook.getBookID();
     }
 }

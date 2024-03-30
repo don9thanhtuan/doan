@@ -37,7 +37,7 @@ public class ManageDeleteBookAPIController {
             
             if(isCompleted) {
                 for(Order order : orderList) {
-                    orderService.deleteOrder(order.getMaDonHang());
+                    orderService.deleteOrder(order.getOrderID());
                 }
             } else{
                 return new ResponseEntity<>("Book deleted fails", HttpStatus.BAD_REQUEST);

@@ -34,14 +34,14 @@ public class ManageAddBookAPIController {
                 id = IDGenerator.IDBook();
             }
         }
-        newBook.setId(id);
+        newBook.setBookID(id);
 
         String filePath = bookService.fileToFilePathConverter(file);
-        newBook.setHinhAnh(filePath);
+        newBook.setBookImage(filePath);
 
         bookService.addBook(newBook);
 
-        BookResponse response = new BookResponse(newBook.getId(), "Book added successfully");
+        BookResponse response = new BookResponse(newBook.getBookID(), "Book added successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

@@ -49,7 +49,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             int itemPosition = mRecyclerView.getChildLayoutPosition(view);
             Book book = bookList.get(itemPosition);
             Intent intent = new Intent(context, ViewBookDetails.class);
-            intent.putExtra("book_id", book.getId());
+            intent.putExtra("book_id", book.getBookID());
             context.startActivity(intent);
         });
 
@@ -64,14 +64,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Book book = bookList.get(position);
 
-        holder.bookId = book.getId();
-        holder.list_Name.setText(book.getTen());
-        holder.list_Author.setText(book.getTacGia());
-        holder.list_Price.setText(book.getGia());
-        holder.list_Sold.setText("Đã bán " + book.getDaBan());
+        holder.bookId = book.getBookID();
+        holder.list_Name.setText(book.getBookName());
+        holder.list_Author.setText(book.getBookAuthor());
+        holder.list_Price.setText(book.getBookPrice());
+        holder.list_Sold.setText("Đã bán " + book.getBookSold());
 
         Glide.with(context)
-                .load(book.getHinhAnh())
+                .load(book.getBookImage())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()

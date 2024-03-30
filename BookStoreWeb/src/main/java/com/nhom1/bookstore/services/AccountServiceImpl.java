@@ -27,7 +27,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account getAccountNonPassword(String userName) {
         Account account = getAccount(userName);
-        account.setMatKhau("");
+        account.setUserPassword("");
         return account;
     }
 
@@ -50,7 +50,7 @@ public class AccountServiceImpl implements AccountService{
     public int authentication(String username, String password) {
         Account account = getAccount(username);
         if(account != null) {
-            if(account.getMatKhau().equals(password)) {
+            if(account.getUserPassword().equals(password)) {
                 if(account.isAdmin()) {
                     return 99;
                 }

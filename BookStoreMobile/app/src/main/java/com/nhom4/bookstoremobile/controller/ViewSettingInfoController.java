@@ -82,19 +82,19 @@ public class ViewSettingInfoController {
         TextView userAddress_TextView = activity.findViewById(R.id.userAddress);
 
         if (userID_TextView != null) {
-            userID_TextView.setText(account.getTenTaiKhoan());
+            userID_TextView.setText(account.getUserID());
         }
         if (userName_TextView != null) {
-            userName_TextView.setText(account.getHoTen());
+            userName_TextView.setText(account.getUserName());
         }
         if (userEmail_TextView != null) {
-            userEmail_TextView.setText(account.getEmail());
+            userEmail_TextView.setText(account.getUserEmail());
         }
         if (userPhone_TextView != null) {
-            userPhone_TextView.setText(account.getSoDienThoai());
+            userPhone_TextView.setText(account.getUserPhone());
         }
         if (userAddress_TextView != null) {
-            userAddress_TextView.setText(account.getDiaChi());
+            userAddress_TextView.setText(account.getUserAddress());
         }
     }
 
@@ -114,16 +114,16 @@ public class ViewSettingInfoController {
         switch (choice) {
             case 1:
                 choiceString = "Họ tên";
-                editInfo = account.getHoTen();
+                editInfo = account.getUserName();
                 break;
             case 2:
                 choiceString = "Email";
-                editInfo = account.getEmail();
+                editInfo = account.getUserEmail();
                 infoEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 break;
             case 3:
                 choiceString = "Số điện thoại";
-                editInfo = account.getSoDienThoai();
+                editInfo = account.getUserPhone();
 
                 InputFilter[] filters = new InputFilter[1];
                 filters[0] = new InputFilter.LengthFilter(10);
@@ -133,7 +133,7 @@ public class ViewSettingInfoController {
                 break;
             case 4:
                 choiceString = "Địa chỉ";
-                editInfo = account.getDiaChi();
+                editInfo = account.getUserAddress();
                 break;
         }
 
@@ -177,7 +177,7 @@ public class ViewSettingInfoController {
     private void setListenerEditor(View view) {
         view.findViewById(R.id.saveBtn).setOnClickListener(v -> {
             Account newAccount = new Account();
-            newAccount.setTenTaiKhoan(account.getTenTaiKhoan());
+            newAccount.setUserID(account.getUserID());
             newAccount.setAdmin(account.isAdmin());
 
             EditText infoEditText = view.findViewById(R.id.infoEditText);
@@ -189,16 +189,16 @@ public class ViewSettingInfoController {
             }
             switch (view.getId()) {
                 case 1:
-                    newAccount.setHoTen(info);
+                    newAccount.setUserName(info);
                     break;
                 case 2:
-                    newAccount.setEmail(info);
+                    newAccount.setUserEmail(info);
                     break;
                 case 3:
-                    newAccount.setSoDienThoai(info);
+                    newAccount.setUserPhone(info);
                     break;
                 case 4:
-                    newAccount.setDiaChi(info);
+                    newAccount.setUserAddress(info);
                     break;
             }
 
@@ -208,7 +208,7 @@ public class ViewSettingInfoController {
 
     private void editPersonalAccountByAPI(Account account) {
         AccountService accountService = RetrofitAPI.getInstance().create(AccountService.class);
-        Call<String> call = accountService.editAccount(account.getTenTaiKhoan(), account);
+        Call<String> call = accountService.editAccount(account.getUserID(), account);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -231,7 +231,7 @@ public class ViewSettingInfoController {
 
     private void afterEdit() {
         Toast.makeText(activity, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-        getAccountFromAPI(account.getTenTaiKhoan());
+        getAccountFromAPI(account.getUserID());
         closeEditor();
     }
 }

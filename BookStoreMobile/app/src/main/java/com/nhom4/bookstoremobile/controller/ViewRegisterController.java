@@ -40,8 +40,8 @@ public class ViewRegisterController {
 
     private void register(String userID, String password) {
         Account account = new Account();
-        account.setTenTaiKhoan(userID);
-        account.setMatKhau(password);
+        account.setUserID(userID);
+        account.setUserPassword(password);
 
         AccountService accountService = RetrofitAPI.getInstance().create(AccountService.class);
         Call<String> call = accountService.register(account);

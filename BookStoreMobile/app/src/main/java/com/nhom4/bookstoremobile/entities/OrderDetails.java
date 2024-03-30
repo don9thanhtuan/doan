@@ -1,44 +1,17 @@
-package com.nhom1.bookstore.entity;
+package com.nhom4.bookstoremobile.entities;
 
 import java.util.List;
 
-public class OrderDetail {
+public class OrderDetails {
     private String orderID;
     private List<OrderItem> orderItemList;
 
-    public OrderDetail(){}
-    public OrderDetail(String orderID, List<OrderItem> orderItemList) {
-        this.orderID = orderID;
-        this.orderItemList = orderItemList;
+    public OrderDetails() {
     }
 
-    public class OrderItem{ 
-        private String bookID;
-        private Book book;
-        private int quantity;
-        
-        public OrderItem(String bookID, int quantity) {
-            this.bookID = bookID;
-            this.quantity = quantity;
-        }
-        public String getBookID() {
-            return bookID;
-        }
-        public void setBookID(String bookID) {
-            this.bookID = bookID;
-        }
-        public Book getBook() {
-            return book;
-        }
-        public void setBook(Book book) {
-            this.book = book;
-        }
-        public int getQuantity() {
-            return quantity;
-        }
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
+    public OrderDetails(String orderID, List<OrderItem> orderItemList) {
+        this.orderID = orderID;
+        this.orderItemList = orderItemList;
     }
 
     public String getOrderID() {
@@ -55,5 +28,40 @@ public class OrderDetail {
 
     public void setOrderItemList(List<OrderItem> bookList) {
         this.orderItemList = bookList;
-    } 
+    }
+
+    public class OrderItem {
+        private String bookID;
+        private Book book;
+        private int quantity;
+
+        public OrderItem(String bookID, int quantity) {
+            this.bookID = bookID;
+            this.quantity = quantity;
+        }
+
+        public String getBookID() {
+            return bookID;
+        }
+
+        public void setBookID(String bookID) {
+            this.bookID = bookID;
+        }
+
+        public Book getBook() {
+            return book;
+        }
+
+        public void setBook(Book book) {
+            this.book = book;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
+        }
+    }
 }

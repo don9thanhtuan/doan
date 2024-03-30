@@ -9,7 +9,7 @@ import com.nhom1.bookstore.entity.Account;
 import com.nhom1.bookstore.entity.Book;
 import com.nhom1.bookstore.entity.Order;
 import com.nhom1.bookstore.entity.OrderDetail;
-import com.nhom1.bookstore.entity.OrderDetail.BookInOrder;
+import com.nhom1.bookstore.entity.OrderDetail.OrderItem;
 import com.nhom1.bookstore.services.AccountService;
 import com.nhom1.bookstore.services.BookService;
 import com.nhom1.bookstore.services.ConverterCurrency;
@@ -35,18 +35,18 @@ public class ManageOrderDetailsController {
         if(isAdmin != null && isAdmin.equals(Boolean.TRUE)) {
             Order order = orderService.getOrder(id);
             OrderDetail orderDetail = orderService.getOrderDetail(id);
-            Account account = accountService.getAccountNonPassword(order.getIdNguoiDat());
+            Account account = accountService.getAccountNonPassword(order.getUserID());
             
-            for (BookInOrder bookInOrder : orderDetail.getBookList()) {
-                Book book = bookService.getBook(bookInOrder.getIdSach());
-                bookInOrder.setSach(book);
+            for (OrderItem bookInOrder : orderDetail.getOrderItemList()) {
+                Book book = bookService.getBook(bookInOrder.getBookID());
+                bookInOrder.setBook(book);
             }
 
-            int tongTienInt = ConverterCurrency.currencyToNumber(order.getThanhTien());
+            int tongTienInt = ConverterCurrency.currencyToNumber(order.getOrderPrice());
             String tongTien = ConverterCurrency.numberToCurrency(tongTienInt + 25000);
             model.addAttribute("account", account);
             model.addAttribute("order", order);
-            model.addAttribute("bookList", orderDetail.getBookList());
+            model.addAttribute("bookList", orderDetail.getOrderItemList());
             model.addAttribute("orderDetail", orderDetail);
             model.addAttribute("totalValue", tongTien);
             return "admin_detailorder";

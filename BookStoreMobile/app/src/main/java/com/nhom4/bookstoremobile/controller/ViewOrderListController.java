@@ -77,7 +77,7 @@ public class ViewOrderListController {
     private void filterData(int choice, List<Order> orderList) {
         if (choice != 4) {
             for (int i = 0; i < orderList.size(); i++) {
-                if (orderList.get(i).getTrangThaiInt() != choice) {
+                if (orderList.get(i).getOrderStatusInt() != choice) {
                     orderList.remove(i);
                     i--;
                 }
@@ -85,9 +85,9 @@ public class ViewOrderListController {
         }
 
         for (Order order : orderList) {
-            Book book = order.getCuonSachDau();
-            String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-            book.setHinhAnh(imageUrl);
+            Book book = order.getOrderFirstBook();
+            String imageUrl = DefaultURL.getUrl() + book.getBookImage();
+            book.setBookImage(imageUrl);
         }
     }
 

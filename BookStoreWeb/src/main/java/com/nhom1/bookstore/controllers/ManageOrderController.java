@@ -29,8 +29,8 @@ public class ManageOrderController {
         if(isAdmin != null && isAdmin.equals(Boolean.TRUE)) {
             List<Order> orderList = orderService.getOrderList();
             for (Order order : orderList) {
-                Book book = bookService.getBook(order.getIdSachDau());
-                order.setCuonSachDau(book);
+                Book book = bookService.getBook(order.getOrderFirstBookID());
+                order.setOrderFirstBook(book);
             }
             model.addAttribute("orderList", orderList);
             

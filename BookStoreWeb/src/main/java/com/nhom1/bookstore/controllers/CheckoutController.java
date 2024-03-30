@@ -29,8 +29,8 @@ public class CheckoutController {
         if(loggedInUser != null) {
             Account account = accountService.getAccountNonPassword(loggedInUser.toString());
             model.addAttribute("account", account);
-            if(account.getDiaChi() != null) {
-                if(account.getDiaChi().isEmpty()) {
+            if(account.getUserAddress() != null) {
+                if(account.getUserAddress().isEmpty()) {
                     model.addAttribute("noAddress", false);
                 }else{
                     model.addAttribute("noAddress", true);

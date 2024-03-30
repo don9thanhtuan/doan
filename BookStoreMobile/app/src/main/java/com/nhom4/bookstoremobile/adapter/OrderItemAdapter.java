@@ -1,6 +1,7 @@
 package com.nhom4.bookstoremobile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
+import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.controller.CheckOutController;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
@@ -24,6 +26,8 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
     private final Context context;
     private final List<CartItem> orderItemList;
     private final CheckOutController controller;
+    private RecyclerView mRecyclerView;
+
 
     public OrderItemAdapter(Context context, List<CartItem> orderItemList, CheckOutController controller) {
         this.context = context;
@@ -31,10 +35,23 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         this.controller = controller;
     }
 
+    public void setmRecyclerView(RecyclerView mRecyclerView) {
+        this.mRecyclerView = mRecyclerView;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_order_item_layout, parent, false);
+        if (mRecyclerView != null) {
+            view.setOnClickListener(v -> {
+                int itemPosition = mRecyclerView.getChildLayoutPosition(v);
+                CartItem cartItem = orderItemList.get(itemPosition);
+                Intent intent = new Intent(context, ViewBookDetails.class);
+                intent.putExtra("book_id", cartItem.getBookID());
+                context.startActivity(intent);
+            });
+        }
         return new ViewHolder(view);
     }
 
@@ -43,12 +60,12 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         CartItem orderItem = orderItemList.get(position);
         Book book = orderItem.getBook();
         if (book != null) {
-            holder.itemName.setText(book.getTen());
-            holder.itemAuthor.setText(book.getTacGia());
-            holder.itemPrice.setText(book.getGia());
+            holder.itemName.setText(book.getBookName());
+            holder.itemAuthor.setText(book.getBookAuthor());
+            holder.itemPrice.setText(book.getBookPrice());
 
             Glide.with(context)
-                    .load(book.getHinhAnh())
+                    .load(book.getBookImage())
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .fitCenter()
@@ -56,8 +73,10 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         }
         holder.itemQuantity.setText(String.valueOf(orderItem.getQuantity()));
 
-        setTotalQuantity(orderItemList);
-        setPrice(orderItemList);
+        if (controller != null) {
+            setTotalQuantity(orderItemList);
+            setPrice(orderItemList);
+        }
     }
 
     private void setTotalQuantity(List<CartItem> itemList) {
@@ -80,7 +99,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
             Book book = item.getBook();
 
             if (book != null) {
-                String priceRaw = book.getGia();
+                String priceRaw = book.getBookPrice();
                 priceRaw = priceRaw.replace("₫", "");
                 priceRaw = priceRaw.replaceAll("\\s+", "");
                 priceRaw = priceRaw.replace(".", "");

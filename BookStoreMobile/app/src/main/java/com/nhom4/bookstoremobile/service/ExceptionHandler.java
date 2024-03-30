@@ -62,16 +62,16 @@ public class ExceptionHandler {
         }
 
         Book newBook = new Book();
-        newBook.setTen(name);
-        newBook.setGia(price);
-        newBook.setTacGia(author);
-        newBook.setNhaCungCap(publisher);
-        newBook.setKichThuoc(size);
-        newBook.setTonKho(Integer.parseInt(stock));
-        newBook.setGioiThieu(introduction);
+        newBook.setBookName(name);
+        newBook.setBookPrice(price);
+        newBook.setBookAuthor(author);
+        newBook.setBookPublisher(publisher);
+        newBook.setBookSize(size);
+        newBook.setBookStock(Integer.parseInt(stock));
+        newBook.setBookIntroduction(introduction);
 
         if (!weight.isEmpty()) {
-            newBook.setTrongLuong(Double.parseDouble(weight));
+            newBook.setBookWeight(Double.parseDouble(weight));
         }
 
         return newBook;

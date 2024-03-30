@@ -27,9 +27,9 @@ public class GetPersonalOrdersAPIController {
     public ResponseEntity<List<Order>> getPersonalOrders(@PathVariable("userid") String userid) {
         List<Order> orderList = orderService.search(userid);
         for (Order order : orderList) {
-            Book book = bookService.getBook(order.getIdSachDau());
-            order.setCuonSachDau(book);
-            order.setSoSanPham(order.getSoSanPham() - 1);
+            Book book = bookService.getBook(order.getOrderFirstBookID());
+            order.setOrderFirstBook(book);
+            order.setOrderItemQuantity(order.getOrderItemQuantity() - 1);
         }
         return new ResponseEntity<>(orderList, HttpStatus.OK);
     }

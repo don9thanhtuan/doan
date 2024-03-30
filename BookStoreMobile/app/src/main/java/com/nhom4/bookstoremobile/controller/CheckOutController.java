@@ -138,8 +138,8 @@ public class CheckOutController {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
                     Book book = response.body();
-                    String imageURL = DefaultURL.getUrl() + book.getHinhAnh();
-                    book.setHinhAnh(imageURL);
+                    String imageURL = DefaultURL.getUrl() + book.getBookImage();
+                    book.setBookImage(imageURL);
                     cartItem.setBook(book);
                     adapter.notifyDataSetChanged();
                 }
@@ -152,8 +152,8 @@ public class CheckOutController {
     }
 
     public void createOrder(Account account) {
-        String phone = account.getSoDienThoai();
-        String address = account.getDiaChi();
+        String phone = account.getUserPhone();
+        String address = account.getUserAddress();
         if (phone == null || phone.trim().isEmpty()) {
             Toast.makeText(activity, "Vui lòng kiểm tra lại số điện thoại", Toast.LENGTH_SHORT).show();
             return;
@@ -179,7 +179,7 @@ public class CheckOutController {
         orderDTO.setPaymentMethod(paymentMethod);
 
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
-        Call<String> call = orderService.createOrder(account.getTenTaiKhoan(), orderDTO);
+        Call<String> call = orderService.createOrder(account.getUserID(), orderDTO);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -211,7 +211,7 @@ public class CheckOutController {
             Book book = item.getBook();
 
             if (book != null) {
-                String priceRaw = book.getGia();
+                String priceRaw = book.getBookPrice();
                 priceRaw = priceRaw.replace("₫", "");
                 priceRaw = priceRaw.replaceAll("\\s+", "");
                 priceRaw = priceRaw.replace(".", "");

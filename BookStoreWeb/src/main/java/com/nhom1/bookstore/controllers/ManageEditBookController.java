@@ -40,23 +40,23 @@ public class ManageEditBookController {
         @RequestParam("introduction") String introduction
     ) {
         Book newBook = new Book();
-        newBook.setId(id);
-        newBook.setTen(name);
-        newBook.setGia(price);
-        newBook.setTacGia(author);
-        newBook.setNhaCungCap(publisher);
+        newBook.setBookID(id);
+        newBook.setBookName(name);
+        newBook.setBookPrice(price);
+        newBook.setBookAuthor(author);
+        newBook.setBookPublisher(publisher);
        
         double weight = 0;
         if(!weightRaw.isBlank()) {weight = Double.parseDouble(weightRaw);}
-        newBook.setTrongLuong(weight);
+        newBook.setBookWeight(weight);
 
-        newBook.setKichThuoc(size);
+        newBook.setBookSize(size);
 
         int stock = 0;
         if (stockRaw != null) {stock = Integer.parseInt(stockRaw);}
-        newBook.setTonKho(stock);
+        newBook.setBookStock(stock);
 
-        newBook.setGioiThieu(introduction);
+        newBook.setBookIntroduction(introduction);
 
         String path = filePath;
         String fileName = file.getOriginalFilename();
@@ -64,9 +64,9 @@ public class ManageEditBookController {
         if(fileName != "") {
             path = bookService.fileToFilePathConverter(file);
         }
-        newBook.setHinhAnh(path);
+        newBook.setBookImage(path);
 
         bookService.editBook(newBook);
-        return "redirect:/quantri/sanpham/"+ newBook.getId();
+        return "redirect:/quantri/sanpham/"+ newBook.getBookID();
     }
 }

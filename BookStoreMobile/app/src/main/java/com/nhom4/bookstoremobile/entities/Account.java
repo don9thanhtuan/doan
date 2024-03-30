@@ -1,64 +1,64 @@
 package com.nhom4.bookstoremobile.entities;
 
 public class Account {
-    private String tenTaiKhoan;
-    private String hoTen;
-    private String soDienThoai;
-    private String email;
-    private String diaChi;
+    private String userID;
+    private String userName;
+    private String userPhone;
+    private String userEmail;
+    private String userAddress;
     private boolean admin;
-    private String matKhau;
+    private String userPassword;
 
     public Account() {
     }
 
-    public Account(String tenTaiKhoan, String hoTen, String soDienThoai, String email, String diaChi, boolean admin) {
-        this.tenTaiKhoan = tenTaiKhoan;
-        this.hoTen = hoTen;
-        this.soDienThoai = soDienThoai;
-        this.email = email;
-        this.diaChi = diaChi;
+    public Account(String userID, String userName, String userPhone, String userEmail, String userAddress, boolean admin) {
+        this.userID = userID;
+        this.userName = userName;
+        this.userPhone = userPhone;
+        this.userEmail = userEmail;
+        this.userAddress = userAddress;
         this.admin = admin;
     }
 
-    public String getTenTaiKhoan() {
-        return tenTaiKhoan;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setTenTaiKhoan(String tenTaiKhoan) {
-        this.tenTaiKhoan = tenTaiKhoan;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public String getHoTen() {
-        return hoTen;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getSoDienThoai() {
-        return soDienThoai;
+    public String getUserPhone() {
+        return userPhone;
     }
 
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public String getUserAddress() {
+        return userAddress;
     }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 
     public boolean isAdmin() {
@@ -69,11 +69,11 @@ public class Account {
         admin = admin;
     }
 
-    public String getMatKhau() {
-        return matKhau;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 }

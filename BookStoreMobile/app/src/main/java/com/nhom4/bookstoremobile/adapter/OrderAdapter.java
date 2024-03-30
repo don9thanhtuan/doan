@@ -1,6 +1,7 @@
 package com.nhom4.bookstoremobile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
+import com.nhom4.bookstoremobile.activity.ViewOrderDetails;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
 
@@ -34,29 +36,44 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.main_order_layout, parent, false);
+        view.setOnClickListener(v -> {
+            int itemPosition = mRecyclerView.getChildLayoutPosition(v);
+            Order order = mOrderList.get(itemPosition);
+            Intent intent = new Intent(mContext, ViewOrderDetails.class);
+            intent.putExtra("orderID", order.getOrderID());
+            intent.putExtra("userID", order.getUserID());
+            intent.putExtra("orderTime", order.getOrderTime().toString());
+            intent.putExtra("orderPhone", order.getOrderPhone());
+            intent.putExtra("orderAddress", order.getOrderAddress());
+            intent.putExtra("orderStatus", order.getOrderStatus());
+            intent.putExtra("orderPrice", order.getOrderPrice());
+            intent.putExtra("orderItemQuantity", order.getOrderItemQuantity());
+
+            mContext.startActivity(intent);
+        });
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = mOrderList.get(position);
-        Book book = order.getCuonSachDau();
+        Book book = order.getOrderFirstBook();
 
-        holder.textViewOrderId.setText(order.getMaDonHang());
-        holder.textViewStatus.setText(order.getTrangThai());
+        holder.textViewOrderId.setText(order.getOrderID());
+        holder.textViewStatus.setText(order.getOrderStatus());
 
         Glide.with(mContext)
-                .load(book.getHinhAnh())
+                .load(book.getBookImage())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()
                 .into(holder.imageViewFirstBook);
 
-        holder.textViewFirstBook.setText(book.getTen());
-        holder.textViewOrderPrice.setText(order.getThanhTien());
+        holder.textViewFirstBook.setText(book.getBookName());
+        holder.textViewOrderPrice.setText(order.getOrderPrice());
         String soSP = "";
-        if (order.getSoSanPham() != 0) {
-            soSP = "Và " + order.getSoSanPham() + " cuốn sách khác";
+        if (order.getOrderItemQuantity() != 0) {
+            soSP = "Và " + order.getOrderItemQuantity() + " cuốn sách khác";
         }
         holder.textViewOtherBook.setText(soSP);
     }

@@ -81,16 +81,16 @@ public class ViewAccountController {
     private void setDataAccount(Account account) {
         TextView nameUser_TextView = activity.findViewById(R.id.nameUser);
         if (account.isAdmin()) {
-            nameUser_TextView.setText(account.getTenTaiKhoan());
+            nameUser_TextView.setText(account.getUserID());
         } else {
-            nameUser_TextView.setText(account.getHoTen());
+            nameUser_TextView.setText(account.getUserName());
         }
     }
 
     private void getOrderFromAPI(Account account) {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
 
-        Call<List<Order>> call = orderService.getPersonalOrders(account.getTenTaiKhoan());
+        Call<List<Order>> call = orderService.getPersonalOrders(account.getUserID());
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
@@ -98,16 +98,16 @@ public class ViewAccountController {
                     List<Order> orderList = response.body();
 
                     for (int i = 0; i < orderList.size(); i++) {
-                        if (orderList.get(i).getTrangThaiInt() == 3) {
+                        if (orderList.get(i).getOrderStatusInt() == 3) {
                             orderList.remove(i);
                             i--;
                         }
                     }
 
                     for (Order order : orderList) {
-                        Book book = order.getCuonSachDau();
-                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-                        book.setHinhAnh(imageUrl);
+                        Book book = order.getOrderFirstBook();
+                        String imageUrl = DefaultURL.getUrl() + book.getBookImage();
+                        book.setBookImage(imageUrl);
                     }
 
                     RecyclerView recyclerView = activity.findViewById(R.id.orderList);
@@ -145,7 +145,7 @@ public class ViewAccountController {
 
     public void redirectToOrderList() {
         Intent intent = new Intent(activity, ViewOrderList.class);
-        intent.putExtra("userID", account.getTenTaiKhoan());
+        intent.putExtra("userID", account.getUserID());
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }

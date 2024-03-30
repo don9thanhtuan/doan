@@ -61,8 +61,8 @@ public class ViewBookDetailsController {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
                     book = response.body();
-                    String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-                    book.setHinhAnh(imageUrl);
+                    String imageUrl = DefaultURL.getUrl() + book.getBookImage();
+                    book.setBookImage(imageUrl);
                     setData(book);
                 }
             }
@@ -75,16 +75,16 @@ public class ViewBookDetailsController {
 
     public void redirectToEditBook() {
         Intent intent = new Intent(activity, EditBook.class);
-        intent.putExtra("book_id", book.getId());
-        intent.putExtra("book_name", book.getTen());
-        intent.putExtra("book_HinhAnh", book.getHinhAnh());
-        intent.putExtra("book_TacGia", book.getTacGia());
-        intent.putExtra("book_NhaCungCap", book.getNhaCungCap());
-        intent.putExtra("book_TonKho", book.getTonKho());
-        intent.putExtra("book_Gia", book.getGia());
-        intent.putExtra("book_TrongLuong", book.getTrongLuong());
-        intent.putExtra("book_KickThuoc", book.getKichThuoc());
-        intent.putExtra("book_GioiThieu", book.getGioiThieu());
+        intent.putExtra("book_id", book.getBookID());
+        intent.putExtra("book_name", book.getBookName());
+        intent.putExtra("book_HinhAnh", book.getBookImage());
+        intent.putExtra("book_TacGia", book.getBookAuthor());
+        intent.putExtra("book_NhaCungCap", book.getBookPublisher());
+        intent.putExtra("book_TonKho", book.getBookStock());
+        intent.putExtra("book_Gia", book.getBookPrice());
+        intent.putExtra("book_TrongLuong", book.getBookWeight());
+        intent.putExtra("book_KickThuoc", book.getBookSize());
+        intent.putExtra("book_GioiThieu", book.getBookIntroduction());
         activity.startActivity(intent);
         activity.finish();
     }
@@ -102,15 +102,15 @@ public class ViewBookDetailsController {
 
     private void deleteBookByAPi() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<ResponseBody> call = bookService.deleteBook(book.getId());
+        Call<ResponseBody> call = bookService.deleteBook(book.getBookID());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(activity, "Xóa thành công sản phẩm " + book.getId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Xóa thành công sản phẩm " + book.getBookID(), Toast.LENGTH_SHORT).show();
                     activity.finish();
                 } else {
-                    Toast.makeText(activity, "Vui lòng hoàn thành các đơn hàng có sản phẩm " + book.getId() + " để xóa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Vui lòng hoàn thành các đơn hàng có sản phẩm " + book.getBookID() + " để xóa", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -130,7 +130,7 @@ public class ViewBookDetailsController {
                     List<Book> bookList = response.body();
                     if (book != null) {
                         for (Book bookInList : bookList) {
-                            if (bookInList.getId().equals(book.getId())) {
+                            if (bookInList.getBookID().equals(book.getBookID())) {
                                 bookList.remove(bookInList);
                                 break;
                             }
@@ -138,8 +138,8 @@ public class ViewBookDetailsController {
                     }
 
                     for (Book book : bookList) {
-                        String imageUrl = DefaultURL.getUrl() + book.getHinhAnh();
-                        book.setHinhAnh(imageUrl);
+                        String imageUrl = DefaultURL.getUrl() + book.getBookImage();
+                        book.setBookImage(imageUrl);
                     }
 
                     RecyclerView recyclerView = activity.findViewById(R.id.detail_RecyclerView);
@@ -168,34 +168,34 @@ public class ViewBookDetailsController {
         TextView introductionTextView = activity.findViewById(R.id.introduction_TxtView);
 
         Glide.with(activity)
-                .load(book.getHinhAnh())
+                .load(book.getBookImage())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()
                 .into(bookImage);
 
-        nameTextView.setText(book.getTen());
-        soldTextView.setText("Đã bán " + book.getDaBan());
-        priceTextView.setText(book.getGia());
-        idTextView.setText(book.getId());
-        authorTextView.setText(book.getTacGia());
-        publisherTextView.setText(book.getNhaCungCap());
-        weightTextView.setText(book.getTrongLuong() + " gr");
-        sizeTextView.setText(book.getKichThuoc());
-        introductionTextView.setText(book.getGioiThieu());
+        nameTextView.setText(book.getBookName());
+        soldTextView.setText("Đã bán " + book.getBookSold());
+        priceTextView.setText(book.getBookPrice());
+        idTextView.setText(book.getBookID());
+        authorTextView.setText(book.getBookAuthor());
+        publisherTextView.setText(book.getBookPublisher());
+        weightTextView.setText(book.getBookWeight() + " gr");
+        sizeTextView.setText(book.getBookSize());
+        introductionTextView.setText(book.getBookIntroduction());
     }
 
     public void openAddCartView(int choice) {
         CartItem cartItem = getCartItem(bookID);
         if (cartItem != null) {
-            if (cartItem.getQuantity() >= book.getTonKho() || book.getTonKho() <= 0) {
+            if (cartItem.getQuantity() >= book.getBookStock() || book.getBookStock() <= 0) {
                 Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
-        if(book != null) {
-            if (book.getTonKho() <= 0) {
+        if (book != null) {
+            if (book.getBookStock() <= 0) {
                 Toast.makeText(activity, "Sản phẩm đã hết hàng", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -242,15 +242,15 @@ public class ViewBookDetailsController {
 
 
         Glide.with(activity)
-                .load(book.getHinhAnh())
+                .load(book.getBookImage())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()
                 .into(imageView);
 
-        nameTextView.setText(book.getTen());
-        authorTextView.setText(book.getTacGia());
-        priceTextView.setText(book.getGia());
+        nameTextView.setText(book.getBookName());
+        authorTextView.setText(book.getBookAuthor());
+        priceTextView.setText(book.getBookPrice());
     }
 
     private void addItemToCart(String id, int quantity) {
@@ -308,9 +308,9 @@ public class ViewBookDetailsController {
                 if (quantity <= 0) {
                     Toast.makeText(activity, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                     quantity_EditText.setText("1");
-                } else if (book.getTonKho() < (quantity + quantityInCart)) {
+                } else if (book.getBookStock() < (quantity + quantityInCart)) {
                     Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
-                    int remain = book.getTonKho() - quantityInCart;
+                    int remain = book.getBookStock() - quantityInCart;
                     quantity_EditText.setText(String.valueOf(remain));
                 }
             }
@@ -338,7 +338,7 @@ public class ViewBookDetailsController {
         }
 
         int quantity = Integer.parseInt(quantityRaw) + 1;
-        if (book.getTonKho() < (quantity + quantityInCart)) {
+        if (book.getBookStock() < (quantity + quantityInCart)) {
             Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
         } else {
             quantity_EditText.setText(String.valueOf(quantity));
@@ -351,7 +351,7 @@ public class ViewBookDetailsController {
         if (choice == 1) {
             redirectToBuyNow(bookID, quantity);
         } else {
-            addItemToCart(book.getId(), quantity);
+            addItemToCart(book.getBookID(), quantity);
             Toast.makeText(activity, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
             closeAddCartView();
         }
