@@ -21,7 +21,7 @@ public class Order {
         this.orderID = orderID;
         this.userID = userID;
         this.orderTime = orderTime;
-        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderStatus = convertStatusInt(orderStatus);
         this.orderPrice = orderPrice;
         this.orderFirstBookID = orderFirstBookID;
         this.orderItemQuantity = orderItemQuantity;
@@ -32,22 +32,11 @@ public class Order {
     public Order(String orderID, String userID, int orderStatus, String orderPrice) {
         this.orderID = orderID;
         this.userID = userID;
-        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderStatus = convertStatusInt(orderStatus);
         this.orderPrice = orderPrice;
     }
 
-    public Order(String orderID, String userID, Date orderTime, String orderPhone, String orderAddress, String orderStatus, String orderPrice, int orderItemQuantity) {
-        this.orderID = orderID;
-        this.userID = userID;
-        this.orderTime = orderTime;
-        this.orderStatus = orderStatus;
-        this.orderPrice = orderPrice;
-        this.orderItemQuantity = orderItemQuantity;
-        this.orderPhone = orderPhone;
-        this.orderAddress = orderAddress;
-    }
-
-    private String convertTrangThaiInt(int orderStatus) {
+    private String convertStatusInt(int orderStatus) {
         switch (orderStatus) {
             case 0:
                 return "Chưa xác nhận";
@@ -62,7 +51,7 @@ public class Order {
         }
     }
 
-    public int convertTrangThaiString(String orderStatus) {
+    public int convertStatusString(String orderStatus) {
         switch (orderStatus) {
             case "Chưa xác nhận":
                 return 0;
@@ -106,11 +95,11 @@ public class Order {
     }
 
     public void setOrderStatus(int orderStatus) {
-        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderStatus = convertStatusInt(orderStatus);
     }
 
     public int getOrderStatusInt() {
-        return convertTrangThaiString(orderStatus);
+        return convertStatusString(orderStatus);
     }
 
     public String getOrderPrice() {

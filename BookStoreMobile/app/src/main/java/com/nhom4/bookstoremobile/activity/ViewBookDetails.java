@@ -1,12 +1,16 @@
 package com.nhom4.bookstoremobile.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewBookDetailsController;
+import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class ViewBookDetails extends AppCompatActivity {
     private ViewBookDetailsController controller;
@@ -25,6 +29,7 @@ public class ViewBookDetails extends AppCompatActivity {
         controller.getBookListFromAPI();
 
         setListener();
+        setUpAdminLayout();
     }
 
     @Override
@@ -37,8 +42,7 @@ public class ViewBookDetails extends AppCompatActivity {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
 
-        findViewById(R.id.editBtn).setOnClickListener(v -> controller.redirectToEditBook());
-        findViewById(R.id.deleteBtn).setOnClickListener(v -> controller.showDeleteConfirm());
+
         findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectToBookList());
         findViewById(R.id.cartBtn).setOnClickListener(v -> controller.redirectToCart());
         findViewById(R.id.addToCartBtn).setOnClickListener(v -> controller.openAddCartView(2));
@@ -48,5 +52,26 @@ public class ViewBookDetails extends AppCompatActivity {
             controller.closeAddCartView();
             return false;
         });
+    }
+
+    private void setUpAdminLayout() {
+        Button editBtn = findViewById(R.id.editBtn);
+        Button deleteBtn = findViewById(R.id.deleteBtn);
+
+        AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
+        if (accountResponse != null) {
+            if (accountResponse.isAdmin()) {
+                editBtn.setVisibility(View.VISIBLE);
+                deleteBtn.setVisibility(View.VISIBLE);
+                editBtn.setOnClickListener(v -> controller.redirectToEditBook());
+                deleteBtn.setOnClickListener(v -> controller.showDeleteConfirm());
+                return;
+            }
+        }
+
+        editBtn.setVisibility(View.GONE);
+        editBtn.setOnClickListener(null);
+        deleteBtn.setVisibility(View.GONE);
+        deleteBtn.setOnClickListener(null);
     }
 }

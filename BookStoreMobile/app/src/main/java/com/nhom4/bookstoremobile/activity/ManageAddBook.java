@@ -10,30 +10,40 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.controller.EditBookController;
+import com.nhom4.bookstoremobile.controller.ManageAddBookController;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class EditBook extends AppCompatActivity {
+public class ManageAddBook extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
-    private EditBookController controller;
+    private ManageAddBookController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
+
+        controller = new ManageAddBookController(this);
+
         setListener();
+    }
 
-        controller = new EditBookController(this);
-
-        controller.setBookData();
+    private void setListener() {
+        findViewById(R.id.addImageButton).setOnClickListener(v -> openImagePickLayout());
+        findViewById(R.id.addBookBtn).setOnClickListener(v -> controller.addBook());
+        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
     }
 
     @Override
     public void onBackPressed() {
+        controller.redirectBack();
         super.onBackPressed();
-        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+    }
+
+    public void openImagePickLayout() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE);
     }
 
     @Override
@@ -45,21 +55,9 @@ public class EditBook extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(controller.getSelectedImage());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 controller.getImagePreview().setImageBitmap(bitmap);
-                controller.setChangeImage(true);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void openImagePickLayout() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE);
-    }
-
-    private void setListener() {
-        findViewById(R.id.addImageButton).setOnClickListener(v -> openImagePickLayout());
-        findViewById(R.id.addBookBtn).setOnClickListener(v -> controller.editBookByAPI());
-        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
     }
 }

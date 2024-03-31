@@ -27,14 +27,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditBookController {
+public class ManageEditBookController {
     private final Activity activity;
     private final Book book;
     boolean changeImage = false;
     private ImageView imagePreview;
     private Uri selectedImage;
 
-    public EditBookController(Activity activity) {
+    public ManageEditBookController(Activity activity) {
         this.activity = activity;
         book = getDataFromIntent();
         imagePreview = activity.findViewById(R.id.imagePreview);
@@ -49,10 +49,6 @@ public class EditBookController {
         this.selectedImage = selectedImage;
     }
 
-    public boolean isChangeImage() {
-        return changeImage;
-    }
-
     public void setChangeImage(boolean changeImage) {
         this.changeImage = changeImage;
     }
@@ -61,9 +57,6 @@ public class EditBookController {
         return imagePreview;
     }
 
-    public void setImagePreview(ImageView imagePreview) {
-        this.imagePreview = imagePreview;
-    }
 
     private Book getDataFromIntent() {
         String book_ID = activity.getIntent().getStringExtra("book_id");
@@ -114,6 +107,7 @@ public class EditBookController {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
+                    Toast.makeText(activity, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
                     redirectToCart();
                 }
             }
@@ -170,7 +164,6 @@ public class EditBookController {
     }
 
     private void redirectToCart() {
-        Toast.makeText(activity, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(activity, ViewBookDetails.class);
         intent.putExtra("book_id", book.getBookID());
         activity.startActivity(intent);

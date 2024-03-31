@@ -70,7 +70,7 @@ public class OrderSeviceImp implements OrderService {
         if(newOrder.getPaymentMethod().equals("cod")) {
             trangThai = 0;
         }
-        order.setTrangThai(trangThai);
+        order.setOrderStatus(trangThai);
         order.setOrderPrice(newOrder.getPrice());
         order.setOrderFirstBookID(newOrder.getBookList().get(0));
         order.setOrderItemQuantity(newOrder.getBookList().size());

@@ -34,9 +34,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ViewBookList" />
-        <activity android:name=".activity.AddBook" />
+        <activity android:name=".activity.ManageAddBook" />
         <activity android:name=".activity.ViewBookDetails" />
-        <activity android:name=".activity.EditBook" />
+        <activity android:name=".activity.ManageEditBook" />
         <activity android:name=".activity.ViewCart" />
         <activity android:name=".activity.ViewAccount" />
         <activity android:name=".activity.ViewLogin" />

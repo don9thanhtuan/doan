@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewBookDetails;
+import com.nhom4.bookstoremobile.activity.ViewBookList;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.BookResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
@@ -24,12 +25,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddBookController {
+public class ManageAddBookController {
     private final Activity activity;
     private final ImageView imagePreview;
     private Uri selectedImage;
 
-    public AddBookController(Activity activity) {
+    public ManageAddBookController(Activity activity) {
         this.activity = activity;
         imagePreview = activity.findViewById(R.id.imagePreview);
     }
@@ -98,6 +99,8 @@ public class AddBookController {
     }
 
     public void redirectBack() {
+        Intent intent = new Intent(activity, ViewBookList.class);
+        activity.startActivity(intent);
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }

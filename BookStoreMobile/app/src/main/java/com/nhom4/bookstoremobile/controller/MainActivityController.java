@@ -24,10 +24,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivityController {
-    private final Activity view;
+    private final Activity activity;
 
-    public MainActivityController(Activity view) {
-        this.view = view;
+    public MainActivityController(Activity activity) {
+        this.activity = activity;
     }
 
     public void getTopSellingFromAPI() {
@@ -43,11 +43,11 @@ public class MainActivityController {
                         book.setBookImage(imageUrl);
                     }
 
-                    RecyclerView recyclerView = view.findViewById(R.id.home_RecyclerView);
+                    RecyclerView recyclerView = activity.findViewById(R.id.home_RecyclerView);
 
-                    BookAdapter adapter = new BookAdapter(view, bookList, recyclerView);
+                    BookAdapter adapter = new BookAdapter(activity, bookList, recyclerView);
 
-                    recyclerView.setLayoutManager(new LinearLayoutManager(view, LinearLayoutManager.HORIZONTAL, false));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -59,26 +59,26 @@ public class MainActivityController {
     }
 
     public void redirectToCart() {
-        Intent intent = new Intent(view, ViewCart.class);
+        Intent intent = new Intent(activity, ViewCart.class);
         intent.putExtra("main", true);
-        view.startActivity(intent);
-        view.finish();
+        activity.startActivity(intent);
+        activity.finish();
     }
 
     public void redirectToBookList() {
-        Intent intent = new Intent(view, ViewBookList.class);
-        view.startActivity(intent);
-        view.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        Intent intent = new Intent(activity, ViewBookList.class);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
     public void redirectToAccount() {
-        Intent intent = new Intent(view, ViewAccount.class);
-        view.startActivity(intent);
-        view.finish();
+        Intent intent = new Intent(activity, ViewAccount.class);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        view.recreate();
+        activity.recreate();
         pullToRefresh.setRefreshing(false);
     }
 }

@@ -35,27 +35,10 @@ import retrofit2.Response;
 
 public class ViewAccountController {
     private final Activity activity;
-    private final AccountTable accountTable;
     private Account account;
 
     public ViewAccountController(Activity activity) {
         this.activity = activity;
-        this.accountTable = new AccountTable(activity);
-    }
-
-    public AccountResponse getAccountData() {
-        Cursor cursor = accountTable.getAccount();
-        if (cursor != null && cursor.moveToFirst()) {
-            String userID = cursor.getString(cursor.getColumnIndex("userID"));
-            int isAdminInt = cursor.getInt(cursor.getColumnIndex("isAdmin"));
-
-            if (isAdminInt == 0) {
-                return new AccountResponse(userID, false);
-            } else {
-                return new AccountResponse(userID, true);
-            }
-        }
-        return null;
     }
 
     public void getAccountFromAPI(String userID) {
@@ -80,17 +63,26 @@ public class ViewAccountController {
 
     private void setDataAccount(Account account) {
         TextView nameUser_TextView = activity.findViewById(R.id.nameUser);
+        TextView titleTxtView_TextView = activity.findViewById(R.id.titleTxtView);
+
         if (account.isAdmin()) {
             nameUser_TextView.setText(account.getUserID());
+            titleTxtView_TextView.setText("Quản lí đơn hàng");
         } else {
             nameUser_TextView.setText(account.getUserName());
+            titleTxtView_TextView.setText("Đơn hàng của tôi");
         }
+
     }
 
     private void getOrderFromAPI(Account account) {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
-
-        Call<List<Order>> call = orderService.getPersonalOrders(account.getUserID());
+        Call<List<Order>> call;
+        if (account.isAdmin()) {
+            call = orderService.getOrderList();
+        } else {
+            call = orderService.getPersonalOrders(account.getUserID());
+        }
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
@@ -98,7 +90,7 @@ public class ViewAccountController {
                     List<Order> orderList = response.body();
 
                     for (int i = 0; i < orderList.size(); i++) {
-                        if (orderList.get(i).getOrderStatusInt() == 3) {
+                        if (orderList.get(i).getOrderStatusInt() >= 3) {
                             orderList.remove(i);
                             i--;
                         }
@@ -132,6 +124,7 @@ public class ViewAccountController {
 
     public void redirectToCart() {
         Intent intent = new Intent(activity, ViewCart.class);
+        intent.putExtra("main", true);
         activity.startActivity(intent);
         activity.finish();
     }
@@ -147,6 +140,7 @@ public class ViewAccountController {
         Intent intent = new Intent(activity, ViewOrderList.class);
         intent.putExtra("userID", account.getUserID());
         activity.startActivity(intent);
+        activity.finish();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 

@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
 public class ViewPersonalOrderDetailsController {
     private final OrderService orderService;
     private final BookService bookService;
-        private final AccountService accountService;
+    private final AccountService accountService;
 
     public ViewPersonalOrderDetailsController(OrderService orderService, BookService bookService, AccountService accountService) {
         this.orderService = orderService;

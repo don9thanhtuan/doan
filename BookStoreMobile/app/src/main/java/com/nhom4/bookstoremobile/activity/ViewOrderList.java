@@ -26,7 +26,6 @@ public class ViewOrderList extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     private void setListener() {

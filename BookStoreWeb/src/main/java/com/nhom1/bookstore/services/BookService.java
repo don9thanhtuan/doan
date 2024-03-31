@@ -14,5 +14,5 @@ public interface BookService {
     List<Book> search(String tuKhoa);
     List<Book> getTopSelling();
     String fileToFilePathConverter(MultipartFile file);
-    void updateSoldQuantity(String id, int daBan);
+    void updateQuantity(String id, int daBan);
 }

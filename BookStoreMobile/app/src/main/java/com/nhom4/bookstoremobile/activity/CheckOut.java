@@ -12,6 +12,7 @@ import com.nhom4.bookstoremobile.controller.CheckOutController;
 import com.nhom4.bookstoremobile.controller.ViewSettingInfoController;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.entities.CartItem;
+import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class CheckOut extends AppCompatActivity {
     private CheckOutController orderController;
@@ -21,8 +22,9 @@ public class CheckOut extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+
         infoController = new ViewSettingInfoController(this);
-        AccountResponse accountResponse = infoController.getAccountData();
+        AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
         infoController.getAccountFromAPI(accountResponse.getUserID());
 
         orderController = new CheckOutController(this);

@@ -85,8 +85,8 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public void updateSoldQuantity(String id, int daBan) {
-        bookDAOController.updateSoldQuantity(id, daBan);
+    public void updateQuantity(String id, int daBan) {
+        bookDAOController.updateQuantity(id, daBan);
     }
 
     private void deleteImage(String imagePath) {

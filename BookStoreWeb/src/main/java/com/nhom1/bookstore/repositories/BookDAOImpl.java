@@ -88,14 +88,16 @@ public class BookDAOImpl implements BookDAO{
     }
     
     @Override
-    public void updateSoldQuantity(String id, int daBan) {
+    public void updateQuantity(String id, int daBan) {
         String sql = "UPDATE Sach SET DaBan = ?, TonKho = ? WHERE ID = ?";
         Book book = getBook(id);
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, daBan);
-            statement.setInt(2, book.getBookStock() - daBan);
+            int sold = book.getBookSold() + daBan;
+            int stock = book.getBookStock() - daBan;
+            statement.setInt(1, sold);
+            statement.setInt(2, stock);
             statement.setString(3, id);
-
+            
             statement.executeUpdate();
         }catch (SQLException e) {
                 e.printStackTrace();

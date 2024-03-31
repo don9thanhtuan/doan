@@ -16,12 +16,15 @@ import com.nhom4.bookstoremobile.activity.CheckOut;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.adapter.CartItemAdapter;
+import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
-import com.nhom4.bookstoremobile.service.ConfirmPopup;
+import com.nhom4.bookstoremobile.service.Popup;
+import com.nhom4.bookstoremobile.sqlite.AccountDAO;
+import com.nhom4.bookstoremobile.sqlite.CartDAO;
 import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.ArrayList;
@@ -35,26 +38,17 @@ public class ViewCartController {
     private final Activity activity;
     private final CartTable cartTable;
     private final CheckBox totalCheckBox;
-    private final List<CartItem> cart;
+    private List<CartItem> cart;
     private CartItemAdapter adapter;
 
     public ViewCartController(ViewCart activity) {
         this.activity = activity;
         cartTable = new CartTable(activity);
         totalCheckBox = activity.findViewById(R.id.totalCheckBox);
-        cart = new ArrayList<>();
     }
 
     public void getCartData() {
-        Cursor cursor = cartTable.getAllCartItems();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String bookID = cursor.getString(cursor.getColumnIndex("bookID"));
-                int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-                cart.add(new CartItem(bookID, quantity));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
+        cart = CartDAO.getInstance(activity).getCartData();
 
         if (cart.size() != 0) {
             for (CartItem cartItem : cart) {
@@ -83,7 +77,8 @@ public class ViewCartController {
                 if (response.isSuccessful()) {
                     Book book = response.body();
                     if (book != null) {
-                        if (book.getBookStock() <= 0) {
+                        int stock = book.getBookStock();
+                        if (stock <= 0) {
                             Toast.makeText(activity, "Sản phẩm " + cartItem.getBookID() + " đã được bán hết", Toast.LENGTH_SHORT).show();
                             cartTable.removeFromCart(cartItem.getBookID());
                             cart.remove(cartItem);
@@ -91,10 +86,10 @@ public class ViewCartController {
                             return;
                         }
 
-                        if (cartItem.getQuantity() >= book.getBookStock()) {
+                        if (cartItem.getQuantity() > stock) {
                             Toast.makeText(activity, "Số lượng sản phẩm " + cartItem.getBookID() + " đã được thay đổi", Toast.LENGTH_SHORT).show();
-                            cartTable.updateQuantityItem(cartItem.getBookID(), book.getBookStock());
-                            cartItem.setQuantity(book.getBookStock());
+                            cartTable.updateQuantityItem(cartItem.getBookID(), stock);
+                            cartItem.setQuantity(stock);
                         }
 
                         String imageUrl = DefaultURL.getUrl() + book.getBookImage();
@@ -117,7 +112,7 @@ public class ViewCartController {
     }
 
     public void showConfirmationPopup() {
-        ConfirmPopup.show(activity, "Xác nhận", "Bạn muốn xóa những sản phẩm được chọn?", (dialog, which) -> {
+        Popup.showConfirm(activity, "Xác nhận", "Bạn muốn xóa những sản phẩm được chọn?", (dialog, which) -> {
             adapter.deleteCartItem();
             totalCheckBox.setChecked(false);
         });
@@ -156,7 +151,7 @@ public class ViewCartController {
     public void redirectToCheckOut() {
         ViewAccountController controller = new ViewAccountController(activity);
 
-        if (controller.getAccountData() == null) {
+        if (AccountDAO.getInstance(activity).getAccountData() == null) {
             Toast.makeText(activity, "Vui lòng đăng nhập để đặt hàng", Toast.LENGTH_SHORT).show();
             redirectToAccount();
             return;

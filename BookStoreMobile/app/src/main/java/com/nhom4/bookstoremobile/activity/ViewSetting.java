@@ -18,9 +18,6 @@ public class ViewSetting extends AppCompatActivity {
 
         controller = new ViewSettingController(this);
 
-        boolean isAdmin = getIntent().getBooleanExtra("isAdmin", false);
-        controller.checkAccount(isAdmin);
-
         setListener();
     }
 

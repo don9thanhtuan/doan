@@ -19,7 +19,7 @@ public class Order {
         this.orderID = orderID;
         this.userID = userID;
         this.orderTime = orderTime;
-        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderStatus = convertStatusInt(orderStatus);
         this.orderPrice = orderPrice;
         this.orderFirstBookID = orderFirstBookID;
         this.orderItemQuantity = orderItemQuantity;
@@ -29,11 +29,11 @@ public class Order {
     public Order(String orderID, String userID, int orderStatus, String orderPrice) {
         this.orderID = orderID;
         this.userID = userID;
-        this.orderStatus = convertTrangThaiInt(orderStatus);
+        this.orderStatus = convertStatusInt(orderStatus);
         this.orderPrice = orderPrice;
     }
 
-    private String convertTrangThaiInt(int orderStatus) {
+    private String convertStatusInt(int orderStatus) {
         switch (orderStatus) {
             case 0:
                 return "Chưa xác nhận";
@@ -48,7 +48,7 @@ public class Order {
         }
     }
 
-    public int convertTrangThaiString(String orderStatus) {
+    public int convertStatusString(String orderStatus) {
         switch (orderStatus) {
             case "Chưa xác nhận":
                 return 0;
@@ -83,11 +83,11 @@ public class Order {
     public String getOrderStatus() {
         return orderStatus;
     }
-    public int getTrangThaiInt() {
-        return convertTrangThaiString(orderStatus);
+    public int getOrderStatusInt() {
+        return convertStatusString(orderStatus);
     }
-    public void setTrangThai(int orderStatus) {
-        this.orderStatus = convertTrangThaiInt(orderStatus);
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = convertStatusInt(orderStatus);
     }
     public String getOrderPrice() {
         return orderPrice;

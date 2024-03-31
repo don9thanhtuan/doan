@@ -29,7 +29,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public OrderAdapter(Context context, List<Order> orderList, RecyclerView recyclerView) {
         mContext = context;
         mOrderList = orderList;
-        this.mRecyclerView = recyclerView;
+        mRecyclerView = recyclerView;
     }
 
     @NonNull
@@ -50,6 +50,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             intent.putExtra("orderItemQuantity", order.getOrderItemQuantity());
 
             mContext.startActivity(intent);
+
         });
         return new ViewHolder(view);
     }

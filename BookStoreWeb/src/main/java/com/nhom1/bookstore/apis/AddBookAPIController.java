@@ -15,10 +15,10 @@ import com.nhom1.bookstore.services.IDGenerator;
 
 @RestController
 @RequestMapping("/api/books")
-public class ManageAddBookAPIController {
+public class AddBookAPIController {
     private final BookService bookService;
 
-    public ManageAddBookAPIController(BookService bookService) {
+    public AddBookAPIController(BookService bookService) {
         this.bookService = bookService;
     }
     

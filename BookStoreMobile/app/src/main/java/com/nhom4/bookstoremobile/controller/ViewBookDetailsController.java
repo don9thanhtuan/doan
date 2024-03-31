@@ -25,7 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.CheckOut;
-import com.nhom4.bookstoremobile.activity.EditBook;
+import com.nhom4.bookstoremobile.activity.ManageEditBook;
 import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -33,7 +33,8 @@ import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
-import com.nhom4.bookstoremobile.service.ConfirmPopup;
+import com.nhom4.bookstoremobile.service.Popup;
+import com.nhom4.bookstoremobile.sqlite.CartDAO;
 import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.List;
@@ -74,7 +75,7 @@ public class ViewBookDetailsController {
     }
 
     public void redirectToEditBook() {
-        Intent intent = new Intent(activity, EditBook.class);
+        Intent intent = new Intent(activity, ManageEditBook.class);
         intent.putExtra("book_id", book.getBookID());
         intent.putExtra("book_name", book.getBookName());
         intent.putExtra("book_HinhAnh", book.getBookImage());
@@ -92,15 +93,15 @@ public class ViewBookDetailsController {
     public void showDeleteConfirm() {
         TextView idTextView = activity.findViewById(R.id.id_TxtView);
         String id = idTextView.getText().toString();
-        ConfirmPopup.show(activity, "Xác nhận", "Bạn muốn xóa sản phẩm " + id + "?", new DialogInterface.OnClickListener() {
+        Popup.showConfirm(activity, "Xác nhận", "Bạn muốn xóa sản phẩm " + id + "?", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteBookByAPi();
+                deleteBookByAPI();
             }
         });
     }
 
-    private void deleteBookByAPi() {
+    private void deleteBookByAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
         Call<ResponseBody> call = bookService.deleteBook(book.getBookID());
         call.enqueue(new Callback<ResponseBody>() {
@@ -186,7 +187,8 @@ public class ViewBookDetailsController {
     }
 
     public void openAddCartView(int choice) {
-        CartItem cartItem = getCartItem(bookID);
+        CartItem cartItem = CartDAO.getInstance(activity).getCartItem(bookID);
+
         if (cartItem != null) {
             if (cartItem.getQuantity() >= book.getBookStock() || book.getBookStock() <= 0) {
                 Toast.makeText(activity, "Số lượng sản phẩm trong giỏ hàng đã đạt số lượng tối đa", Toast.LENGTH_SHORT).show();
@@ -223,16 +225,7 @@ public class ViewBookDetailsController {
         addCartLayout.startAnimation(slideUpAnimation);
     }
 
-    private CartItem getCartItem(String id) {
-        CartTable cartTable = new CartTable(activity);
-        Cursor cursor = cartTable.findCartItem(id);
 
-        if (cursor != null && cursor.moveToFirst()) {
-            int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-            return new CartItem(id, quantity);
-        }
-        return null;
-    }
 
     private void setDataToAddCart(View addCartLayout) {
         ImageView imageView = addCartLayout.findViewById(R.id.imageView);
@@ -255,7 +248,7 @@ public class ViewBookDetailsController {
 
     private void addItemToCart(String id, int quantity) {
         try (CartTable cartTable = new CartTable(activity)) {
-            CartItem cartItem = getCartItem(id);
+            CartItem cartItem = CartDAO.getInstance(activity).getCartItem(id);
 
             if (cartItem != null) {
                 cartTable.updateQuantityItem(id, cartItem.getQuantity() + quantity);
@@ -278,7 +271,7 @@ public class ViewBookDetailsController {
     }
 
     private void setListenerAddLayout(View addCart_Layout, int choice) {
-        CartItem cartItem = getCartItem(bookID);
+        CartItem cartItem = CartDAO.getInstance(activity).getCartItem(bookID);
         EditText quantity_EditText = addCart_Layout.findViewById(R.id.quantity_EditText);
 
         addCart_Layout.findViewById(R.id.closeBtn).setOnClickListener(v -> closeAddCartView());

@@ -32,7 +32,7 @@ public class UpdateOrderStatusController {
 
             for (OrderItem bookInOrder : orderDetail.getOrderItemList()) {
                 Book book = bookService.getBook(bookInOrder.getBookID());
-                bookService.updateSoldQuantity(book.getBookID(), book.getBookSold() + bookInOrder.getQuantity());
+                bookService.updateQuantity(book.getBookID(), bookInOrder.getQuantity());
             }
         }
         orderService.editStatusOrder(maDonHang, orderStatus);

@@ -22,6 +22,7 @@ import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.OrderService;
+import com.nhom4.bookstoremobile.sqlite.CartDAO;
 import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.ArrayList;
@@ -75,26 +76,9 @@ public class CheckOutController {
         }
     }
 
-    public List<CartItem> getCartData() {
-        List<CartItem> cart = new ArrayList<>();
-
-        CartTable cartTable = new CartTable(activity);
-        Cursor cursor = cartTable.getAllCartItems();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String bookID = cursor.getString(cursor.getColumnIndex("bookID"));
-                int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-                cart.add(new CartItem(bookID, quantity));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-
-        return cart;
-    }
-
     public void getOrderItemList(boolean[] checkedArray) {
         List<Boolean> checkedList = convertArrayToList(checkedArray);
-        orderItemList = getCartData();
+        orderItemList = CartDAO.getInstance(activity).getCartData();
 
         if (orderItemList.size() != 0) {
             for (int i = 0; i < orderItemList.size(); i++) {
@@ -152,6 +136,11 @@ public class CheckOutController {
     }
 
     public void createOrder(Account account) {
+        if(account.isAdmin()) {
+            Toast.makeText(activity, "Vui lòng không dùng tài khoản quản trị để đặt hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String phone = account.getUserPhone();
         String address = account.getUserAddress();
         if (phone == null || phone.trim().isEmpty()) {

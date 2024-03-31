@@ -19,6 +19,8 @@ public class ViewBookList extends AppCompatActivity {
 
         controller = new ViewBookListController(this);
         controller.getBookListFromAPI();
+
+        controller.checkAdmin();
     }
 
     @Override

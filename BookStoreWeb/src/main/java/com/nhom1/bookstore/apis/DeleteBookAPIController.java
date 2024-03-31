@@ -13,12 +13,12 @@ import com.nhom1.bookstore.services.BookService;
 import com.nhom1.bookstore.services.OrderService;
 
 @RestController
-public class ManageDeleteBookAPIController {
+public class DeleteBookAPIController {
     private final BookService bookService;
         private final OrderService orderService;
 
 
-    public ManageDeleteBookAPIController(BookService bookService, OrderService orderService) {
+    public DeleteBookAPIController(BookService bookService, OrderService orderService) {
         this.bookService = bookService;
         this.orderService = orderService;
     }
@@ -29,7 +29,7 @@ public class ManageDeleteBookAPIController {
         if(orderList.size() != 0) {
             boolean isCompleted = true;
             for(Order order : orderList) {
-                if(order.getTrangThaiInt() <= 2) {
+                if(order.getOrderStatusInt() <= 2) {
                     isCompleted = false;
                     break;
                 }

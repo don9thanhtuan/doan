@@ -58,22 +58,6 @@ public class ViewSettingInfoController {
         });
     }
 
-    public AccountResponse getAccountData() {
-        AccountTable accountTable = new AccountTable(activity);
-        Cursor cursor = accountTable.getAccount();
-        if (cursor != null && cursor.moveToFirst()) {
-            String userID = cursor.getString(cursor.getColumnIndex("userID"));
-            int isAdminInt = cursor.getInt(cursor.getColumnIndex("isAdmin"));
-
-            if (isAdminInt == 0) {
-                return new AccountResponse(userID, false);
-            } else {
-                return new AccountResponse(userID, true);
-            }
-        }
-        return null;
-    }
-
     private void setAccountData(Account account) {
         TextView userID_TextView = activity.findViewById(R.id.userID);
         TextView userName_TextView = activity.findViewById(R.id.userName);

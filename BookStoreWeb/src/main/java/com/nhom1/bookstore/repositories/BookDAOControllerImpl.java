@@ -44,8 +44,7 @@ public class BookDAOControllerImpl implements BookDAOController{
     }
 
     @Override
-    public void updateSoldQuantity(String id, int daBan) {
-        bookDAO.updateSoldQuantity(id, daBan);
-        
+    public void updateQuantity(String id, int daBan) {
+        bookDAO.updateQuantity(id, daBan);
     }
 }

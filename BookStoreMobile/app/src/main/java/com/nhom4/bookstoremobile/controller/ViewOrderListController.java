@@ -1,6 +1,7 @@
 package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.widget.TextView;
 
@@ -8,12 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nhom4.bookstoremobile.R;
+import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.adapter.OrderAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.OrderService;
+import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +53,12 @@ public class ViewOrderListController {
 
     public void getOrderFromAPI(int choice) {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
-
-        Call<List<Order>> call = orderService.getPersonalOrders(userID);
+        Call<List<Order>> call;
+        if(AccountDAO.getInstance(activity).getAccountData().isAdmin()) {
+            call = orderService.getOrderList();
+        } else {
+            call = orderService.getPersonalOrders(userID);
+        }
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
@@ -92,6 +99,8 @@ public class ViewOrderListController {
     }
 
     public void redirectBack() {
+        Intent intent = new Intent(activity, ViewAccount.class);
+        activity.startActivity(intent);
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }

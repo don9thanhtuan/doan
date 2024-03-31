@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewAccountController;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class ViewAccount extends AppCompatActivity {
     private ViewAccountController controller;
@@ -18,13 +19,13 @@ public class ViewAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         controller = new ViewAccountController(this);
 
-        AccountResponse accountResponse = controller.getAccountData();
+        AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
 
         if (accountResponse == null) {
             setContentView(R.layout.activity_non_login);
             setListenerNonLogin();
         } else {
-            setContentView(R.layout.activity_view_account_user);
+            setContentView(R.layout.activity_view_account);
             setListenerAccount();
             controller.getAccountFromAPI(accountResponse.getUserID());
         }
@@ -50,8 +51,8 @@ public class ViewAccount extends AppCompatActivity {
 
     private void setListenerAccount() {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
-
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
+
         findViewById(R.id.viewOrderListBtn).setOnClickListener(v -> controller.redirectToOrderList());
         findViewById(R.id.settingBtn).setOnClickListener(v -> controller.redirectToSetting());
     }

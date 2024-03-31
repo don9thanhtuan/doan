@@ -213,7 +213,7 @@ public class OrderDAOImpl implements OrderDAO {
             statement.setString(1, newOrder.getOrderID());
             statement.setString(2, newOrder.getUserID());
             statement.setObject(3, newOrder.getOrderTime());
-            statement.setInt(4, newOrder.convertTrangThaiString(newOrder.getOrderStatus()));
+            statement.setInt(4, newOrder.convertStatusString(newOrder.getOrderStatus()));
 
             int thanhTien = ConverterCurrency.currencyToNumber(newOrder.getOrderPrice());
             statement.setInt(5, thanhTien);
