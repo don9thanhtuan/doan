@@ -23,36 +23,36 @@
         <div class="container-order-card clear-fix">
             <div class="order-card" th:each="order : ${orderList}">
                 <div class="order-image">
-                    <img th:src="${order.cuonSachDau.hinhAnh}" alt="Product img">
+                    <img th:src="${order.orderFirstBook.bookImage}" alt="Product img">
                 </div>
                 <div class="order-details">
                     <div>
                         <span style="font-weight: bold;">Mã đơn hàng:</span>
-                        <span class="order-code" th:text="${order.maDonHang}"></span>
+                        <span class="order-code" th:text="${order.orderID}"></span>
                     </div>
                     <div>
                         <span style="font-weight: bold;">Tên sản phẩm:</span>
-                        <span class="order-name" th:text="${order.cuonSachDau.ten}"></span>
+                        <span class="order-name" th:text="${order.orderFirstBook.bookName}"></span>
                     </div>
                     <div>
-                        <span class="order-name" th:text="'Và ' + ${order.soSanPham - 1} + ' cuốn sách khác'"
-                        th:style="${order.soSanPham - 1 == 0 ? 'display: none;' : ''}"></span>
+                        <span class="order-name" th:text="'Và ' + ${order.orderItemQuantity - 1} + ' cuốn sách khác'"
+                        th:style="${order.orderItemQuantity - 1 == 0 ? 'display: none;' : ''}"></span>
                     </div>
                     <div>
                         <span style="font-weight: bold;">Giá:</span>
-                        <span class="order-price" th:text="${order.thanhTien}"></span>
+                        <span class="order-price" th:text="${order.orderPrice}"></span>
                     </div>
                     <div>
                         <span style="font-weight: bold;">Trạng thái đơn hàng:</span>
-                        <span class="order-state" th:text="${order.trangThai}"></span>
+                        <span class="order-state" th:text="${order.orderStatus}"></span>
                     </div>
                     <div class="order-actions">
-                        <button class="btn btn-edit-product" onclick="openUpdateStatusModal(event)" th:id="${order.maDonHang}"
-                        th:style="${order.trangThai == 'Đã hoàn thành' or order.trangThai == 'Đã hủy' ? 'opacity: 0.5;' : ''}"
-                        th:disabled="${order.trangThai == 'Đã hoàn thành' or order.trangThai == 'Đã hủy'}">
+                        <button class="btn btn-edit-product" onclick="openUpdateStatusModal(event)" th:id="${order.orderID}"
+                        th:style="${order.orderStatus == 'Đã hoàn thành' or order.orderStatus == 'Đã hủy' ? 'opacity: 0.5;' : ''}"
+                        th:disabled="${order.orderStatus == 'Đã hoàn thành' or order.orderStatus == 'Đã hủy'}">
                             Cập nhật trạng thái
                         </button>
-                        <a th:href="@{'/quantri/donhang/' + ${order.maDonHang}}">
+                        <a th:href="@{'/quantri/donhang/' + ${order.orderID}}">
                             <button class=" btn btn-view-order" onclick="showOrderDetail()">Xem chi tiết</button>
                         </a>
                     </div>

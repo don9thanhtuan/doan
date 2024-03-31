@@ -19,52 +19,52 @@
 
     <div class="container-edit">
         <h2>Chỉnh Sửa Sản Phẩm</h2>
-        <form th:action="'/quantri/sanpham/chinhsua/' + ${book.id}" class="form-container" method="post" enctype="multipart/form-data">
+        <form th:action="'/quantri/sanpham/chinhsua/' + ${book.bookID}" class="form-container" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="add_image">Hình Ảnh:</label>
                 <input type="file" name="image" id="image" class="add_image" accept="image/*" onchange="validateImageFile()">
-                <input type="text" name="path" id="path" th:value="${book.hinhAnh}" style="display: none;">
+                <input type="text" name="path" id="path" th:value="${book.bookImage}" style="display: none;">
                 <div id="error-message"></div>
             </div>
             <div class="form-group">
                 <label for="add_name">Tên:</label>
                 <input type="text" name="name" id="name" class="add_name"required  
-                th:value="${book.ten}">
+                th:value="${book.bookName}">
             </div>
             <div class="form-group">
                 <label for="add_price">Giá (vnđ):</label>
                 <input type="text" name="price" id="price" class="add_price" required oninput="formatNumber(this)"
-                th:value="${book.Gia}">
+                th:value="${book.bookPrice}">
             </div>
             <div class="form-group">
                 <label for="add_author">Tác Giả:</label>
                 <input type="text" name="author" id="author" class="add_author"
-                th:value="${book.tacGia}">
+                th:value="${book.bookAuthor}">
             </div>
             <div class="form-group">
                 <label for="add_publisher">Nhà xuất bản:</label>
                 <input type="text" name="publisher" id="publisher" class="add_publisher"
-                th:value="${book.nhaCungCap}">
+                th:value="${book.bookPublisher}">
             </div>
             <div class="form-group">
                 <label for="add_weight">Trọng Lượng (kg):</label>
                 <input type="number" name="weight" id="weight" class="add_weight"
-                th:value="${book.trongLuong}">
+                th:value="${book.bookWeight}">
             </div>
             <div class="form-group">
                 <label for="add_size">Kích Thước:</label>
                 <input type="text" name="size" id="size" class="add_size"
-                th:value="${book.kichThuoc}">
+                th:value="${book.bookSize}">
             </div>
             <div class="form-group">
                 <label for="add_size">Số tồn kho:</label>
                 <input type="number" name="stock" id="stock" class="add_size"
-                th:value="${book.tonKho}">
+                th:value="${book.bookStock}">
             </div>
             <div class="form-group">
                 <label for="add_size">Giới thiệu:</label>
                 <input type="text" name="introduction" id="introduction" class="add_size"
-                th:value="${book.gioiThieu}">
+                th:value="${book.bookIntroduction}">
             </div>
             <div class="button-container">
                 <button class="button add-button" type="submit" onclick="">Lưu</button>

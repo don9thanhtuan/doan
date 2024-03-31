@@ -35,25 +35,25 @@
                 <div class="order-list">
                 <div class="order-item" th:each="order : ${orderList}">
                     <div class="order-header">
-                        <span class="order-id" th:text="${'Mã đơn hàng: '+order.maDonHang}"></span>
-                        <span class="order-state" th:text="${'Tình trạng: '+order.trangThai}"></span>
+                        <span class="order-id" th:text="${'Mã đơn hàng: '+order.orderID}"></span>
+                        <span class="order-state" th:text="${'Tình trạng: '+order.orderStatus}"></span>
                         <div class="header-right">
-                            <span class="order-date" th:text="${'Ngày đặt: '+order.thoiGianDat}"></span>
+                            <span class="order-date" th:text="${'Ngày đặt: '+order.orderTime}"></span>
                         </div>
                     </div>
                     <div class="order-details">
                         <div class="product-info" style="flex-direction: row;">
-                            <img th:src="${order.cuonSachDau.hinhAnh}" alt="Product Image">
+                            <img th:src="${order.orderFirstBook.bookImage}" alt="Product Image">
                             <div class="product-description">
                                 <div>
-                                    <h3 th:text="${order.cuonSachDau.ten}"></h3>
-                                <p th:text="'Và '+${order.soSanPham}+ ' cuốn sách khác'"></p>
+                                    <h3 th:text="${order.orderFirstBook.bookName}"></h3>
+                                <p th:text="'Và '+${order.orderItemQuantity}+ ' cuốn sách khác'"></p>
                                 </div>
-                                <p th:text="${order.thanhTien}"></p>
+                                <p th:text="${order.orderPrice}"></p>
                             </div>
                         </div>
                     </div>
-                    <a th:href="@{'/taikhoan/donhang/' + ${order.maDonHang}}"><button class="view-detail">Xem chi tiết đơn hàng</button></a>
+                    <a th:href="@{'/taikhoan/donhang/' + ${order.orderID}}"><button class="view-detail">Xem chi tiết đơn hàng</button></a>
                 </div>
             </div>
         </div>

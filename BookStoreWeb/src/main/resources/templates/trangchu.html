@@ -57,18 +57,18 @@
             <div class="product-wrapper">
                 <div class="product-item" th:each="book : ${bookList}">
                     <div class="product-img">
-                        <a th:href="@{'/sach/' + ${book.id}}">
-                            <img th:src="${book.hinhAnh}" alt="">
+                        <a th:href="@{'/sach/' + ${book.bookID}}">
+                            <img th:src="${book.bookImage}" alt="">
                         </a>
                     </div>
                     <h3 class="product-name">
-                        <a th:href="@{'/sach/' + ${book.id}}" th:text="${book.ten}"></a>
+                        <a th:href="@{'/sach/' + ${book.bookID}}" th:text="${book.bookName}"></a>
                     </h3>
                     <div class="product-price">
-                        <p><span th:text="${book.gia}"></span></p>
+                        <p><span th:text="${book.bookPrice}"></span></p>
                     </div>
                     <div class="product-sold">
-                        <p>Đã bán <span th:text="${book.daBan}"></span></p>
+                        <p>Đã bán <span th:text="${book.bookSold}"></span></p>
                     </div>
                 </div>
             </div>

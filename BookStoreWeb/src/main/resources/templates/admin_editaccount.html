@@ -24,22 +24,22 @@
                 <div class="form-group">
                     <label for="accountName">Tên đăng nhập: </label>
                     <input type="text" name="accountID" id="accountID" class="accountName"
-                    th:value="${account.tenTaiKhoan}" readonly>
+                    th:value="${account.userID}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="accountName">Họ và tên: </label>
                     <input type="text" name="accountName" id="accountName" class="accountName"
-                    th:value="${account.hoTen}">
+                    th:value="${account.userName}">
                 </div>
                 <div class="form-group">
                     <label for="accountPhone">Số điện thoại: </label>
                     <input type="text" name="accountPhone" id="accountPhone" class="accountPhone"
-                    th:value="${account.soDienThoai}">
+                    th:value="${account.userPhone}">
                 </div>
                 <div class="form-group">
                     <label for="accountAdress">Địa chỉ:</label>
                     <input type="text" name="accountAdress" id="accountAdress" class="accountAdress"
-                    th:value="${account.diaChi}">
+                    th:value="${account.userAddress}">
                 </div>
                 <div class="button-container">
                     <button class="btn account-save-button" type="submit">Lưu</button>

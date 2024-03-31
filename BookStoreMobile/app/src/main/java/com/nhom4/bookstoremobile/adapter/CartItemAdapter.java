@@ -222,15 +222,17 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
                     if (!quantityRaw.isEmpty()) {
                         quantity = Integer.parseInt(quantityRaw);
                     }
-
+                    int stock = book.getBookStock();
                     if (quantity <= 0) {
                         Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                         cartItem.setQuantity(1);
                         addItemToCart(holder.bookId, 1);
-                    } else if (book.getBookStock() < quantity) {
+                        quantity_EditText.setText(String.valueOf(1));
+                    } else if (stock < quantity) {
                         Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                        cartItem.setQuantity(book.getBookStock());
-                        addItemToCart(holder.bookId, book.getBookStock());
+                        cartItem.setQuantity(stock);
+                        addItemToCart(holder.bookId, stock);
+                        quantity_EditText.setText(String.valueOf(stock));
                     }
                     getTotalQuantity();
                     getTotalPrice();

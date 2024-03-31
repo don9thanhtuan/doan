@@ -27,29 +27,29 @@
         <div class="container-product-card clear-fix">
             <div class="product-card" th:each="book : ${bookList}">
                 <div class="product-image">
-                    <img th:src="${book.hinhAnh}" alt="Product 1">
+                    <img th:src="${book.bookImage}" alt="Product 1">
                 </div>
                 <div class="product-details">
                     <div>
                         <span style="font-weight: bold;">Mã sản phẩm:</span>
-                        <span class="product-code" th:text="${book.id}"></span>
+                        <span class="product-code" th:text="${book.bookID}"></span>
                     </div>
                     <div>
                         <span style="font-weight: bold;">Tên sản phẩm:</span>
-                        <span class="product-name" th:text="${book.ten}" ></span>
+                        <span class="product-name" th:text="${book.bookName}" ></span>
                     </div>
                     <div>
                         <span style="font-weight: bold;">Giá:</span>
-                        <span class="product-price" th:text="${book.Gia}"></span>
+                        <span class="product-price" th:text="${book.bookPrice}"></span>
                     </div>
                     <div class="product-actions">
-                        <a th:href="@{'/quantri/sanpham/chinhsua/' + ${book.id}}">
+                        <a th:href="@{'/quantri/sanpham/chinhsua/' + ${book.bookID}}">
                             <button class="btn btn-edit-product" onclick="">Chỉnh sửa thông tin</button>
                         </a>
-                        <a th:href="@{'/quantri/sanpham/' + ${book.id}}">
+                        <a th:href="@{'/quantri/sanpham/' + ${book.bookID}}">
                             <button class=" btn btn-view-product" onclick="showProductDetail()">Xem chi tiết</button>
                         </a>
-                        <a th:href="@{'/quantri/sanpham/xoa/' + ${book.id}}">
+                        <a th:href="@{'/quantri/sanpham/xoa/' + ${book.bookID}}">
                             <button class="btn btn-delete-product" id="btn-delete-product">Xóa</button>
                         </a>
                     </div>

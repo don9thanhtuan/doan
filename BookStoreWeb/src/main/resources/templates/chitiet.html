@@ -28,7 +28,7 @@
             <i class="fa-solid fa-angle-right"></i>
             <a href="/danhsach" style="color: #C92127;">Danh sách sản phẩm</a>
             <i class="fa-solid fa-angle-right"></i>
-            <a href="" style="color: #000;" th:text="${book.ten}"></a>
+            <a href="" style="color: #000;" th:text="${book.bookName}"></a>
         </div>
         <div class="product-essential-container">
             <div class="product-essential">
@@ -37,20 +37,20 @@
                         <div class="product-view-thumbnail">
                             <div id="lightgallery-product-media" class="lightgallery">
                                 <a href="" id="lightgallery-item">
-                                    <img th:src="${book.hinhAnh}" alt="">
+                                    <img th:src="${book.bookImage}" alt="">
                                 </a>
                             </div>
                             <div class="product-view-image-product">
-                                <img th:src="${book.hinhAnh}" alt="" id="Hinh">
+                                <img th:src="${book.bookImage}" alt="" id="Hinh">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="product-info">
-                    <h1 th:text="${book.ten}" id="Ten"></h1>
+                    <h1 th:text="${book.bookName}" id="Ten"></h1>
                     <div>
-                        <p class="product-info-supplier" th:text="'Nhà cung cấp: ' + ${book.nhaCungCap}"></p>
-                        <p class="product-info-author" >Tác giả: <span th:text="${book.tacGia}"></span></p>
+                        <p class="product-info-supplier" th:text="'Nhà cung cấp: ' + ${book.bookPublisher}"></p>
+                        <p class="product-info-author" >Tác giả: <span th:text="${book.bookAuthor}"></span></p>
                     </div>
                     <div class="rating">
                         <i class="fa-solid fa-star"></i>
@@ -60,11 +60,11 @@
                         <i class="fa-regular fa-star"></i>
                         <span>Đánh Giá: 4/5</span>
                     </div>
-                    <div class="product-info-price"th:text="${book.gia}" id="Gia"></div>
+                    <div class="product-info-price"th:text="${book.bookPrice}" id="Gia"></div>
                     <div class="product-info-quantity">
                         <button class="product-info-btn-quantity product-info-btn-minus" id="btn-minus-quantity"><i
                                 class="fa-solid fa-minus"></i></button>
-                        <input class="product-info-quantity-input" type="number" value="1" min="1" th:max="${book.tonKho}" id="quantityInput">
+                        <input class="product-info-quantity-input" type="number" value="1" min="1" th:max="${book.bookStock}" id="quantityInput">
                         <button class="product-info-btn-quantity product-info-btn-plus" id="btn-plus-quantity"><i
                                 class="fa-solid fa-plus"></i></button>
                     </div>
@@ -83,27 +83,27 @@
                 <table class="product-info-table">
                     <tr>
                         <td >Mã hàng</td>
-                        <td th:text="${book.id}" id="ID"></td>
+                        <td th:text="${book.bookID}" id="ID"></td>
                     </tr>
                     <tr>
                         <td>Tên Nhà Cung Cấp</td>
-                        <td th:text="${book.nhaCungCap}"></td>
+                        <td th:text="${book.bookPublisher}"></td>
                     </tr>
                     <tr>
                         <td>Tác giả</td>
-                        <td th:text="${book.tacGia}"></td>
+                        <td th:text="${book.bookAuthor}"></td>
                     </tr>
                     <tr>
                         <td>Trọng lượng (gr)</td>
-                        <td th:text="${book.trongLuong}"></td>
+                        <td th:text="${book.bookWeight}"></td>
                     </tr>
                     <tr>
                         <td>Kích Thước Bao Bì</td>
-                        <td th:text="${book.kichThuoc}"></td>
+                        <td th:text="${book.bookSize}"></td>
                     </tr>
                     <tr>
                         <td>Giới thiệu</td>
-                        <td class="product-info-introduce" th:text="${book.gioiThieu}"></td>
+                        <td class="product-info-introduce" th:text="${book.bookIntroduction}"></td>
                     </tr>
                 </table>
                 

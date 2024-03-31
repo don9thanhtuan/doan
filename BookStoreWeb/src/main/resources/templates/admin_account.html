@@ -26,30 +26,30 @@
                     <table>
                         <tr>
                             <td><span style="font-weight: bold;">ID:</span></td>
-                            <td><span class="account-code" th:text="${account.tenTaiKhoan}"></span></td>
+                            <td><span class="account-code" th:text="${account.userID}"></span></td>
                         </tr>
                         <tr>
                             <td><span style="font-weight: bold;">Họ và tên:</span></td>
-                            <td><span class="account-name" th:text="${account.hoTen}"></span></td>
+                            <td><span class="account-name" th:text="${account.userName}"></span></td>
                         </tr>
                         <tr>
                             <td><span style="font-weight: bold;">Email:</span></td>
-                            <td><span class="account-price" th:text="${account.email}"></span></td>
+                            <td><span class="account-price" th:text="${account.userEmail}"></span></td>
                         </tr>
                         <tr>
                             <td><span style="font-weight: bold;">Số điện thoại: </span></td>
-                            <td><span class="account-remain" th:text="${account.soDienThoai}"></span></td>
+                            <td><span class="account-remain" th:text="${account.userPhone}"></span></td>
                         </tr>
                         <tr>
                             <td><span style="font-weight: bold;">Địa chỉ</span></td>
-                            <td><span class="account-state" th:text="${account.diaChi}"></span></td>
+                            <td><span class="account-state" th:text="${account.userAddress}"></span></td>
                         </tr>
                     </table>
                     <div class="account-actions">
-                        <a th:href="@{'/quantri/taikhoan/chinhsua/' + ${account.tenTaiKhoan}}">
+                        <a th:href="@{'/quantri/taikhoan/chinhsua/' + ${account.userID}}">
                             <button class="btn btn-edit-account">Chỉnh sửa thông tin</button>
                         </a>
-                        <a th:href="@{'/quantri/taikhoan/xoa/' + ${account.tenTaiKhoan}}">
+                        <a th:href="@{'/quantri/taikhoan/xoa/' + ${account.userID}}">
                             <button class="btn btn-delete-account">Xóa</button>
                         </a>
                     </div>

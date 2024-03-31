@@ -45,19 +45,19 @@
                 <form class="checkout-form" id="checkout-form" method="post">
                     <div class="form-group">
                         <label for="name">Họ và tên người nhận</label>
-                        <input type="text" id="name" name="name" class="checkout-input" th:value="${account.hoTen}" required>
+                        <input type="text" id="name" name="name" class="checkout-input" th:value="${account.userName}" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" class="checkout-input" th:value="${account.email}">
+                        <input type="email" id="email" name="email" class="checkout-input" th:value="${account.userEmail}">
                     </div>
                     <div class="form-group">
                         <label for="phone">Số điện thoại</label>
-                        <input type="tel" id="phone" name="phone" class="checkout-input" th:value="${account.soDienThoai}" required>
+                        <input type="tel" id="phone" name="phone" class="checkout-input" th:value="${account.userPhone}" required>
                     </div>
                     <div class="form-group">
                         <label for="address">Địa chỉ</label>
-                        <input type="text" id="address" name="address" class="checkout-input" th:value="${account.diaChi}" required>
+                        <input type="text" id="address" name="address" class="checkout-input" th:value="${account.userAddress}" required>
                     </div>
                     <button type="submit" class="checkout-btn" onclick="postData(event)">Đặt hàng</button>
                 </form>

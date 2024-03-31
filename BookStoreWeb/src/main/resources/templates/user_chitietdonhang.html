@@ -21,9 +21,9 @@
                 <button class="back-to-orders" id="back-to-orders">Quay lại danh sách đơn hàng</button>
             </a>
             <div class="order-container-state">
-                <span class="order-id" th:text="'Mã đơn hàng: ' + ${order.maDonHang}"></span>
+                <span class="order-id" th:text="'Mã đơn hàng: ' + ${order.orderID}"></span>
                 <span>|</span>
-                <span class="order-state" th:text="${order.trangThai}"></span>
+                <span class="order-state" th:text="${order.orderStatus}"></span>
             </div>
         </div>
         <div class="order-container">
@@ -34,15 +34,15 @@
                         <table>
                             <tr>
                                 <td><span style="font-weight: bold;">Tên khách hàng:</span></td>
-                                <td th:text="${account.hoTen}"></td>
+                                <td th:text="${account.userName}"></td>
                             </tr>
                             <tr>
                                 <td><span style="font-weight: bold;">Số điện thoại:</span></td>
-                                <td th:text="${account.soDienThoai}"></td>
+                                <td th:text="${account.userPhone}"></td>
                             </tr>
                             <tr>
                                 <td><span style="font-weight: bold;">Địa chỉ:</span></td>
-                                <td th:text="${account.diaChi}"></td>
+                                <td th:text="${account.userAddress}"></td>
                             </tr>
                         </table>
                     </div>
@@ -50,11 +50,11 @@
             </div>
             <div class="order-product-info">
                 <div class="order-product-info-item" th:each="book : ${bookList}">
-                    <img th:src="${book.sach.hinhAnh}" alt="Product Image">
+                    <img th:src="${book.book.bookImage}" alt="Product Image">
                     <div class="order-product-info-description">
-                        <h3 th:text="${book.sach.ten}"></h3>
-                        <p th:text="'Số lượng: ' + ${book.soLuong}"></p>
-                        <p th:text="'Giá: ' + ${book.sach.gia}"></p>
+                        <h3 th:text="${book.book.bookName}"></h3>
+                        <p th:text="'Số lượng: ' + ${book.quantity}"></p>
+                        <p th:text="'Giá: ' + ${book.book.bookPrice}"></p>
                     </div>
                 </div>  
             </div>
@@ -63,7 +63,7 @@
             <table class="total-table">
                 <tr>
                     <td class="total-name">Tổng tiền</td>
-                    <td class="total-value" th:text="${order.thanhTien}"></td>
+                    <td class="total-value" th:text="${order.orderPrice}"></td>
                 </tr>
                 <tr>
                     <td class="total-name">Phí vận chuyển</td>

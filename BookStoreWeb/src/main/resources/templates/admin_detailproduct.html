@@ -24,58 +24,58 @@
     <div class="container container-m-product" id="content">
         <div class="productDetailContent_product-container">
             <div class="productDetailContent_product-image">
-                <img th:src="${book.hinhAnh}" alt="Product 1">
+                <img th:src="${book.bookImage}" alt="Product 1">
             </div>
             <div class="productDetailContent_product-details">
                 <div>
                     <span style="font-weight: bold;">Mã sản phẩm: </span>
-                    <span class="productDetailContent_product-code" th:text="${book.id}"></span>
+                    <span class="productDetailContent_product-code" th:text="${book.bookID}"></span>
                 </div>
                 <div>
                     <span style="font-weight: bold;">Tên sản phẩm: </span>
-                    <span class="productDetailContent_product-name" th:text="${book.ten}"></span>
+                    <span class="productDetailContent_product-name" th:text="${book.bookName}"></span>
                 </div>
                 <div>
                     <span style="font-weight: bold;">Giá: </span>
-                    <span class="productDetailContent_product-price" th:text="${book.Gia}"></span>
+                    <span class="productDetailContent_product-price" th:text="${book.bookPrice}"></span>
                 </div>
                 <div class="productDetailContent_product-info">
                     <div class="productDetailContent_product-desc">
                         <div>
                             <span class="detail-label author">Tác giả: </span>
-                            <span th:text="${book.tacGia} ?: 'không có dữ liệu'"></span>
+                            <span th:text="${book.bookAuthor} ?: 'không có dữ liệu'"></span>
                         </div>
                         <div>
                             <span class="detail-label supplier">Nhà xuất bản: </span>
-                            <span th:text="${book.nhaCungCap} ?: 'không có dữ liệu'"></span>
+                            <span th:text="${book.bookPublisher} ?: 'không có dữ liệu'"></span>
                         </div>
                         <div>
                             <span class="detail-label weight">Trọng lượng: </span>
-                            <span th:text="${book.trongLuong != null and book.trongLuong != 0.0 ? book.trongLuong : 'không có dữ liệu'}"></span>
+                            <span th:text="${book.bookWeight != null and book.bookWeight != 0.0 ? book.bookWeight : 'không có dữ liệu'}"></span>
                         </div>
                         <div>
                             <span class="detail-label size">Kích thước: </span>
-                            <span th:text="${book.kichThuoc} ?: 'không có dữ liệu'"></span>
+                            <span th:text="${book.bookSize} ?: 'không có dữ liệu'"></span>
                         </div>
                         <div>
                             <span class="detail-label size">Số sách tồn kho: </span>
-                            <span th:text="${book.tonKho}"></span>
+                            <span th:text="${book.bookStock}"></span>
                         </div>
                         <div>
                             <span class="detail-label size">Số sách đã bán: </span>
-                            <span th:text="${book.daBan}"></span>
+                            <span th:text="${book.bookSold}"></span>
                         </div>
                         <div>
                             <span class="detail-label introduce">Giới thiệu:</span>
-                            <span th:text="${book.gioiThieu} ?: 'không có'"></span>
+                            <span th:text="${book.bookIntroduction} ?: 'không có'"></span>
                         </div>
                     </div>
                 </div>
                 <div class="product-actions" style="justify-content: flex-start;">
-                    <a th:href="@{'/quantri/sanpham/chinhsua/' + ${book.id}}">
+                    <a th:href="@{'/quantri/sanpham/chinhsua/' + ${book.bookID}}">
                         <button class="btn btn-edit-product" onclick="">Chỉnh sửa thông tin</button>
                     </a>
-                    <a th:href="@{'/quantri/sanpham/xoa/' + ${book.id}}">
+                    <a th:href="@{'/quantri/sanpham/xoa/' + ${book.bookID}}">
                         <button class="btn btn-delete-product" id="btn-delete-product">Xóa</button>
                     </a>
                 </div>
