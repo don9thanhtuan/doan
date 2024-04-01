@@ -25,6 +25,7 @@ public class ViewOrderList extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        controller.redirectBack();
         super.onBackPressed();
     }
 

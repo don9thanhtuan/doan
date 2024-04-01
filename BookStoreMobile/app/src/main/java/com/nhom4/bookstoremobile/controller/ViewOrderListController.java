@@ -54,7 +54,7 @@ public class ViewOrderListController {
     public void getOrderFromAPI(int choice) {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
         Call<List<Order>> call;
-        if(AccountDAO.getInstance(activity).getAccountData().isAdmin()) {
+        if (AccountDAO.getInstance(activity).getAccountData().isAdmin()) {
             call = orderService.getOrderList();
         } else {
             call = orderService.getPersonalOrders(userID);
@@ -99,8 +99,6 @@ public class ViewOrderListController {
     }
 
     public void redirectBack() {
-        Intent intent = new Intent(activity, ViewAccount.class);
-        activity.startActivity(intent);
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }

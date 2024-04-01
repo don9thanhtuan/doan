@@ -10,8 +10,8 @@ import java.util.List;
 
 public class CartDAO {
 
-    private final CartTable cartTable;
     private static CartDAO cartDAO;
+    private final CartTable cartTable;
 
     public CartDAO(CartTable cartTable) {
         this.cartTable = cartTable;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.nhom1.bookstore.DTO.OrderDTO;
 import com.nhom1.bookstore.entity.Account;
 import com.nhom1.bookstore.services.AccountService;
+import com.nhom1.bookstore.services.IDGenerator;
 import com.nhom1.bookstore.services.OrderService;
 
 import jakarta.servlet.http.HttpSession;
@@ -45,7 +46,8 @@ public class CheckoutController {
     public void checkOut(@RequestBody OrderDTO orderDTO, HttpSession session) {
         Object loggedInUser = session.getAttribute("loggedInUser");
         if(loggedInUser != null) {
-            orderService.createOrder(loggedInUser.toString(), orderDTO);
+            String orderID = IDGenerator.IDOrder();
+            orderService.createOrder(loggedInUser.toString(), orderID, orderDTO);
         }
     }
 }

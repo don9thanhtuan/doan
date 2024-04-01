@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,14 +17,12 @@ import com.nhom4.bookstoremobile.activity.ViewRegister;
 import com.nhom4.bookstoremobile.activity.ViewSetting;
 import com.nhom4.bookstoremobile.adapter.OrderAdapter;
 import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
 import com.nhom4.bookstoremobile.service.OrderService;
-import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
 import java.util.List;
 
@@ -118,8 +115,26 @@ public class ViewAccountController {
 
     public void redirectToMain() {
         Intent intent = new Intent(activity, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
-        activity.finish();
+    }
+
+    public void redirectToCart() {
+        Intent intent = new Intent(activity, ViewCart.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+    }
+
+    public void redirectToLogin() {
+        Intent intent = new Intent(activity, ViewLogin.class);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+    }
+
+    public void redirectToRegister() {
+        Intent intent = new Intent(activity, ViewRegister.class);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
     public void redirectBack() {
@@ -127,25 +142,10 @@ public class ViewAccountController {
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
-    public void redirectToCart() {
-        Intent intent = new Intent(activity, ViewCart.class);
-        intent.putExtra("main", true);
-        activity.startActivity(intent);
-        activity.finish();
-    }
-
-    public void redirectToLogin() {
-        Intent intent = new Intent(activity, ViewLogin.class);
-        activity.startActivity(intent);
-        activity.finish();
-        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-    }
-
     public void redirectToOrderList() {
         Intent intent = new Intent(activity, ViewOrderList.class);
         intent.putExtra("userID", account.getUserID());
         activity.startActivity(intent);
-        activity.finish();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
@@ -162,10 +162,5 @@ public class ViewAccountController {
         pullToRefresh.setRefreshing(false);
     }
 
-    public void redirectToRegister() {
-        Intent intent = new Intent(activity, ViewRegister.class);
-        activity.startActivity(intent);
-        activity.finish();
-        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-    }
+
 }

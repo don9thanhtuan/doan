@@ -41,7 +41,7 @@ public class ViewBookDetails extends AppCompatActivity {
     private void setListener() {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
-        
+
         findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectToBookList());
         findViewById(R.id.cartBtn).setOnClickListener(v -> controller.redirectToCart());
         findViewById(R.id.addToCartBtn).setOnClickListener(v -> controller.openAddCartView(2));

@@ -3,15 +3,11 @@ package com.nhom4.bookstoremobile.sqlite;
 import android.app.Activity;
 import android.database.Cursor;
 
-import com.google.gson.GsonBuilder;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class AccountDAO {
-    private final AccountTable accountTable;
     private static AccountDAO accountDAO;
+    private final AccountTable accountTable;
 
     public AccountDAO(AccountTable accountTable) {
         this.accountTable = accountTable;

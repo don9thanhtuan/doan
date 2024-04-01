@@ -2,6 +2,7 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,21 +59,21 @@ public class MainActivityController {
         });
     }
 
-    public void redirectToCart() {
-        Intent intent = new Intent(activity, ViewCart.class);
-        intent.putExtra("main", true);
-        activity.startActivity(intent);
-        activity.finish();
-    }
-
     public void redirectToBookList() {
         Intent intent = new Intent(activity, ViewBookList.class);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
+    public void redirectToCart() {
+        Intent intent = new Intent(activity, ViewCart.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+    }
+
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 

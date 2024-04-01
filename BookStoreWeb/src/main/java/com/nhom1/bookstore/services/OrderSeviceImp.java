@@ -60,10 +60,10 @@ public class OrderSeviceImp implements OrderService {
     }
 
     @Override
-    public void createOrder(String idNguoiDat, OrderDTO newOrder) {
-        String maDonHang = IDGenerator.IDOrder();
+    public void createOrder(String idNguoiDat, String orderID, OrderDTO newOrder) {
+        
         Order order = new Order();
-        order.setOrderID(maDonHang);
+        order.setOrderID(orderID);
         order.setUserID(idNguoiDat);
         order.setOrderTime(new Date());
         int trangThai = 1;
@@ -79,7 +79,7 @@ public class OrderSeviceImp implements OrderService {
         orderDAOController.createOrder(order);
 
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setOrderID(maDonHang);
+        orderDetail.setOrderID(orderID);
 
         orderDetail.setOrderItemList(new ArrayList<>());
         

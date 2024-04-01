@@ -27,12 +27,12 @@ public class ViewSettingInfo extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        controller.redirectToAccountSetting();
+        controller.redirectBack();
         super.onBackPressed();
     }
 
     private void setListener() {
-        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectToAccountSetting());
+        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectBack());
 
         findViewById(R.id.nameChangeBtn).setOnClickListener(v -> controller.openEditor(1));
         findViewById(R.id.emailChangeBtn).setOnClickListener(v -> controller.openEditor(2));

@@ -23,12 +23,15 @@ public class CheckOut extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
+        boolean isBuyNow = getIntent().getBooleanExtra("isBuyNow", false);
+
         infoController = new ViewSettingInfoController(this);
         AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
         infoController.getAccountFromAPI(accountResponse.getUserID());
 
-        orderController = new CheckOutController(this);
-        if (getIntent().getBooleanExtra("isBuyNow", false)) {
+        orderController = new CheckOutController(this, isBuyNow);
+
+        if (isBuyNow) {
             String bookID = getIntent().getStringExtra("bookID");
             int quantity = getIntent().getIntExtra("quantity", 0);
             CartItem cartItem = new CartItem(bookID, quantity);
@@ -45,9 +48,9 @@ public class CheckOut extends AppCompatActivity {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> orderController.reload(pullToRefresh));
 
+        findViewById(R.id.backButton).setOnClickListener(v -> orderController.redirectBack());
         findViewById(R.id.phoneChange).setOnClickListener(v -> infoController.openEditor(3));
         findViewById(R.id.addressChange).setOnClickListener(v -> infoController.openEditor(4));
-        findViewById(R.id.backButton).setOnClickListener(v -> orderController.redirectToCart());
         findViewById(R.id.overlayLayout).setOnTouchListener((v, event) -> {
             v.performClick();
             infoController.closeEditor();
@@ -84,7 +87,7 @@ public class CheckOut extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        orderController.redirectToCart();
+        orderController.redirectBack();
         super.onBackPressed();
     }
 }

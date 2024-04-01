@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -86,7 +85,6 @@ public class ViewLoginController {
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
         activity.startActivity(intent);
-        activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 }

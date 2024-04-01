@@ -9,6 +9,14 @@ import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Book;
 
 public class ExceptionHandler {
+    public static void forcusError(EditText editText) {
+        Rect point = new Rect();
+
+        editText.requestFocus();
+        editText.getGlobalVisibleRect(point);
+        editText.requestRectangleOnScreen(point);
+    }
+
     public Book handleExceptionBook(Activity activity) {
         EditText nameEditText = activity.findViewById(R.id.add_name);
         EditText priceEditText = activity.findViewById(R.id.add_price);
@@ -69,13 +77,5 @@ public class ExceptionHandler {
         }
 
         return newBook;
-    }
-
-    public static void forcusError(EditText editText) {
-        Rect point = new Rect();
-
-        editText.requestFocus();
-        editText.getGlobalVisibleRect(point);
-        editText.requestRectangleOnScreen(point);
     }
 }

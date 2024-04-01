@@ -3,7 +3,6 @@ package com.nhom4.bookstoremobile.controller;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -89,7 +88,6 @@ public class ViewBookDetailsController {
         intent.putExtra("book_KickThuoc", book.getBookSize());
         intent.putExtra("book_GioiThieu", book.getBookIntroduction());
         activity.startActivity(intent);
-        activity.finish();
     }
 
     public void showDeleteConfirm() {
@@ -226,7 +224,6 @@ public class ViewBookDetailsController {
         Animation slideUpAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_up);
         addCartLayout.startAnimation(slideUpAnimation);
     }
-
 
 
     private void setDataToAddCart(View addCartLayout) {
@@ -372,12 +369,10 @@ public class ViewBookDetailsController {
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
         activity.startActivity(intent);
-        activity.finish();
-        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     public void redirectToBuyNow(String bookID, int quantity) {
-        if(AccountDAO.getInstance(activity).getAccountData() == null) {
+        if (AccountDAO.getInstance(activity).getAccountData() == null) {
             Toast.makeText(activity, "Vui lòng đăng nhập để mua hàng", Toast.LENGTH_SHORT).show();
             redirectToAccount();
             return;

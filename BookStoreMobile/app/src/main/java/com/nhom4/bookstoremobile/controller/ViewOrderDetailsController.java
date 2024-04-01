@@ -1,7 +1,6 @@
 package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.adapter.OrderItemAdapter;
 import com.nhom4.bookstoremobile.converter.Converter;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
@@ -200,7 +198,8 @@ public class ViewOrderDetailsController {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {}
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
         });
     }
 }

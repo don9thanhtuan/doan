@@ -99,8 +99,6 @@ public class ManageAddBookController {
     }
 
     public void redirectBack() {
-        Intent intent = new Intent(activity, ViewBookList.class);
-        activity.startActivity(intent);
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }

@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -16,7 +15,6 @@ import com.nhom4.bookstoremobile.activity.CheckOut;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.adapter.CartItemAdapter;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
@@ -27,7 +25,6 @@ import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 import com.nhom4.bookstoremobile.sqlite.CartDAO;
 import com.nhom4.bookstoremobile.sqlite.CartTable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -118,29 +115,44 @@ public class ViewCartController {
         });
     }
 
-    public void redirectToMain() {
-        Intent intent = new Intent(activity, MainActivity.class);
-        activity.startActivity(intent);
-        activity.finish();
-    }
-
-    public void checkAll() {
-        adapter.checkAllCartItem(totalCheckBox.isChecked());
-    }
-
-    public void redirectBack(boolean isFromMain) {
-        if (isFromMain) {
-            redirectToMain();
-        } else {
+    public void redirectBack() {
             activity.finish();
             activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-        }
+    }
+
+    public void redirectToMain() {
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
     }
 
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
-        activity.finish();
+    }
+
+    public void redirectToCheckOut() {
+        if (AccountDAO.getInstance(activity).getAccountData() == null) {
+            Toast.makeText(activity, "Vui lòng đăng nhập để đặt hàng", Toast.LENGTH_SHORT).show();
+            redirectToAccount();
+        }
+
+        if (adapter != null) {
+            for (Boolean b : adapter.getIsChecked()) {
+                if(b) {
+                    Intent intent = new Intent(activity, CheckOut.class);
+                    intent.putExtra("orderList", adapter.checkOut());
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    return;
+                }
+            }
+
+            Toast.makeText(activity, "Vui lòng chọn ít nhất 1 sản phẩm", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(activity, "Giỏ hàng hiện đang trống", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
@@ -148,33 +160,7 @@ public class ViewCartController {
         pullToRefresh.setRefreshing(false);
     }
 
-    public void redirectToCheckOut() {
-        ViewAccountController controller = new ViewAccountController(activity);
-
-        if (AccountDAO.getInstance(activity).getAccountData() == null) {
-            Toast.makeText(activity, "Vui lòng đăng nhập để đặt hàng", Toast.LENGTH_SHORT).show();
-            redirectToAccount();
-            return;
-        }
-
-        if (adapter != null) {
-            boolean hasOne = false;
-
-            for (Boolean b : adapter.getIsChecked()) {
-                if (b) {
-                    hasOne = true;
-                    Intent intent = new Intent(activity, CheckOut.class);
-                    intent.putExtra("orderList", adapter.checkOut());
-                    activity.startActivity(intent);
-                    activity.finish();
-                }
-            }
-
-            if (!hasOne) {
-                Toast.makeText(activity, "Vui lòng chọn ít nhất 1 sản phẩm", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(activity, "Giỏ hàng hiện đang trống", Toast.LENGTH_SHORT).show();
-        }
+    public void checkAll() {
+        adapter.checkAllCartItem(totalCheckBox.isChecked());
     }
 }

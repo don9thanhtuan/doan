@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -17,10 +16,8 @@ import android.widget.Toast;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
-import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -166,11 +163,12 @@ public class ViewSettingInfoController {
 
             EditText infoEditText = view.findViewById(R.id.infoEditText);
             String info = infoEditText.getText().toString();
-            String temp = info.trim();
-            if (temp.isEmpty()) {
+
+            if (info.trim().isEmpty()) {
                 Toast.makeText(activity, "Vui lòng không để trống", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             switch (view.getId()) {
                 case 1:
                     newAccount.setUserName(info);
@@ -208,7 +206,7 @@ public class ViewSettingInfoController {
         });
     }
 
-    public void redirectToAccountSetting() {
+    public void redirectBack() {
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }

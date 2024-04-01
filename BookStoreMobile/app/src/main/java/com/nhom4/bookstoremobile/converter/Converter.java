@@ -28,13 +28,13 @@ public class Converter {
         return null;
     }
 
-    public static String numberToCurrency(int number){
+    public static String numberToCurrency(int number) {
         Locale vietnameseLocale = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(vietnameseLocale);
         return currencyFormat.format(number);
     }
 
-    public static int currencyToNumber(String currency){
+    public static int currencyToNumber(String currency) {
         String giaRaw = currency.replaceAll("\\D", "");
         return Integer.parseInt(giaRaw);
     }

@@ -2,8 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.view.View;
-import android.widget.TextView;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
@@ -30,7 +28,6 @@ public class ViewSettingController {
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
         activity.startActivity(intent);
-        activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 

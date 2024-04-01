@@ -108,13 +108,13 @@ public class ManageEditBookController {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(activity, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-                    redirectToCart();
+                    redirectToBookDetails();
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                redirectToCart();
+                redirectToBookDetails();
             }
         });
     }
@@ -163,7 +163,7 @@ public class ManageEditBookController {
         introductionEditText.setText(book.getBookIntroduction());
     }
 
-    private void redirectToCart() {
+    private void redirectToBookDetails() {
         Intent intent = new Intent(activity, ViewBookDetails.class);
         intent.putExtra("book_id", book.getBookID());
         activity.startActivity(intent);
@@ -171,9 +171,7 @@ public class ManageEditBookController {
     }
 
     public void redirectBack() {
-        Intent intent = new Intent(activity, ViewBookDetails.class);
-        intent.putExtra("book_id", book.getBookID());
-        activity.startActivity(intent);
         activity.finish();
+        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 }

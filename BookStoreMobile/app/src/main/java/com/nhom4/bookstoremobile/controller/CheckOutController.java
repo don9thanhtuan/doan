@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewCart;
+import com.nhom4.bookstoremobile.activity.ViewOrderDetails;
 import com.nhom4.bookstoremobile.adapter.OrderItemAdapter;
+import com.nhom4.bookstoremobile.converter.Converter;
 import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.entities.OrderDTO;
+import com.nhom4.bookstoremobile.entities.OrderDetails;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
@@ -34,14 +35,16 @@ import retrofit2.Response;
 
 public class CheckOutController {
     private final List<TextView> btnList = new ArrayList<>();
+    private final Boolean isBuyNow;
     private final Activity activity;
     private OrderItemAdapter adapter;
     private List<CartItem> orderItemList;
     private String paymentMethod;
 
 
-    public CheckOutController(Activity activity) {
+    public CheckOutController(Activity activity, Boolean isBuyNow) {
         this.activity = activity;
+        this.isBuyNow = isBuyNow;
     }
 
     public Activity getActivity() {
@@ -136,7 +139,7 @@ public class CheckOutController {
     }
 
     public void createOrder(Account account) {
-        if(account.isAdmin()) {
+        if (account.isAdmin()) {
             Toast.makeText(activity, "Vui lòng không dùng tài khoản quản trị để đặt hàng", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -162,6 +165,7 @@ public class CheckOutController {
 
         orderDTO.setBookList(bookList);
         orderDTO.setQuantityList(quantityList);
+
         orderDTO.setPrice(calculatePrice());
         orderDTO.setPhone(phone);
         orderDTO.setAddress(address);
@@ -173,25 +177,24 @@ public class CheckOutController {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    afterOrder();
+                    String orderID = response.body();
+                    afterCheckout(orderID);
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                afterOrder();
-            }
+            public void onFailure(Call<String> call, Throwable t) {}
         });
     }
 
-    private void afterOrder() {
+    private void afterCheckout(String orderID) {
         CartTable cartTable = new CartTable(activity);
         for (CartItem item : orderItemList) {
             cartTable.removeFromCart(item.getBookID());
         }
 
         Toast.makeText(activity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-        redirectToAccount();
+        redirectToOrderDetails(orderID);
     }
 
     private String calculatePrice() {
@@ -200,28 +203,22 @@ public class CheckOutController {
             Book book = item.getBook();
 
             if (book != null) {
-                String priceRaw = book.getBookPrice();
-                priceRaw = priceRaw.replace("₫", "");
-                priceRaw = priceRaw.replaceAll("\\s+", "");
-                priceRaw = priceRaw.replace(".", "");
-
-                int price = Integer.parseInt(priceRaw);
+                int price = Converter.currencyToNumber(book.getBookPrice());
                 totalPrice += (item.getQuantity() * price);
             }
         }
-        return String.format("%,d", totalPrice).replace(',', '.') + " ₫";
+        return Converter.numberToCurrency(totalPrice);
     }
 
-    public void redirectToAccount() {
-        Intent intent = new Intent(activity, ViewAccount.class);
+    public void redirectToOrderDetails(String orderID) {
+        Intent intent = new Intent(activity, ViewOrderDetails.class);
+        intent.putExtra("orderID", orderID);
         activity.startActivity(intent);
-        activity.finish();
     }
 
-    public void redirectToCart() {
-        Intent intent = new Intent(activity, ViewCart.class);
-        activity.startActivity(intent);
+    public void redirectBack() {
         activity.finish();
+        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {

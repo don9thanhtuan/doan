@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,13 +32,13 @@ public class ViewRegisterController {
         String userPassword = userPasswordEditText.getText().toString();
         String userConfirmPassword = userConfirmPasswordEditText.getText().toString();
 
-        if(!userID.trim().isEmpty()) {
-                if (userPassword.equals(userConfirmPassword)) {
-                    register(userID, userPassword);
-                } else {
-                    Toast.makeText(activity, "Vui lòng xác nhận lại mật khẩu", Toast.LENGTH_LONG).show();
-                    ExceptionHandler.forcusError(userConfirmPasswordEditText);
-                }
+        if (!userID.trim().isEmpty()) {
+            if (userPassword.equals(userConfirmPassword)) {
+                register(userID, userPassword);
+            } else {
+                Toast.makeText(activity, "Vui lòng xác nhận lại mật khẩu", Toast.LENGTH_LONG).show();
+                ExceptionHandler.forcusError(userConfirmPasswordEditText);
+            }
         } else {
             Toast.makeText(activity, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_LONG).show();
             ExceptionHandler.forcusError(userIDEditText);
@@ -75,7 +74,6 @@ public class ViewRegisterController {
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
         activity.startActivity(intent);
-        activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 }
