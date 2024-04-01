@@ -26,6 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.CheckOut;
 import com.nhom4.bookstoremobile.activity.ManageEditBook;
+import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
@@ -34,6 +35,7 @@ import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.Popup;
+import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 import com.nhom4.bookstoremobile.sqlite.CartDAO;
 import com.nhom4.bookstoremobile.sqlite.CartTable;
 
@@ -367,7 +369,20 @@ public class ViewBookDetailsController {
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
+    public void redirectToAccount() {
+        Intent intent = new Intent(activity, ViewAccount.class);
+        activity.startActivity(intent);
+        activity.finish();
+        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+    }
+
     public void redirectToBuyNow(String bookID, int quantity) {
+        if(AccountDAO.getInstance(activity).getAccountData() == null) {
+            Toast.makeText(activity, "Vui lòng đăng nhập để mua hàng", Toast.LENGTH_SHORT).show();
+            redirectToAccount();
+            return;
+        }
+
         Intent intent = new Intent(activity, CheckOut.class);
         intent.putExtra("isBuyNow", true);
         intent.putExtra("bookID", bookID);

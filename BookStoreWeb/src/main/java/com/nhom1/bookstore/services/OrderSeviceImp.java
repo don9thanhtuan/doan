@@ -99,4 +99,9 @@ public class OrderSeviceImp implements OrderService {
     public void deleteOrder(String id) {
         orderDAOController.deleteOrder(id);
     }
+
+    @Override
+    public List<Order> getPOrderList(String userid) {
+        return orderDAOController.getPOrderList(userid);
+    }
 }

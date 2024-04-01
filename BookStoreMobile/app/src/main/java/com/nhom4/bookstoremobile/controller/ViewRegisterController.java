@@ -2,6 +2,7 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class ViewRegisterController {
     }
 
     public void checkInfo() {
+        Rect point = new Rect();
         EditText userPasswordEditText = activity.findViewById(R.id.userPassword);
         EditText userConfirmPasswordEditText = activity.findViewById(R.id.userConfirmPassword);
 
@@ -31,10 +33,21 @@ public class ViewRegisterController {
 
         if (userPassword.equals(userConfirmPassword)) {
             EditText userIDEditText = activity.findViewById(R.id.userID);
+
             String userID = userIDEditText.getText().toString();
-            register(userID, userPassword);
+            if(userID.isEmpty()) {
+                Toast.makeText(activity, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_LONG).show();
+                userIDEditText.requestFocus();
+                userIDEditText.getGlobalVisibleRect(point);
+                userIDEditText.requestRectangleOnScreen(point);
+            } else {
+                register(userID, userPassword);
+            }
         } else {
             Toast.makeText(activity, "Vui lòng xác nhận lại mật khẩu", Toast.LENGTH_LONG).show();
+            userConfirmPasswordEditText.requestFocus();
+            userConfirmPasswordEditText.getGlobalVisibleRect(point);
+            userConfirmPasswordEditText.requestRectangleOnScreen(point);
         }
     }
 

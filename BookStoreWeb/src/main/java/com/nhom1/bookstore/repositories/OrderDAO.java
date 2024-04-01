@@ -14,4 +14,5 @@ public interface OrderDAO {
     void createOrder(Order newOrder);
     void createOrderDetail(OrderDetail newOrderDetail);
     void deleteOrder(String id);
+    List<Order> getPOrderList(String id);
 }

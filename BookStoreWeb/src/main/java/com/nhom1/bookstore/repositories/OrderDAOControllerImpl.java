@@ -53,4 +53,11 @@ public class OrderDAOControllerImpl implements OrderDAOController{
     public void deleteOrder(String id) {
         orderDAO.deleteOrder(id);
     }
+
+    @Override
+    public List<Order> getPOrderList(String userid) {
+       return  orderDAO.getPOrderList(userid);
+    }
+
+    
 }

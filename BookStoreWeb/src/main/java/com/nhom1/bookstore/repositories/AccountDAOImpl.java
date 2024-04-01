@@ -150,6 +150,4 @@ public class AccountDAOImpl implements AccountDAO{
             e.printStackTrace();
         }
     }
-
-    
 }

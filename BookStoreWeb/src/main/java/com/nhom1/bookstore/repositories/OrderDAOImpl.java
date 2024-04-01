@@ -266,4 +266,38 @@ public class OrderDAOImpl implements OrderDAO {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Order> getPOrderList(String userid) {
+        List<Order> result = new ArrayList<>();
+        
+        String sql = "SELECT * FROM DonHang WHERE LOWER(IDNguoiDat) = LOWER(?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, userid);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String maDonHang = resultSet.getString("MaDonHang");
+                    String idNguoiDat = resultSet.getString("IDNguoiDat");
+                    Date thoiGianDat = resultSet.getTimestamp("ThoiGianDat");
+                    int trangThai = resultSet.getInt("TrangThai");
+
+                    int thanhTienRaw = resultSet.getInt("ThanhTien");
+                    String thanhTien = ConverterCurrency.numberToCurrency(thanhTienRaw);
+
+                    String idSachDau = resultSet.getString("IDSachDau");
+                    int soSanPham = resultSet.getInt("SoSanPham");
+                    String soDienThoai = resultSet.getString("SoDienThoai");
+                    String diaChi = resultSet.getString("DiaChi");
+                    result.add(
+                            new Order(maDonHang, idNguoiDat, thoiGianDat, trangThai, thanhTien, idSachDau, soSanPham, soDienThoai, diaChi));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

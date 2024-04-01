@@ -14,4 +14,5 @@ public interface OrderService {
     List<Order> search(String tuKhoa);
     void createOrder(String idNguoiDat, OrderDTO newOrder);
     void deleteOrder(String id);
+    List<Order> getPOrderList(String id);
 }

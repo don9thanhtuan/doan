@@ -25,7 +25,7 @@ public class GetPersonalOrdersAPIController {
 
     @GetMapping("/api/accounts/{userid}/orders")
     public ResponseEntity<List<Order>> getPersonalOrders(@PathVariable("userid") String userid) {
-        List<Order> orderList = orderService.search(userid);
+        List<Order> orderList = orderService.getPOrderList(userid);
         for (Order order : orderList) {
             Book book = bookService.getBook(order.getOrderFirstBookID());
             order.setOrderFirstBook(book);
