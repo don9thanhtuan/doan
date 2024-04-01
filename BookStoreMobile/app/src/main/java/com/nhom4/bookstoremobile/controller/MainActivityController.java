@@ -74,7 +74,6 @@ public class MainActivityController {
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
         activity.startActivity(intent);
-        activity.finish();
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {

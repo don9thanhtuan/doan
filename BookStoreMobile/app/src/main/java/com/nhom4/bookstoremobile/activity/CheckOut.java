@@ -43,8 +43,8 @@ public class CheckOut extends AppCompatActivity {
 
     private void setListener() {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
-
         pullToRefresh.setOnRefreshListener(() -> orderController.reload(pullToRefresh));
+
         findViewById(R.id.phoneChange).setOnClickListener(v -> infoController.openEditor(3));
         findViewById(R.id.addressChange).setOnClickListener(v -> infoController.openEditor(4));
         findViewById(R.id.backButton).setOnClickListener(v -> orderController.redirectToCart());
@@ -78,6 +78,7 @@ public class CheckOut extends AppCompatActivity {
         });
 
         orderController.setEffect(codBtn);
+
         findViewById(R.id.orderBtn).setOnClickListener(v -> orderController.createOrder(infoController.getAccount()));
     }
 

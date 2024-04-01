@@ -1,5 +1,6 @@
 package com.nhom4.bookstoremobile.converter;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -25,5 +26,16 @@ public class Converter {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String numberToCurrency(int number){
+        Locale vietnameseLocale = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(vietnameseLocale);
+        return currencyFormat.format(number);
+    }
+
+    public static int currencyToNumber(String currency){
+        String giaRaw = currency.replaceAll("\\D", "");
+        return Integer.parseInt(giaRaw);
     }
 }

@@ -36,12 +36,14 @@ public class ViewOrderList extends AppCompatActivity {
         TextView confirmBtn = findViewById(R.id.confirmBtn);
         TextView deliveryBtn = findViewById(R.id.deliveryBtn);
         TextView completeBtn = findViewById(R.id.completeBtn);
+        TextView cancelBtn = findViewById(R.id.cancelBtn);
 
         controller.addBtnToList(allBtn);
         controller.addBtnToList(waitBtn);
         controller.addBtnToList(confirmBtn);
         controller.addBtnToList(deliveryBtn);
         controller.addBtnToList(completeBtn);
+        controller.addBtnToList(cancelBtn);
 
         allBtn.setOnClickListener(v -> {
             controller.setEffect(allBtn);
@@ -63,7 +65,10 @@ public class ViewOrderList extends AppCompatActivity {
             controller.setEffect(completeBtn);
             controller.getOrderFromAPI(3);
         });
-
+        cancelBtn.setOnClickListener(v -> {
+            controller.setEffect(cancelBtn);
+            controller.getOrderFromAPI(10);
+        });
         controller.setEffect(allBtn);
         controller.getOrderFromAPI(4);
     }

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewOrderDetails;
+import com.nhom4.bookstoremobile.converter.Converter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
 
@@ -71,7 +72,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 .into(holder.imageViewFirstBook);
 
         holder.textViewFirstBook.setText(book.getBookName());
-        holder.textViewOrderPrice.setText(order.getOrderPrice());
+
+        int priceInt = Converter.currencyToNumber(order.getOrderPrice());
+        priceInt += 20000;
+        String priceString = Converter.numberToCurrency(priceInt);
+
+        holder.textViewOrderPrice.setText(priceString);
         String soSP = "";
         if (order.getOrderItemQuantity() != 0) {
             soSP = "Và " + order.getOrderItemQuantity() + " cuốn sách khác";

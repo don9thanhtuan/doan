@@ -121,7 +121,7 @@ VALUES
 ('OCFGI084', 'BWNPW735', 3);
 
 INSERT INTO DonHang (MaDonHang, IDNguoiDat, ThoiGianDat, TrangThai, ThanhTien, IDSachDau, SoSanPham, SoDienThoai, DiaChi)
-VALUES ('OCBEI084', 'user1', '2023-03-07', 2, 360000, 'BGEHN704', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
+VALUES ('OCBEI084', 'user1', '2023-03-07', 10, 360000, 'BGEHN704', 3, '0123456789', '371 Nguyễn Kiệm, P.3, Q.Gò Vấp, TP.HCM');
 INSERT INTO ChiTietDonHang (MaDonHang, IDSach, SoLuong) 
 VALUES 
 ('OCBEI084',  'BGEHN704', 2),

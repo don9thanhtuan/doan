@@ -11,6 +11,7 @@ import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.entities.AccountResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
+import com.nhom4.bookstoremobile.service.ExceptionHandler;
 import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
 import okhttp3.MediaType;
@@ -33,18 +34,13 @@ public class ViewLoginController {
         String userID = userID_EditText.getText().toString();
         String userPassword = userPassword_EditText.getText().toString();
 
-        Rect point = new Rect();
         if (userID.isEmpty()) {
+            ExceptionHandler.forcusError(userID_EditText);
             Toast.makeText(activity, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
-            userID_EditText.requestFocus();
-            userID_EditText.getGlobalVisibleRect(point);
-            userID_EditText.requestRectangleOnScreen(point);
             return;
         } else if (userPassword.isEmpty()) {
+            ExceptionHandler.forcusError(userPassword_EditText);
             Toast.makeText(activity, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
-            userPassword_EditText.requestFocus();
-            userPassword_EditText.getGlobalVisibleRect(point);
-            userPassword_EditText.requestRectangleOnScreen(point);
             return;
         }
 

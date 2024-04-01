@@ -110,11 +110,13 @@ public class ViewOrderDetailsController {
         String orderTimeString = Converter.dateToString(order.getOrderTime());
         orderTimeTextView.setText(orderTimeString);
 
-        totalPriceTextView.setText(order.getOrderPrice());
-        String orderPrice = calculatePrice(order.getOrderPrice());
-        productPriceTextView.setText(orderPrice);
+        productPriceTextView.setText(order.getOrderPrice());
 
+        int priceInt = Converter.currencyToNumber(order.getOrderPrice());
+        priceInt += 20000;
+        String priceString = Converter.numberToCurrency(priceInt);
 
+        totalPriceTextView.setText(priceString);
     }
 
     private void setTotalQuantity(OrderDetails orderDetails) {
@@ -146,17 +148,6 @@ public class ViewOrderDetailsController {
         adapter.setmRecyclerView(recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-    }
-
-    private String calculatePrice(String totalPriceRaw) {
-        totalPriceRaw = totalPriceRaw.replace("₫", "");
-        totalPriceRaw = totalPriceRaw.replaceAll("\\s+", "");
-        totalPriceRaw = totalPriceRaw.replace(".", "");
-
-        int totalPrice = Integer.parseInt(totalPriceRaw);
-        totalPrice -= 20000;
-
-        return String.format("%,d", totalPrice).replace(',', '.') + " ₫";
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {

@@ -13,10 +13,13 @@ import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class ViewAccount extends AppCompatActivity {
     private ViewAccountController controller;
+    private boolean isFromMain;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isFromMain = getIntent().getBooleanExtra("main", false);
+
         controller = new ViewAccountController(this);
 
         AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
@@ -34,7 +37,7 @@ public class ViewAccount extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        controller.redirectToMain();
+        controller.redirectBack();
         super.onBackPressed();
     }
 

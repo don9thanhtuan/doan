@@ -122,6 +122,11 @@ public class ViewAccountController {
         activity.finish();
     }
 
+    public void redirectBack() {
+        activity.finish();
+        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+    }
+
     public void redirectToCart() {
         Intent intent = new Intent(activity, ViewCart.class);
         intent.putExtra("main", true);

@@ -383,6 +383,7 @@ public class ViewBookDetailsController {
             return;
         }
 
+        closeAddCartView();
         Intent intent = new Intent(activity, CheckOut.class);
         intent.putExtra("isBuyNow", true);
         intent.putExtra("bookID", bookID);

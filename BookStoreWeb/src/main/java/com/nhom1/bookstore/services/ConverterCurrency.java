@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class ConverterCurrency {
-    
     public static String numberToCurrency(int number){
         Locale vietnameseLocale = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(vietnameseLocale);

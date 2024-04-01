@@ -28,36 +28,30 @@ public class ExceptionHandler {
         String stock = stockEditText.getText().toString();
         String introduction = introductionEditText.getText().toString();
 
-        Rect rectangle = new Rect();
         if (name.isEmpty()) {
             Toast.makeText(activity, "Vui lòng nhập tên", Toast.LENGTH_SHORT).show();
-            nameEditText.requestFocus();
-            nameEditText.getGlobalVisibleRect(rectangle);
-            nameEditText.requestRectangleOnScreen(rectangle);
+
+            forcusError(nameEditText);
             return null;
         } else if (price.isEmpty()) {
             Toast.makeText(activity, "Vui lòng nhập giá", Toast.LENGTH_SHORT).show();
-            priceEditText.requestFocus();
-            priceEditText.getGlobalVisibleRect(rectangle);
-            priceEditText.requestRectangleOnScreen(rectangle);
+
+            forcusError(priceEditText);
             return null;
         } else if (author.isEmpty()) {
             Toast.makeText(activity, "Vui lòng nhập tên tác giả", Toast.LENGTH_SHORT).show();
-            authorEditText.requestFocus();
-            authorEditText.getGlobalVisibleRect(rectangle);
-            authorEditText.requestRectangleOnScreen(rectangle);
+
+            forcusError(authorEditText);
             return null;
         } else if (stock.isEmpty()) {
             Toast.makeText(activity, "Vui lòng nhập số lượng tồn kho", Toast.LENGTH_SHORT).show();
-            stockEditText.requestFocus();
-            stockEditText.getGlobalVisibleRect(rectangle);
-            stockEditText.requestRectangleOnScreen(rectangle);
+
+            forcusError(stockEditText);
             return null;
         } else if (introduction.isEmpty()) {
             Toast.makeText(activity, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
-            introductionEditText.requestFocus();
-            introductionEditText.getGlobalVisibleRect(rectangle);
-            introductionEditText.requestRectangleOnScreen(rectangle);
+
+            forcusError(introductionEditText);
             return null;
         }
 
@@ -75,5 +69,13 @@ public class ExceptionHandler {
         }
 
         return newBook;
+    }
+
+    public static void forcusError(EditText editText) {
+        Rect point = new Rect();
+
+        editText.requestFocus();
+        editText.getGlobalVisibleRect(point);
+        editText.requestRectangleOnScreen(point);
     }
 }

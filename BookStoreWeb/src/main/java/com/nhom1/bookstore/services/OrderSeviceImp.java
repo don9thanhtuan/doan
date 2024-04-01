@@ -102,6 +102,8 @@ public class OrderSeviceImp implements OrderService {
 
     @Override
     public List<Order> getPOrderList(String userid) {
-        return orderDAOController.getPOrderList(userid);
+        List<Order> orderList = orderDAOController.getPOrderList(userid);
+        sortByThoiGianDat(orderList);
+        return orderList;
     }
 }

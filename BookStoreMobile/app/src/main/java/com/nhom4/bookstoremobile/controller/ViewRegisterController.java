@@ -11,6 +11,7 @@ import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
+import com.nhom4.bookstoremobile.service.ExceptionHandler;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,30 +25,24 @@ public class ViewRegisterController {
     }
 
     public void checkInfo() {
-        Rect point = new Rect();
+        EditText userIDEditText = activity.findViewById(R.id.userID);
         EditText userPasswordEditText = activity.findViewById(R.id.userPassword);
         EditText userConfirmPasswordEditText = activity.findViewById(R.id.userConfirmPassword);
 
+        String userID = userIDEditText.getText().toString();
         String userPassword = userPasswordEditText.getText().toString();
         String userConfirmPassword = userConfirmPasswordEditText.getText().toString();
 
-        if (userPassword.equals(userConfirmPassword)) {
-            EditText userIDEditText = activity.findViewById(R.id.userID);
-
-            String userID = userIDEditText.getText().toString();
-            if(userID.isEmpty()) {
-                Toast.makeText(activity, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_LONG).show();
-                userIDEditText.requestFocus();
-                userIDEditText.getGlobalVisibleRect(point);
-                userIDEditText.requestRectangleOnScreen(point);
-            } else {
-                register(userID, userPassword);
-            }
+        if(!userID.trim().isEmpty()) {
+                if (userPassword.equals(userConfirmPassword)) {
+                    register(userID, userPassword);
+                } else {
+                    Toast.makeText(activity, "Vui lòng xác nhận lại mật khẩu", Toast.LENGTH_LONG).show();
+                    ExceptionHandler.forcusError(userConfirmPasswordEditText);
+                }
         } else {
-            Toast.makeText(activity, "Vui lòng xác nhận lại mật khẩu", Toast.LENGTH_LONG).show();
-            userConfirmPasswordEditText.requestFocus();
-            userConfirmPasswordEditText.getGlobalVisibleRect(point);
-            userConfirmPasswordEditText.requestRectangleOnScreen(point);
+            Toast.makeText(activity, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_LONG).show();
+            ExceptionHandler.forcusError(userIDEditText);
         }
     }
 
