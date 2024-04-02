@@ -56,12 +56,10 @@ public class ViewRegisterController {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().equals("Success")) {
-                        Toast.makeText(activity, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
-                        redirectToAccount();
-                    } else {
-                        Toast.makeText(activity, "Tên tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(activity, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
+                    redirectToAccount();
+                } else {
+                    Toast.makeText(activity, "Tên tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
                 }
             }
 

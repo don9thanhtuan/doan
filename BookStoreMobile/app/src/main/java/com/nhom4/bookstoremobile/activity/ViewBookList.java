@@ -1,5 +1,6 @@
 package com.nhom4.bookstoremobile.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,11 +30,10 @@ public class ViewBookList extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
-
     private void setListener() {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
-
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
+
         findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectToMain());
     }
 }

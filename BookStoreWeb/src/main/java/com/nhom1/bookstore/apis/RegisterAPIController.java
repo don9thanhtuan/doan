@@ -1,5 +1,7 @@
 package com.nhom1.bookstore.apis;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +18,11 @@ public class RegisterAPIController {
     }
     
     @PostMapping("/api/register")
-    public String registerAccount(@RequestBody Account account) {
+    public ResponseEntity<String> registerAccount(@RequestBody Account account) {
         if(accountService.checkUsername(account.getUserID())){
             accountService.registerAccount(account);
-            return "Success";             
+            return new ResponseEntity<>("Success", HttpStatus.CREATED);
         }
-        return "Fails";
+        return new ResponseEntity<>("Fails", HttpStatus.BAD_REQUEST);
     }
 }

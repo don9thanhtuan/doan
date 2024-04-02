@@ -4,7 +4,6 @@ package com.nhom4.bookstoremobile.service;
 import androidx.annotation.Nullable;
 
 import com.nhom4.bookstoremobile.entities.Book;
-import com.nhom4.bookstoremobile.entities.BookResponse;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public interface BookService {
 
     @Multipart
     @POST("books")
-    Call<BookResponse> addBook(
+    Call<Book> addBook(
             @Part MultipartBody.Part image,
             @Part("book") Book book
     );

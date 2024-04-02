@@ -3,7 +3,6 @@ package com.nhom4.bookstoremobile.service;
 import com.nhom4.bookstoremobile.entities.Order;
 import com.nhom4.bookstoremobile.entities.OrderDTO;
 import com.nhom4.bookstoremobile.entities.OrderDetails;
-import com.nhom4.bookstoremobile.entities.OrderResponse;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public interface OrderService {
     Call<OrderDetails> getOrderDetails(@Path("orderID") String orderID);
 
     @GET("orders/{orderID}")
-    Call<OrderResponse> getOrder(@Path("orderID") String orderID);
+    Call<Order> getOrder(@Path("orderID") String orderID);
 
     @GET("orders")
     Call<List<Order>> getOrderList();

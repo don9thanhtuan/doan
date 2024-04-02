@@ -10,7 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.CheckOutController;
 import com.nhom4.bookstoremobile.controller.ViewSettingInfoController;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
@@ -26,8 +26,8 @@ public class CheckOut extends AppCompatActivity {
         boolean isBuyNow = getIntent().getBooleanExtra("isBuyNow", false);
 
         infoController = new ViewSettingInfoController(this);
-        AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
-        infoController.getAccountFromAPI(accountResponse.getUserID());
+        Account account = AccountDAO.getInstance(this).getAccountData();
+        infoController.getAccountFromAPI(account.getUserID());
 
         orderController = new CheckOutController(this, isBuyNow);
 

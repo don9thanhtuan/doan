@@ -1,15 +1,14 @@
 package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.adapter.OrderAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
@@ -101,5 +100,10 @@ public class ViewOrderListController {
     public void redirectBack() {
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+    }
+
+    public void reload(SwipeRefreshLayout pullToRefresh) {
+        activity.recreate();
+        pullToRefresh.setRefreshing(false);
     }
 }

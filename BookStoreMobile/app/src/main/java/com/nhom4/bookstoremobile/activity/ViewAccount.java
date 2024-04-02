@@ -8,7 +8,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewAccountController;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class ViewAccount extends AppCompatActivity {
@@ -22,23 +22,17 @@ public class ViewAccount extends AppCompatActivity {
 
         controller = new ViewAccountController(this);
 
-        AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
+        Account account = AccountDAO.getInstance(this).getAccountData();
 
-        if (accountResponse == null) {
+        if (account == null) {
             setContentView(R.layout.activity_non_login);
             setListenerNonLogin();
         } else {
             setContentView(R.layout.activity_view_account);
             setListenerAccount();
-            controller.getAccountFromAPI(accountResponse.getUserID());
+            controller.getAccountFromAPI(account.getUserID());
         }
         setBaseListener();
-    }
-
-    @Override
-    public void onBackPressed() {
-        controller.redirectBack();
-        super.onBackPressed();
     }
 
     private void setBaseListener() {

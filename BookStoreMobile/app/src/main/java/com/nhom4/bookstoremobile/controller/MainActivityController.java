@@ -2,7 +2,6 @@ package com.nhom4.bookstoremobile.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,13 +66,11 @@ public class MainActivityController {
 
     public void redirectToCart() {
         Intent intent = new Intent(activity, ViewCart.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 
     public void redirectToAccount() {
         Intent intent = new Intent(activity, ViewAccount.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 

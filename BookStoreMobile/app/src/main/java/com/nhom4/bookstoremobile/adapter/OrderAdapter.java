@@ -1,5 +1,6 @@
 package com.nhom4.bookstoremobile.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -51,7 +52,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             intent.putExtra("orderItemQuantity", order.getOrderItemQuantity());
 
             mContext.startActivity(intent);
-
+            ((Activity) mContext).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         });
         return new ViewHolder(view);
     }

@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
@@ -48,15 +48,15 @@ public class ViewLoginController {
 
         AccountService accountService = RetrofitAPI.getInstance().create(AccountService.class);
 
-        Call<AccountResponse> call = accountService.login(userIDRB, userPasswordRB);
-        call.enqueue(new Callback<AccountResponse>() {
+        Call<Account> call = accountService.login(userIDRB, userPasswordRB);
+        call.enqueue(new Callback<Account>() {
             @Override
-            public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
+            public void onResponse(Call<Account> call, Response<Account> response) {
                 if (response.isSuccessful()) {
-                    AccountResponse accountResponse = response.body();
-                    if (accountResponse.getUserID() != null) {
+                    Account account = response.body();
+                    if (account.getUserID() != null) {
                         Toast.makeText(activity, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        loginSuccess(accountResponse);
+                        loginSuccess(account);
                         redirectToAccount();
                     } else {
                         Toast.makeText(activity, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
@@ -65,21 +65,21 @@ public class ViewLoginController {
             }
 
             @Override
-            public void onFailure(Call<AccountResponse> call, Throwable t) {
+            public void onFailure(Call<Account> call, Throwable t) {
                 Toast.makeText(activity, t.toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
     }
 
-    private void loginSuccess(AccountResponse accountResponse) {
+    private void loginSuccess(Account account) {
         AccountTable accountTable = new AccountTable(activity);
         accountTable.clear();
         int isAdminInt = 0;
-        if (accountResponse.isAdmin()) {
+        if (account.isAdmin()) {
             isAdminInt = 1;
         }
-        accountTable.addAccount(accountResponse.getUserID(), isAdminInt);
+        accountTable.addAccount(account.getUserID(), isAdminInt);
     }
 
     public void redirectToAccount() {

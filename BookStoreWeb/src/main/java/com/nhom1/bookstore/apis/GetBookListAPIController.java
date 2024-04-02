@@ -23,9 +23,6 @@ public class GetBookListAPIController {
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> bookList = bookService.getBookList();
-        if (bookList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 }

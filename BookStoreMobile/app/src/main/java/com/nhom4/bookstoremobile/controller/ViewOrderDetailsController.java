@@ -14,12 +14,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.adapter.OrderItemAdapter;
 import com.nhom4.bookstoremobile.converter.Converter;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.entities.Order;
 import com.nhom4.bookstoremobile.entities.OrderDetails;
-import com.nhom4.bookstoremobile.entities.OrderResponse;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.OrderService;
@@ -64,26 +63,25 @@ public class ViewOrderDetailsController {
 
     public void getOrderFromAPI(String orderID) {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
-        Call<OrderResponse> call = orderService.getOrder(orderID);
-        call.enqueue(new Callback<OrderResponse>() {
+        Call<Order> call = orderService.getOrder(orderID);
+        call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+            public void onResponse(Call<Order> call, Response<Order> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        OrderResponse order = response.body();
+                        Order order = response.body();
                         setOrderToLayout(order);
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
+            public void onFailure(Call<Order> call, Throwable t) {
             }
         });
     }
 
-    private void setOrderToLayout(OrderResponse orderResponse) {
-        Order order = orderResponse.getOrder();
+    private void setOrderToLayout(Order order) {
         Button editStatusBtn = activity.findViewById(R.id.editStatusBtn);
         editStatusBtn.setEnabled(order.getOrderStatusInt() < 3);
 
@@ -98,7 +96,7 @@ public class ViewOrderDetailsController {
         TextView productPriceTextView = activity.findViewById(R.id.productPrice);
         TextView totalPriceTextView = activity.findViewById(R.id.totalPrice);
 
-        userNameTextView.setText(orderResponse.getUserName());
+        userNameTextView.setText(order.getUserID());
         userPhoneTextView.setText(order.getOrderPhone());
         userAddressTextView.setText(order.getOrderAddress());
 
@@ -162,9 +160,9 @@ public class ViewOrderDetailsController {
         ConstraintLayout adminLayout = activity.findViewById(R.id.bottomLayout);
         Button editStatusBtn = activity.findViewById(R.id.editStatusBtn);
 
-        AccountResponse accountResponse = AccountDAO.getInstance(activity).getAccountData();
-        if (accountResponse != null) {
-            if (accountResponse.isAdmin()) {
+        Account account = AccountDAO.getInstance(activity).getAccountData();
+        if (account != null) {
+            if (account.isAdmin()) {
                 adminLayout.setVisibility(View.VISIBLE);
                 editStatusBtn.setOnClickListener(v -> showEditStatusPopup());
                 return;

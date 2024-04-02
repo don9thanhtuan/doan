@@ -40,15 +40,17 @@ public class GetOrderDetailsAPIController {
     }
 
     @GetMapping("/api/orders/{orderID}")
-    public ResponseEntity<OrderResponse> getOrder(@PathVariable("orderID") String id) {
+    public ResponseEntity<Order> getOrder(@PathVariable("orderID") String id) {
         Order order = orderService.getOrder(id);
-   
-        Book book = bookService.getBook(order.getOrderFirstBookID());
-        order.setOrderFirstBook(book);
-        order.setOrderItemQuantity(order.getOrderItemQuantity() - 1);
-            
-        Account account = accountService.getAccount(order.getUserID());
-        OrderResponse response = new OrderResponse(order, account.getUserName());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(order != null) {
+            Book book = bookService.getBook(order.getOrderFirstBookID());
+            order.setOrderFirstBook(book);
+            order.setOrderItemQuantity(order.getOrderItemQuantity() - 1);
+                
+            Account account = accountService.getAccount(order.getUserID());
+            order.setUserID(account.getUserName());
+            return new ResponseEntity<>(order, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

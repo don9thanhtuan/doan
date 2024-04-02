@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
-import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.activity.ViewOrderDetails;
 import com.nhom4.bookstoremobile.adapter.OrderItemAdapter;
 import com.nhom4.bookstoremobile.converter.Converter;
@@ -18,7 +17,6 @@ import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
 import com.nhom4.bookstoremobile.entities.OrderDTO;
-import com.nhom4.bookstoremobile.entities.OrderDetails;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
@@ -178,23 +176,24 @@ public class CheckOutController {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     String orderID = response.body();
-                    afterCheckout(orderID);
+
+                    clearCart();
+                    redirectToOrderDetails(orderID);
+                    Toast.makeText(activity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {}
+            public void onFailure(Call<String> call, Throwable t) {
+            }
         });
     }
 
-    private void afterCheckout(String orderID) {
+    private void clearCart() {
         CartTable cartTable = new CartTable(activity);
         for (CartItem item : orderItemList) {
             cartTable.removeFromCart(item.getBookID());
         }
-
-        Toast.makeText(activity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-        redirectToOrderDetails(orderID);
     }
 
     private String calculatePrice() {
@@ -214,6 +213,8 @@ public class CheckOutController {
         Intent intent = new Intent(activity, ViewOrderDetails.class);
         intent.putExtra("orderID", orderID);
         activity.startActivity(intent);
+        activity.finish();
+        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
     public void redirectBack() {

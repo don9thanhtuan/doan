@@ -128,6 +128,7 @@ public class ViewAccountController {
     public void redirectToLogin() {
         Intent intent = new Intent(activity, ViewLogin.class);
         activity.startActivity(intent);
+        activity.finish();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 

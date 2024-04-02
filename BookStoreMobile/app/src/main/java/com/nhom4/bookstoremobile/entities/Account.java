@@ -12,6 +12,11 @@ public class Account {
     public Account() {
     }
 
+    public Account(String userID, boolean admin) {
+        this.userID = userID;
+        this.admin = admin;
+    }
+
     public Account(String userID, String userName, String userPhone, String userEmail, String userAddress, boolean admin) {
         this.userID = userID;
         this.userName = userName;

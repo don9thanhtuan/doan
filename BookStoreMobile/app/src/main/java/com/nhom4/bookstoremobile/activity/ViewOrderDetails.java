@@ -16,7 +16,6 @@ public class ViewOrderDetails extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
         String orderID = getIntent().getStringExtra("orderID");
 

@@ -75,21 +75,6 @@ public class ViewBookDetailsController {
         });
     }
 
-    public void redirectToEditBook() {
-        Intent intent = new Intent(activity, ManageEditBook.class);
-        intent.putExtra("book_id", book.getBookID());
-        intent.putExtra("book_name", book.getBookName());
-        intent.putExtra("book_HinhAnh", book.getBookImage());
-        intent.putExtra("book_TacGia", book.getBookAuthor());
-        intent.putExtra("book_NhaCungCap", book.getBookPublisher());
-        intent.putExtra("book_TonKho", book.getBookStock());
-        intent.putExtra("book_Gia", book.getBookPrice());
-        intent.putExtra("book_TrongLuong", book.getBookWeight());
-        intent.putExtra("book_KickThuoc", book.getBookSize());
-        intent.putExtra("book_GioiThieu", book.getBookIntroduction());
-        activity.startActivity(intent);
-    }
-
     public void showDeleteConfirm() {
         TextView idTextView = activity.findViewById(R.id.id_TxtView);
         String id = idTextView.getText().toString();
@@ -350,7 +335,7 @@ public class ViewBookDetailsController {
 
     }
 
-    public void redirectToBookList() {
+    public void redirectBack() {
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
@@ -384,6 +369,23 @@ public class ViewBookDetailsController {
         intent.putExtra("bookID", bookID);
         intent.putExtra("quantity", quantity);
         activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+    }
+
+    public void redirectToEditBook() {
+        Intent intent = new Intent(activity, ManageEditBook.class);
+        intent.putExtra("book_id", book.getBookID());
+        intent.putExtra("book_name", book.getBookName());
+        intent.putExtra("book_HinhAnh", book.getBookImage());
+        intent.putExtra("book_TacGia", book.getBookAuthor());
+        intent.putExtra("book_NhaCungCap", book.getBookPublisher());
+        intent.putExtra("book_TonKho", book.getBookStock());
+        intent.putExtra("book_Gia", book.getBookPrice());
+        intent.putExtra("book_TrongLuong", book.getBookWeight());
+        intent.putExtra("book_KickThuoc", book.getBookSize());
+        intent.putExtra("book_GioiThieu", book.getBookIntroduction());
+        activity.startActivity(intent);
+        activity.finish();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 }

@@ -1,5 +1,6 @@
 package com.nhom4.bookstoremobile.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -51,6 +52,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             Intent intent = new Intent(context, ViewBookDetails.class);
             intent.putExtra("book_id", book.getBookID());
             context.startActivity(intent);
+            ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
         });
 
         if (setWidth) {

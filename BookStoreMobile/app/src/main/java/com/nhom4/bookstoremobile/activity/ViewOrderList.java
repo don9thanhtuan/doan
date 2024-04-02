@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewOrderListController;
@@ -30,6 +31,9 @@ public class ViewOrderList extends AppCompatActivity {
     }
 
     private void setListener() {
+        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
+
         findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectBack());
 
         TextView allBtn = findViewById(R.id.allBtn);

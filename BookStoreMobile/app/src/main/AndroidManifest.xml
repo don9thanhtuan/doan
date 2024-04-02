@@ -25,29 +25,27 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:launchMode="singleTop"
             android:name=".MainActivity"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ViewBookList" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ManageAddBook" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewBookDetails" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ManageEditBook" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewCart" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewAccount" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewLogin" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewOrderList" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewSetting" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewSettingInfo" android:launchMode="singleTop"/>
-        <activity android:name=".activity.CheckOut" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewRegister" android:launchMode="singleTop"/>
-        <activity android:name=".activity.ViewOrderDetails" android:launchMode="singleTop"/>
+        <activity android:name=".activity.ViewBookList" />
+        <activity android:name=".activity.ManageAddBook" />
+        <activity android:name=".activity.ViewBookDetails" />
+        <activity android:name=".activity.ManageEditBook" />
+        <activity android:name=".activity.ViewCart" />
+        <activity android:name=".activity.ViewAccount" />
+        <activity android:name=".activity.ViewLogin" />
+        <activity android:name=".activity.ViewOrderList" />
+        <activity android:name=".activity.ViewSetting" />
+        <activity android:name=".activity.ViewSettingInfo" />
+        <activity android:name=".activity.CheckOut" />
+        <activity android:name=".activity.ViewRegister" />
+        <activity android:name=".activity.ViewOrderDetails" />
     </application>
 
 </manifest>

@@ -17,7 +17,7 @@ public class EditPersonalAccountAPIController {
     }
 
     @PutMapping("/api/accounts/{userid}")
-    public String changeInformation(@PathVariable("userid") String userid, @RequestBody Account newAccount) {        
+    public void changeInformation(@PathVariable("userid") String userid, @RequestBody Account newAccount) {        
             Account currentAccount = accountService.getAccount(userid);
         
         if(newAccount.getUserName() != null) {
@@ -42,7 +42,5 @@ public class EditPersonalAccountAPIController {
         }
 
         accountService.editAccount(currentAccount.getUserID(), newAccount);
-
-        return "Account edited successfully";
     }
 }

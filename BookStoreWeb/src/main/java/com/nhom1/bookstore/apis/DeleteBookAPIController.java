@@ -40,7 +40,7 @@ public class DeleteBookAPIController {
                     orderService.deleteOrder(order.getOrderID());
                 }
             } else{
-                return new ResponseEntity<>("Book deleted fails", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Book deleted fails", HttpStatus.CONFLICT);
             }
         }
 

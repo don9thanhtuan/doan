@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewSettingInfoController;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class ViewSettingInfo extends AppCompatActivity {
@@ -21,8 +21,8 @@ public class ViewSettingInfo extends AppCompatActivity {
 
         setListener();
 
-        AccountResponse accountResponse = AccountDAO.getInstance(this).getAccountData();
-        controller.getAccountFromAPI(accountResponse.getUserID());
+        Account account = AccountDAO.getInstance(this).getAccountData();
+        controller.getAccountFromAPI(account.getUserID());
     }
 
     @Override

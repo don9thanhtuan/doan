@@ -23,9 +23,6 @@ public class GetTopSellingAPIController {
     @GetMapping
     public ResponseEntity<List<Book>> getTopSelling() {
         List<Book> bookList = bookService.getTopSelling();
-        if (bookList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 }

@@ -8,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nhom4.bookstoremobile.R;
+import com.nhom4.bookstoremobile.activity.ManageAddBook;
 import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.activity.ViewBookList;
 import com.nhom4.bookstoremobile.entities.Book;
-import com.nhom4.bookstoremobile.entities.BookResponse;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
@@ -58,16 +58,16 @@ public class ManageAddBookController {
         Book newBook = new ExceptionHandler().handleExceptionBook(activity);
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<BookResponse> call = bookService.addBook(imagePart, newBook);
-        call.enqueue(new Callback<BookResponse>() {
+        Call<Book> call = bookService.addBook(imagePart, newBook);
+        call.enqueue(new Callback<Book>() {
             @Override
-            public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {
+            public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
-                    BookResponse bookResponse = response.body();
-                    if (bookResponse != null) {
+                    Book book = response.body();
+                    if (book != null) {
                         Toast.makeText(activity, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(activity, ViewBookDetails.class);
-                        intent.putExtra("book_id", bookResponse.getBookID());
+                        intent.putExtra("book_id", book.getBookID());
                         activity.startActivity(intent);
                         activity.finish();
                     }
@@ -75,7 +75,7 @@ public class ManageAddBookController {
             }
 
             @Override
-            public void onFailure(Call<BookResponse> call, Throwable t) {
+            public void onFailure(Call<Book> call, Throwable t) {
                 Toast.makeText(activity, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -99,7 +99,9 @@ public class ManageAddBookController {
     }
 
     public void redirectBack() {
+        Intent intent = new Intent(activity, ViewBookList.class);
+        activity.startActivity(intent);
         activity.finish();
-        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 }

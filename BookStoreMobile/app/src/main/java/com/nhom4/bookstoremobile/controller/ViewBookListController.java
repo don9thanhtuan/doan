@@ -12,7 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ManageAddBook;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
@@ -75,15 +75,16 @@ public class ViewBookListController {
     public void redirectToAddBook() {
         Intent intent = new Intent(activity, ManageAddBook.class);
         activity.startActivity(intent);
+        activity.finish();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
     public void checkAdmin() {
         ImageButton addBtn = activity.findViewById(R.id.addBtn);
 
-        AccountResponse accountResponse = AccountDAO.getInstance(activity).getAccountData();
-        if (accountResponse != null) {
-            if (accountResponse.isAdmin()) {
+        Account account = AccountDAO.getInstance(activity).getAccountData();
+        if (account != null) {
+            if (account.isAdmin()) {
                 addBtn.setVisibility(View.VISIBLE);
                 addBtn.setOnClickListener(v -> redirectToAddBook());
                 return;

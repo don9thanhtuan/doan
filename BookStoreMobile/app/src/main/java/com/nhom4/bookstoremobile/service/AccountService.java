@@ -1,7 +1,6 @@
 package com.nhom4.bookstoremobile.service;
 
 import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.entities.AccountResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -16,7 +15,7 @@ import retrofit2.http.Path;
 public interface AccountService {
     @Multipart
     @POST("login")
-    Call<AccountResponse> login(
+    Call<Account> login(
             @Part("username") RequestBody userID,
             @Part("password") RequestBody userPassword
     );

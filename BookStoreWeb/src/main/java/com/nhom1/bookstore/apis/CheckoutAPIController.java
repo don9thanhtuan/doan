@@ -23,6 +23,6 @@ public class CheckoutAPIController {
     public ResponseEntity<String> createOrder(@PathVariable("username") String userID, @RequestBody OrderDTO orderDTO) {
         String orderID = IDGenerator.IDOrder();
         orderService.createOrder(userID, orderID, orderDTO);
-        return new ResponseEntity<>(orderID, HttpStatus.OK);
+        return new ResponseEntity<>(orderID, HttpStatus.CREATED);
     }
 }

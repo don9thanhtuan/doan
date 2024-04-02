@@ -36,12 +36,6 @@ public class ViewCart extends AppCompatActivity {
         controller.getCartData();
     }
 
-    @Override
-    public void onBackPressed() {
-        controller.redirectBack();
-        super.onBackPressed();
-    }
-
     private void setListener() {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));

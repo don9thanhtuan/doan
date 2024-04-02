@@ -116,8 +116,8 @@ public class ViewCartController {
     }
 
     public void redirectBack() {
-            activity.finish();
-            activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        activity.finish();
+        activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     public void redirectToMain() {
@@ -140,11 +140,13 @@ public class ViewCartController {
 
         if (adapter != null) {
             for (Boolean b : adapter.getIsChecked()) {
-                if(b) {
+                if (b) {
                     Intent intent = new Intent(activity, CheckOut.class);
                     intent.putExtra("orderList", adapter.checkOut());
                     activity.startActivity(intent);
+                    activity.finish();
                     activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
                     return;
                 }
             }

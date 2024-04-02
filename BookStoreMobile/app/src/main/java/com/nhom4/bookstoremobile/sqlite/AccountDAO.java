@@ -3,7 +3,7 @@ package com.nhom4.bookstoremobile.sqlite;
 import android.app.Activity;
 import android.database.Cursor;
 
-import com.nhom4.bookstoremobile.entities.AccountResponse;
+import com.nhom4.bookstoremobile.entities.Account;
 
 public class AccountDAO {
     private static AccountDAO accountDAO;
@@ -20,16 +20,16 @@ public class AccountDAO {
         return accountDAO;
     }
 
-    public AccountResponse getAccountData() {
+    public Account getAccountData() {
         Cursor cursor = accountTable.getAccount();
         if (cursor != null && cursor.moveToFirst()) {
             String userID = cursor.getString(cursor.getColumnIndex("userID"));
             int isAdminInt = cursor.getInt(cursor.getColumnIndex("isAdmin"));
 
             if (isAdminInt == 0) {
-                return new AccountResponse(userID, false);
+                return new Account(userID, false);
             } else {
-                return new AccountResponse(userID, true);
+                return new Account(userID, true);
             }
         }
         return null;

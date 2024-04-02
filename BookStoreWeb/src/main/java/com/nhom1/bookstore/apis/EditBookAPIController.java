@@ -19,7 +19,7 @@ public class EditBookAPIController {
     }
 
     @PutMapping("/api/books/{id}")
-    public String editBook(@PathVariable("id") String id,
+    public void editBook(@PathVariable("id") String id,
             @RequestParam("image") MultipartFile file,
             @RequestParam("book") String bookJSON) {
         Book newBook = ConverterJSON.jsonToBookEntity(bookJSON);
@@ -30,6 +30,5 @@ public class EditBookAPIController {
         }
         
         bookService.editBook(newBook);
-        return "Book edited successfully";
     }
 }

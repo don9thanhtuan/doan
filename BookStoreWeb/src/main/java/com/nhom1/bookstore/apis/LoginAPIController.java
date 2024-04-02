@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nhom1.bookstore.entity.Account;
 import com.nhom1.bookstore.services.AccountService;
 
 
@@ -18,9 +19,9 @@ public class LoginAPIController {
     }
     
     @PostMapping("/api/login")
-    public ResponseEntity<AccountResponse> authentication(@RequestParam("username") String username, @RequestParam("password") String password) {
+    public ResponseEntity<Account> authentication(@RequestParam("username") String username, @RequestParam("password") String password) {
         int ketqua = accountService.authentication(username, password);
-        AccountResponse response = new AccountResponse(null, false);
+        Account response = new Account();
         if (ketqua != 0) {
             if (ketqua >= 1) {
                 response.setUserID(username);
@@ -31,7 +32,6 @@ public class LoginAPIController {
                 }
             }
         }
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
 }

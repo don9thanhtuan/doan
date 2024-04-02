@@ -23,7 +23,7 @@ public class AddBookAPIController {
     }
     
     @PostMapping
-    public ResponseEntity<BookResponse> addBook(@RequestParam("image") MultipartFile file, @RequestParam("book") String bookJSON) {
+    public ResponseEntity<String> addBook(@RequestParam("image") MultipartFile file, @RequestParam("book") String bookJSON) {
         Book newBook = ConverterJSON.jsonToBookEntity(bookJSON);
         
         String id = IDGenerator.IDBook();
@@ -40,8 +40,6 @@ public class AddBookAPIController {
         newBook.setBookImage(filePath);
 
         bookService.addBook(newBook);
-
-        BookResponse response = new BookResponse(newBook.getBookID(), "Book added successfully");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 }

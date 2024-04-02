@@ -23,7 +23,7 @@ public class GetOrderListAPIController {
     }
 
     @GetMapping("/api/orders")
-    public ResponseEntity<List<Order>> getPersonalOrders() {
+    public ResponseEntity<List<Order>> getOrderList() {
         List<Order> orderList = orderService.getOrderList();
         for (Order order : orderList) {
             Book book = bookService.getBook(order.getOrderFirstBookID());
