@@ -13,8 +13,6 @@ import com.nhom4.bookstoremobile.service.AccountService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
 import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,12 +41,9 @@ public class ViewLoginController {
             return;
         }
 
-        RequestBody userIDRB = RequestBody.create(MediaType.parse("text/plain"), userID);
-        RequestBody userPasswordRB = RequestBody.create(MediaType.parse("text/plain"), userPassword);
-
         AccountService accountService = RetrofitAPI.getInstance().create(AccountService.class);
 
-        Call<Account> call = accountService.login(userIDRB, userPasswordRB);
+        Call<Account> call = accountService.login(userID, userPassword);
         call.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {

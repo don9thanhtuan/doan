@@ -10,6 +10,7 @@ public class RetrofitAPI {
     private static final String BASE_URL = DefaultURL.getUrl() + "/api/";
 
     private static Retrofit retrofit;
+    z
 
     public static Retrofit getInstance() {
         if (retrofit == null) {

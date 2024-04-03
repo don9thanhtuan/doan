@@ -114,7 +114,6 @@ public class ManageEditBookController {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                redirectToBookDetails();
             }
         });
     }
