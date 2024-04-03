@@ -176,8 +176,9 @@ public class CheckOutController {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     String orderID = response.body();
-
-                    clearCart();
+                    if(!isBuyNow) {
+                        clearCart();
+                    }
                     redirectToOrderDetails(orderID);
                     Toast.makeText(activity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                 }
