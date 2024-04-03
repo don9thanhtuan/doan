@@ -32,7 +32,7 @@ public class MainActivityController {
 
     public void getTopSellingFromAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<List<Book>> call = bookService.getBookTopSellingFromRestAPI();
+        Call<List<Book>> call = bookService.getTopSelling();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {

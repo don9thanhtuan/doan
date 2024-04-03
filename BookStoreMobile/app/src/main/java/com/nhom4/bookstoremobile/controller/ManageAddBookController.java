@@ -57,16 +57,16 @@ public class ManageAddBookController {
         Book newBook = new ExceptionHandler().handleExceptionBook(activity);
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<Book> call = bookService.addBook(imagePart, newBook);
-        call.enqueue(new Callback<Book>() {
+        Call<String> call = bookService.addBook(imagePart, newBook);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Book> call, Response<Book> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    Book book = response.body();
-                    if (book != null) {
+                    String bookID = response.body();
+                    if (bookID != null) {
                         Toast.makeText(activity, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(activity, ViewBookDetails.class);
-                        intent.putExtra("book_id", book.getBookID());
+                        intent.putExtra("book_id", bookID);
                         activity.startActivity(intent);
                         activity.finish();
                     }
@@ -74,7 +74,7 @@ public class ManageAddBookController {
             }
 
             @Override
-            public void onFailure(Call<Book> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(activity, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

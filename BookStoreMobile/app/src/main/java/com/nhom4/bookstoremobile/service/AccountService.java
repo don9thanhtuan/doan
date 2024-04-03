@@ -23,7 +23,7 @@ public interface AccountService {
     Call<Account> getAccount(@Path("username") String userID);
 
     @PUT("accounts/{username}")
-    Call<String> editAccount(@Path("username") String userID, @Body Account account);
+    Call<Void> editAccount(@Path("username") String userID, @Body Account account);
 
     @POST("register")
     Call<String> register(@Body Account account);

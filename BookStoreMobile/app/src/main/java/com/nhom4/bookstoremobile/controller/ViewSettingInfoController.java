@@ -190,17 +190,17 @@ public class ViewSettingInfoController {
 
     private void editPersonalAccountByAPI(Account account) {
         AccountService accountService = RetrofitAPI.getInstance().create(AccountService.class);
-        Call<String> call = accountService.editAccount(account.getUserID(), account);
-        call.enqueue(new Callback<String>() {
+        Call<Void> call = accountService.editAccount(account.getUserID(), account);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     afterEdit();
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 afterEdit();
             }
         });

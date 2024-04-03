@@ -101,11 +101,11 @@ public class ManageEditBookController {
         }
 
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<String> call = bookService.editBook(newBook.getBookID(), imagePart, newBook);
+        Call<Void> call = bookService.editBook(newBook.getBookID(), imagePart, newBook);
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(activity, "Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
                     redirectToBookDetails();
@@ -113,8 +113,7 @@ public class ManageEditBookController {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-            }
+            public void onFailure(Call<Void> call, Throwable t) {}
         });
     }
 

@@ -117,7 +117,7 @@ public class CheckOutController {
 
     private void getBookDetailFromAPI(CartItem cartItem) {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<Book> call = bookService.getBookDetailsFromRestAPI(cartItem.getBookID());
+        Call<Book> call = bookService.getBookDetails(cartItem.getBookID());
         call.enqueue(new Callback<Book>() {
             @Override
             public void onResponse(Call<Book> call, Response<Book> response) {

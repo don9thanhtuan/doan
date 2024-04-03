@@ -57,7 +57,7 @@ public class ViewBookDetailsController {
 
     public void getBookDetailFromAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<Book> call = bookService.getBookDetailsFromRestAPI(bookID);
+        Call<Book> call = bookService.getBookDetails(bookID);
         call.enqueue(new Callback<Book>() {
             @Override
             public void onResponse(Call<Book> call, Response<Book> response) {
@@ -88,10 +88,10 @@ public class ViewBookDetailsController {
 
     private void deleteBookByAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<ResponseBody> call = bookService.deleteBook(book.getBookID());
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<String> call = bookService.deleteBook(book.getBookID());
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(activity, "Xóa thành công sản phẩm " + book.getBookID(), Toast.LENGTH_SHORT).show();
                     activity.finish();
@@ -101,14 +101,14 @@ public class ViewBookDetailsController {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
             }
         });
     }
 
     public void getBookListFromAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<List<Book>> call2 = bookService.getBookFromRestAPI();
+        Call<List<Book>> call2 = bookService.getBookList();
         call2.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {

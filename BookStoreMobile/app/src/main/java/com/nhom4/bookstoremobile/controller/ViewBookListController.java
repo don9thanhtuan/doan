@@ -34,7 +34,7 @@ public class ViewBookListController {
 
     public void getBookListFromAPI() {
         BookService bookService = RetrofitAPI.getInstance().create(BookService.class);
-        Call<List<Book>> call = bookService.getBookFromRestAPI();
+        Call<List<Book>> call = bookService.getBookList();
 
         call.enqueue(new Callback<List<Book>>() {
             @Override

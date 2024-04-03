@@ -20,29 +20,29 @@ import retrofit2.http.Path;
 
 public interface BookService {
     @GET("books")
-    Call<List<Book>> getBookFromRestAPI();
+    Call<List<Book>> getBookList();
 
     @GET("topselling")
-    Call<List<Book>> getBookTopSellingFromRestAPI();
+    Call<List<Book>> getTopSelling();
 
     @GET("books/{id}")
-    Call<Book> getBookDetailsFromRestAPI(@Path("id") String bookId);
+    Call<Book> getBookDetails(@Path("id") String bookId);
 
     @Multipart
     @POST("books")
-    Call<Book> addBook(
+    Call<String> addBook(
             @Part MultipartBody.Part image,
             @Part("book") Book book
     );
 
     @Multipart
     @PUT("books/{id}")
-    Call<String> editBook(
+    Call<Void> editBook(
             @Path("id") String bookId,
             @Part @Nullable MultipartBody.Part image,
             @Part("book") Book book
     );
 
     @DELETE("books/{id}")
-    Call<ResponseBody> deleteBook(@Path("id") String id);
+    Call<String> deleteBook(@Path("id") String id);
 }
