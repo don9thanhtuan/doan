@@ -113,7 +113,8 @@ public class ManageEditBookController {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {}
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
         });
     }
 

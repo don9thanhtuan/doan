@@ -33,6 +33,6 @@ public class ViewBookList extends AppCompatActivity {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
 
-        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectToMain());
+        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectToMain());
     }
 }

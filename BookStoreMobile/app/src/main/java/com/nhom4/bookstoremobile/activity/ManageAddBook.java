@@ -30,9 +30,9 @@ public class ManageAddBook extends AppCompatActivity {
     }
 
     private void setListener() {
-        findViewById(R.id.addImageButton).setOnClickListener(v -> openImagePickLayout());
+        findViewById(R.id.addImageBtn).setOnClickListener(v -> openImagePickLayout());
         findViewById(R.id.addBookBtn).setOnClickListener(v -> controller.addBook());
-        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
+        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectBack());
     }
 
     @Override

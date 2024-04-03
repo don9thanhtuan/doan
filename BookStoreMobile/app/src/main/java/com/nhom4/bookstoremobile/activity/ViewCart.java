@@ -44,7 +44,7 @@ public class ViewCart extends AppCompatActivity {
         totalCheckBox.setOnClickListener(view -> controller.checkAll());
 
         findViewById(R.id.homeBtn).setOnClickListener(v -> controller.redirectToMain());
-        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
+        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectBack());
         findViewById(R.id.deleteBtn).setOnClickListener(v -> controller.showConfirmationPopup());
         findViewById(R.id.accountBtn).setOnClickListener(v -> controller.redirectToAccount());
         findViewById(R.id.paymentBtn).setOnClickListener(v -> controller.redirectToCheckOut());

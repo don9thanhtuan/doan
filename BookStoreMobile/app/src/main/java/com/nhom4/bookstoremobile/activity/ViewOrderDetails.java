@@ -36,6 +36,6 @@ public class ViewOrderDetails extends AppCompatActivity {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
 
-        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
+        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectBack());
     }
 }

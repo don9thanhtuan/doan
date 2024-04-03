@@ -40,7 +40,7 @@ public class ViewBookDetails extends AppCompatActivity {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
 
-        findViewById(R.id.backButton).setOnClickListener(v -> controller.redirectBack());
+        findViewById(R.id.backBtn).setOnClickListener(v -> controller.redirectBack());
         findViewById(R.id.cartBtn).setOnClickListener(v -> controller.redirectToCart());
         findViewById(R.id.addToCartBtn).setOnClickListener(v -> controller.openAddCartView(2));
         findViewById(R.id.buyNowBtn).setOnClickListener(v -> controller.openAddCartView(1));

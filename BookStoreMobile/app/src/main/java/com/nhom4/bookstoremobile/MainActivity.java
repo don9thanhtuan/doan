@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> controller.reload(pullToRefresh));
 
-        findViewById(R.id.viewListButton).setOnClickListener(v -> controller.redirectToBookList());
+        findViewById(R.id.viewListBtn).setOnClickListener(v -> controller.redirectToBookList());
         findViewById(R.id.homeBtn).setOnClickListener(v -> recreate());
         findViewById(R.id.top_cartBtn).setOnClickListener(v -> controller.redirectToCart());
         findViewById(R.id.bottom_cartBtn).setOnClickListener(v -> controller.redirectToCart());
