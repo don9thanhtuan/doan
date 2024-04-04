@@ -8,10 +8,10 @@ import android.widget.Toast;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.entities.Account;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
-import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,13 +68,13 @@ public class ViewLoginController {
     }
 
     private void loginSuccess(Account account) {
-        AccountTable accountTable = new AccountTable(activity);
-        accountTable.clear();
+        AccountDAO accountDAO = AccountDAO.getInstance(activity);
+        accountDAO.clear();
         int isAdminInt = 0;
         if (account.isAdmin()) {
             isAdminInt = 1;
         }
-        accountTable.addAccount(account.getUserID(), isAdminInt);
+        accountDAO.addAccount(account.getUserID(), isAdminInt);
     }
 
     public void redirectToAccount() {

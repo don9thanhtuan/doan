@@ -17,13 +17,13 @@ import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.adapter.CartItemAdapter;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
+import com.nhom4.bookstoremobile.repositories.CartDAO;
+import com.nhom4.bookstoremobile.repositories.CartTable;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.Popup;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
-import com.nhom4.bookstoremobile.sqlite.CartDAO;
-import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.List;
 

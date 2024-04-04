@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewSettingInfoController;
 import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 
 public class ViewSettingInfo extends AppCompatActivity {
     private ViewSettingInfoController controller;

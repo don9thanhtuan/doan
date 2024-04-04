@@ -28,15 +28,16 @@ import com.nhom4.bookstoremobile.activity.ManageEditBook;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewCart;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
+import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
+import com.nhom4.bookstoremobile.repositories.CartDAO;
+import com.nhom4.bookstoremobile.repositories.CartTable;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.Popup;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
-import com.nhom4.bookstoremobile.sqlite.CartDAO;
-import com.nhom4.bookstoremobile.sqlite.CartTable;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class ViewBookDetailsController {
         });
     }
 
-    public void showDeleteConfirm() {
+    private void showDeleteConfirm() {
         TextView idTextView = activity.findViewById(R.id.id_TxtView);
         String id = idTextView.getText().toString();
         Popup.showConfirm(activity, "Xác nhận", "Bạn muốn xóa sản phẩm " + id + "?", new DialogInterface.OnClickListener() {
@@ -371,7 +372,7 @@ public class ViewBookDetailsController {
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
-    public void redirectToEditBook() {
+    private void redirectToEditBook() {
         Intent intent = new Intent(activity, ManageEditBook.class);
         intent.putExtra("book_id", book.getBookID());
         intent.putExtra("book_name", book.getBookName());
@@ -386,5 +387,26 @@ public class ViewBookDetailsController {
         activity.startActivity(intent);
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+    }
+
+    public void setUpAdminLayout() {
+        Button editBtn = activity.findViewById(R.id.editBtn);
+        Button deleteBtn = activity.findViewById(R.id.deleteBtn);
+
+        Account account = AccountDAO.getInstance(activity).getAccountData();
+        if (account != null) {
+            if (account.isAdmin()) {
+                editBtn.setVisibility(View.VISIBLE);
+                deleteBtn.setVisibility(View.VISIBLE);
+                editBtn.setOnClickListener(v -> redirectToEditBook());
+                deleteBtn.setOnClickListener(v -> showDeleteConfirm());
+                return;
+            }
+        }
+
+        editBtn.setVisibility(View.GONE);
+        editBtn.setOnClickListener(null);
+        deleteBtn.setVisibility(View.GONE);
+        deleteBtn.setOnClickListener(null);
     }
 }

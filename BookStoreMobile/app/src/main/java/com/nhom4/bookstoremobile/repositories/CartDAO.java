@@ -1,4 +1,4 @@
-package com.nhom4.bookstoremobile.sqlite;
+package com.nhom4.bookstoremobile.repositories;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -19,7 +19,8 @@ public class CartDAO {
 
     public static CartDAO getInstance(Activity activity) {
         if (cartDAO == null) {
-            cartDAO = new CartDAO(new CartTable(activity));
+            CartTable cartTable = new CartTable(activity);
+            cartDAO = new CartDAO(cartTable);
         }
         return cartDAO;
     }
@@ -48,5 +49,17 @@ public class CartDAO {
             return new CartItem(id, quantity);
         }
         return null;
+    }
+
+    public void updateQuantityItem(String id, int quantity) {
+        cartTable.updateQuantityItem(id, quantity);
+    }
+
+    public void addToCart(String id, int quantity) {
+        cartTable.addToCart(id, quantity);
+    }
+
+    public void removeFromCart(String bookID) {
+        cartTable.removeFromCart(bookID);
     }
 }

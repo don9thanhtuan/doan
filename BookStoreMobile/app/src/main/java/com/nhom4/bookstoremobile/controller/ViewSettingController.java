@@ -6,8 +6,8 @@ import android.content.Intent;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewAccount;
 import com.nhom4.bookstoremobile.activity.ViewSettingInfo;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 import com.nhom4.bookstoremobile.service.Popup;
-import com.nhom4.bookstoremobile.sqlite.AccountTable;
 
 
 public class ViewSettingController {
@@ -19,8 +19,7 @@ public class ViewSettingController {
 
     public void showConfirmationPopup() {
         Popup.showConfirm(activity, "Xác nhận", "Bạn muốn đăng xuất?", (dialog, which) -> {
-            AccountTable accountTable = new AccountTable(activity);
-            accountTable.clear();
+            AccountDAO.getInstance(activity).clear();
             redirectToAccount();
         });
     }

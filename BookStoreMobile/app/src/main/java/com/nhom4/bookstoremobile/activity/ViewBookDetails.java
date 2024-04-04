@@ -1,16 +1,12 @@
 package com.nhom4.bookstoremobile.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewBookDetailsController;
-import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 public class ViewBookDetails extends AppCompatActivity {
     private ViewBookDetailsController controller;
@@ -25,9 +21,10 @@ public class ViewBookDetails extends AppCompatActivity {
 
         controller.getBookDetailFromAPI();
         controller.getBookListFromAPI();
+        controller.setUpAdminLayout();
 
         setListener();
-        setUpAdminLayout();
+
     }
 
     @Override
@@ -49,26 +46,5 @@ public class ViewBookDetails extends AppCompatActivity {
             controller.closeAddCartView();
             return false;
         });
-    }
-
-    private void setUpAdminLayout() {
-        Button editBtn = findViewById(R.id.editBtn);
-        Button deleteBtn = findViewById(R.id.deleteBtn);
-
-        Account account = AccountDAO.getInstance(this).getAccountData();
-        if (account != null) {
-            if (account.isAdmin()) {
-                editBtn.setVisibility(View.VISIBLE);
-                deleteBtn.setVisibility(View.VISIBLE);
-                editBtn.setOnClickListener(v -> controller.redirectToEditBook());
-                deleteBtn.setOnClickListener(v -> controller.showDeleteConfirm());
-                return;
-            }
-        }
-
-        editBtn.setVisibility(View.GONE);
-        editBtn.setOnClickListener(null);
-        deleteBtn.setVisibility(View.GONE);
-        deleteBtn.setOnClickListener(null);
     }
 }

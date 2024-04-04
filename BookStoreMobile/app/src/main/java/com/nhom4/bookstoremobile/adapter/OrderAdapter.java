@@ -62,8 +62,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         Order order = mOrderList.get(position);
         Book book = order.getOrderFirstBook();
 
-        holder.textViewOrderId.setText(order.getOrderID());
-        holder.textViewStatus.setText(order.getOrderStatus());
+        holder.orderID.setText(order.getOrderID());
+        holder.orderStatus.setText(order.getOrderStatus());
 
         Glide.with(mContext)
                 .load(book.getBookImage())
@@ -72,18 +72,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 .fitCenter()
                 .into(holder.imageViewFirstBook);
 
-        holder.textViewFirstBook.setText(book.getBookName());
+        holder.orderFirstBook.setText(book.getBookName());
 
         int priceInt = Converter.currencyToNumber(order.getOrderPrice());
         priceInt += 20000;
         String priceString = Converter.numberToCurrency(priceInt);
 
-        holder.textViewOrderPrice.setText(priceString);
+        holder.orderPrice.setText(priceString);
         String soSP = "";
         if (order.getOrderItemQuantity() != 0) {
             soSP = "Và " + order.getOrderItemQuantity() + " cuốn sách khác";
         }
-        holder.textViewOtherBook.setText(soSP);
+        holder.orderOtherBook.setText(soSP);
     }
 
     @Override
@@ -92,21 +92,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textViewOrderId;
-        public TextView textViewStatus;
+        public TextView orderID;
+        public TextView orderStatus;
         public ImageView imageViewFirstBook;
-        public TextView textViewFirstBook;
-        public TextView textViewOrderPrice;
-        public TextView textViewOtherBook;
+        public TextView orderFirstBook;
+        public TextView orderPrice;
+        public TextView orderOtherBook;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewOrderId = itemView.findViewById(R.id.orderID);
-            textViewStatus = itemView.findViewById(R.id.orderStatus);
+            orderID = itemView.findViewById(R.id.orderID);
+            orderStatus = itemView.findViewById(R.id.orderStatus);
             imageViewFirstBook = itemView.findViewById(R.id.firstBookImage);
-            textViewFirstBook = itemView.findViewById(R.id.firstBookName);
-            textViewOrderPrice = itemView.findViewById(R.id.orderPrice);
-            textViewOtherBook = itemView.findViewById(R.id.otherBook);
+            orderFirstBook = itemView.findViewById(R.id.firstBookName);
+            orderPrice = itemView.findViewById(R.id.orderPrice);
+            orderOtherBook = itemView.findViewById(R.id.otherBook);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.nhom4.bookstoremobile.sqlite;
+package com.nhom4.bookstoremobile.repositories;
 
 import android.content.ContentValues;
 import android.content.Context;

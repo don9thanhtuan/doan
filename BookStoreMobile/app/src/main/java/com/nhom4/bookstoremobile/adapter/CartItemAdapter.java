@@ -1,8 +1,8 @@
 package com.nhom4.bookstoremobile.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,7 +26,7 @@ import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.CartItem;
-import com.nhom4.bookstoremobile.sqlite.CartTable;
+import com.nhom4.bookstoremobile.repositories.CartDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     private final List<CartItem> itemList;
     private final RecyclerView mRecyclerView;
     private final List<Boolean> isChecked = new ArrayList<>();
+    private final CartDAO cartDAO;
     private Button paymentBtn;
     private TextView totalPriceTxtView;
     private CheckBox totalCheckBox;
@@ -44,6 +45,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         this.context = context;
         this.itemList = itemList;
         this.mRecyclerView = mRecyclerView;
+        this.cartDAO = CartDAO.getInstance((Activity) context);
+
         for (int i = 0; i < itemList.size(); i++) {
             isChecked.add(false);
         }
@@ -89,12 +92,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         holder.bookId = cartItem.getBookID();
 
         int quantity = cartItem.getQuantity();
-        holder.quantity_EditText.setText(String.valueOf(quantity));
+        holder.itemQuantity.setText(String.valueOf(quantity));
 
         if (book != null) {
-            holder.name_TxtView.setText(book.getBookName());
-            holder.author_TxtView.setText(book.getBookAuthor());
-            holder.price_TxtView.setText(book.getBookPrice());
+            holder.itemName.setText(book.getBookName());
+            holder.itemAuthor.setText(book.getBookAuthor());
+            holder.itemPrice.setText(book.getBookPrice());
 
             Glide.with(context)
                     .load(book.getBookImage())
@@ -133,14 +136,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     }
 
     private void addItemToCart(String id, int quantity) {
-        CartTable cartTable = new CartTable(context);
-        Cursor cursor = cartTable.findCartItem(id);
+        CartItem cartItem = cartDAO.getCartItem(id);
 
-        if (cursor != null && cursor.moveToFirst()) {
-            cartTable.updateQuantityItem(id, quantity);
-            cursor.close();
+        if (cartItem != null) {
+            cartDAO.updateQuantityItem(id, quantity);
         } else {
-            cartTable.addToCart(id, quantity);
+            cartDAO.addToCart(id, quantity);
         }
     }
 
@@ -149,8 +150,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             if (isChecked.get(i)) {
                 CartItem cartItem = itemList.get(i);
 
-                CartTable cartTable = new CartTable(context);
-                cartTable.removeFromCart(cartItem.getBookID());
+                cartDAO.removeFromCart(cartItem.getBookID());
 
                 isChecked.remove(i);
                 itemList.remove(i);
@@ -204,9 +204,9 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         CartItem cartItem = itemList.get(position);
         Book book = cartItem.getBook();
 
-        EditText quantity_EditText = holder.quantity_EditText;
+        EditText itemQuantity = holder.itemQuantity;
         if (book != null) {
-            quantity_EditText.addTextChangedListener(new TextWatcher() {
+            itemQuantity.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -227,12 +227,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
                         Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                         cartItem.setQuantity(1);
                         addItemToCart(holder.bookId, 1);
-                        quantity_EditText.setText(String.valueOf(1));
+                        itemQuantity.setText(String.valueOf(1));
                     } else if (stock < quantity) {
                         Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
                         cartItem.setQuantity(stock);
                         addItemToCart(holder.bookId, stock);
-                        quantity_EditText.setText(String.valueOf(stock));
+                        itemQuantity.setText(String.valueOf(stock));
                     }
                     getTotalQuantity();
                     getTotalPrice();
@@ -241,13 +241,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         }
 
         holder.plusBtn.setOnClickListener(v -> {
-            String quantityRaw = quantity_EditText.getText().toString();
+            String quantityRaw = itemQuantity.getText().toString();
             int quantity = Integer.parseInt(quantityRaw) + 1;
 
             if (book.getBookStock() < quantity) {
                 Toast.makeText(context, "Số lượng tồn kho không đủ", Toast.LENGTH_SHORT).show();
             } else {
-                holder.quantity_EditText.setText(String.valueOf(quantity));
+                holder.itemQuantity.setText(String.valueOf(quantity));
                 cartItem.setQuantity(quantity);
                 addItemToCart(holder.bookId, quantity);
                 getTotalQuantity();
@@ -256,13 +256,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         });
 
         holder.minusBtn.setOnClickListener(v -> {
-            String quantityRaw = quantity_EditText.getText().toString();
+            String quantityRaw = itemQuantity.getText().toString();
             int quantity = Integer.parseInt(quantityRaw) - 1;
 
             if (quantity <= 0) {
                 Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
             } else {
-                holder.quantity_EditText.setText(String.valueOf(quantity));
+                holder.itemQuantity.setText(String.valueOf(quantity));
                 cartItem.setQuantity(quantity);
                 addItemToCart(holder.bookId, quantity);
                 getTotalQuantity();
@@ -298,10 +298,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         String bookId;
         ImageView imageView;
-        TextView name_TxtView;
-        TextView author_TxtView;
-        TextView price_TxtView;
-        EditText quantity_EditText;
+        TextView itemName;
+        TextView itemAuthor;
+        TextView itemPrice;
+        EditText itemQuantity;
         ImageButton plusBtn;
         ImageButton minusBtn;
         CheckBox checkBox;
@@ -309,10 +309,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
-            name_TxtView = itemView.findViewById(R.id.name_TxtView);
-            author_TxtView = itemView.findViewById(R.id.author_TxtView);
-            price_TxtView = itemView.findViewById(R.id.price_TxtView);
-            quantity_EditText = itemView.findViewById(R.id.quantity_EditText);
+            itemName = itemView.findViewById(R.id.name_TxtView);
+            itemAuthor = itemView.findViewById(R.id.author_TxtView);
+            itemPrice = itemView.findViewById(R.id.price_TxtView);
+            itemQuantity = itemView.findViewById(R.id.quantity_EditText);
             plusBtn = itemView.findViewById(R.id.plusBtn);
             minusBtn = itemView.findViewById(R.id.minusBtn);
             checkBox = itemView.findViewById(R.id.checkBox);

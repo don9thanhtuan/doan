@@ -67,18 +67,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Book book = bookList.get(position);
 
-        holder.bookId = book.getBookID();
-        holder.list_Name.setText(book.getBookName());
-        holder.list_Author.setText(book.getBookAuthor());
-        holder.list_Price.setText(book.getBookPrice());
-        holder.list_Sold.setText("Đã bán " + book.getBookSold());
+        holder.bookID = book.getBookID();
+        holder.bookName.setText(book.getBookName());
+        holder.bookAuthor.setText(book.getBookAuthor());
+        holder.bookPrice.setText(book.getBookPrice());
+        holder.bookSold.setText("Đã bán " + book.getBookSold());
 
         Glide.with(context)
                 .load(book.getBookImage())
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .fitCenter()
-                .into(holder.BookImageMainPage);
+                .into(holder.bookImage);
     }
 
     @Override
@@ -93,20 +93,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        String bookId;
-        ImageView BookImageMainPage;
-        TextView list_Name;
-        TextView list_Author;
-        TextView list_Price;
-        TextView list_Sold;
+        String bookID;
+        ImageView bookImage;
+        TextView bookName;
+        TextView bookAuthor;
+        TextView bookPrice;
+        TextView bookSold;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            BookImageMainPage = itemView.findViewById(R.id.list_Image);
-            list_Name = itemView.findViewById(R.id.list_Name);
-            list_Author = itemView.findViewById(R.id.list_Author);
-            list_Price = itemView.findViewById(R.id.list_Price);
-            list_Sold = itemView.findViewById(R.id.list_Sold);
+            bookImage = itemView.findViewById(R.id.list_Image);
+            bookName = itemView.findViewById(R.id.list_Name);
+            bookAuthor = itemView.findViewById(R.id.list_Author);
+            bookPrice = itemView.findViewById(R.id.list_Price);
+            bookSold = itemView.findViewById(R.id.list_Sold);
 
         }
     }

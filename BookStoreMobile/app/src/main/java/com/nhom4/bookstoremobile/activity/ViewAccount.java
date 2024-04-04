@@ -9,16 +9,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.controller.ViewAccountController;
 import com.nhom4.bookstoremobile.entities.Account;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 
 public class ViewAccount extends AppCompatActivity {
     private ViewAccountController controller;
-    private boolean isFromMain;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isFromMain = getIntent().getBooleanExtra("main", false);
 
         controller = new ViewAccountController(this);
 

@@ -14,10 +14,10 @@ import com.nhom4.bookstoremobile.activity.ManageAddBook;
 import com.nhom4.bookstoremobile.adapter.BookAdapter;
 import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
 
 import java.util.List;
 

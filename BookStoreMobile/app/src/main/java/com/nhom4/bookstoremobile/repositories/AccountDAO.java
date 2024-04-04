@@ -1,4 +1,4 @@
-package com.nhom4.bookstoremobile.sqlite;
+package com.nhom4.bookstoremobile.repositories;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -33,5 +33,13 @@ public class AccountDAO {
             }
         }
         return null;
+    }
+
+    public void clear() {
+        accountTable.clear();
+    }
+
+    public void addAccount(String userID, int isAdminInt) {
+        accountTable.addAccount(userID, isAdminInt);
     }
 }

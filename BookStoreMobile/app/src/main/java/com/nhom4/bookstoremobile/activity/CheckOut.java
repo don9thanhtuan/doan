@@ -12,7 +12,7 @@ import com.nhom4.bookstoremobile.controller.CheckOutController;
 import com.nhom4.bookstoremobile.controller.ViewSettingInfoController;
 import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.CartItem;
-import com.nhom4.bookstoremobile.sqlite.AccountDAO;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 
 public class CheckOut extends AppCompatActivity {
     private CheckOutController orderController;
