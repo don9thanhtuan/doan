@@ -1,5 +1,4 @@
 # android-book-store
-![Screenshot_20240413_202251](https://github.com/ThinhPham03/android-book-store/assets/119690355/e1247fbe-d57c-4dd8-bb85-284d2a3aa252)
 Công nghệ và công cụ:
 - Ngôn ngữ lập trình: Java
 - Framework: Android Jetpack, Retrofit, Glide
@@ -24,3 +23,7 @@ Công nghệ và công cụ:
   + Xóa sản phẩm
   + Thêm/Sửa sản phẩm
   + Cập nhật trạng thái đơn hàng
+
+![Screenshot_20240413_202251](https://github.com/ThinhPham03/android-book-store/assets/119690355/e1247fbe-d57c-4dd8-bb85-284d2a3aa252)
+![giohang](https://github.com/ThinhPham03/android-book-store/assets/119690355/5c7aa5af-b90c-4890-9bc1-5a25fa0726c4)
+![account](https://github.com/ThinhPham03/android-book-store/assets/119690355/c1c81b3e-d506-451d-b4f5-becdd65817a9)
