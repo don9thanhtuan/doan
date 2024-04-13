@@ -19,6 +19,7 @@ import com.nhom4.bookstoremobile.adapter.OrderAdapter;
 import com.nhom4.bookstoremobile.entities.Account;
 import com.nhom4.bookstoremobile.entities.Book;
 import com.nhom4.bookstoremobile.entities.Order;
+import com.nhom4.bookstoremobile.repositories.AccountDAO;
 import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.AccountService;
@@ -159,9 +160,8 @@ public class ViewAccountController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        Account account = AccountDAO.getInstance(activity).getAccountData();
+        getAccountFromAPI(account.getUserID());
         pullToRefresh.setRefreshing(false);
     }
-
-
 }

@@ -158,7 +158,7 @@ public class ViewCartController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        getCartData();
         pullToRefresh.setRefreshing(false);
     }
 

@@ -34,12 +34,14 @@ import retrofit2.Response;
 
 public class ViewOrderDetailsController {
     private final Activity activity;
+    private final String orderID;
 
-    public ViewOrderDetailsController(Activity activity) {
+    public ViewOrderDetailsController(Activity activity, String orderID) {
         this.activity = activity;
+        this.orderID = orderID;
     }
 
-    public void getOrderDetailsFromAPI(String orderID) {
+    public void getOrderDetailsFromAPI() {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
 
         Call<OrderDetails> call = orderService.getOrderDetails(orderID);
@@ -61,7 +63,7 @@ public class ViewOrderDetailsController {
         });
     }
 
-    public void getOrderFromAPI(String orderID) {
+    public void getOrderFromAPI() {
         OrderService orderService = RetrofitAPI.getInstance().create(OrderService.class);
         Call<Order> call = orderService.getOrder(orderID);
         call.enqueue(new Callback<Order>() {
@@ -147,7 +149,9 @@ public class ViewOrderDetailsController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        getOrderFromAPI();
+        getOrderDetailsFromAPI();
+        checkAdmin();
         pullToRefresh.setRefreshing(false);
     }
 

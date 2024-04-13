@@ -75,7 +75,7 @@ public class MainActivityController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        getTopSellingFromAPI();
         pullToRefresh.setRefreshing(false);
     }
 }

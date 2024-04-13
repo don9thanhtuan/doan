@@ -103,7 +103,8 @@ public class ViewOrderListController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        setEffect(btnList.get(0));
+        getOrderFromAPI(4);
         pullToRefresh.setRefreshing(false);
     }
 }

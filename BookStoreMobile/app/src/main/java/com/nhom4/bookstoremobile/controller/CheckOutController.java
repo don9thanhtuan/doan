@@ -222,9 +222,4 @@ public class CheckOutController {
         activity.finish();
         activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
-
-    public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
-        pullToRefresh.setRefreshing(false);
-    }
 }

@@ -68,7 +68,8 @@ public class ViewBookListController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        getBookListFromAPI();
+        checkAdmin();
         pullToRefresh.setRefreshing(false);
     }
 

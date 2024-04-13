@@ -341,7 +341,9 @@ public class ViewBookDetailsController {
     }
 
     public void reload(SwipeRefreshLayout pullToRefresh) {
-        activity.recreate();
+        getBookDetailFromAPI();
+        getBookListFromAPI();
+        setUpAdminLayout();
         pullToRefresh.setRefreshing(false);
     }
 

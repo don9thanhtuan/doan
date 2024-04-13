@@ -44,10 +44,9 @@ public class CheckOut extends AppCompatActivity {
         setListener();
     }
 
-    private void setListener() {
-        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(() -> orderController.reload(pullToRefresh));
 
+
+    private void setListener() {
         findViewById(R.id.backBtn).setOnClickListener(v -> orderController.redirectBack());
         findViewById(R.id.phoneChange).setOnClickListener(v -> infoController.openEditor(3));
         findViewById(R.id.addressChange).setOnClickListener(v -> infoController.openEditor(4));

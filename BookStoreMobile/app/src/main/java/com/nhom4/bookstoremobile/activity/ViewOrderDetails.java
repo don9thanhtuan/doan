@@ -19,9 +19,9 @@ public class ViewOrderDetails extends AppCompatActivity {
 
         String orderID = getIntent().getStringExtra("orderID");
 
-        controller = new ViewOrderDetailsController(this);
-        controller.getOrderFromAPI(orderID);
-        controller.getOrderDetailsFromAPI(orderID);
+        controller = new ViewOrderDetailsController(this, orderID);
+        controller.getOrderFromAPI();
+        controller.getOrderDetailsFromAPI();
         controller.checkAdmin();
         setListener();
     }
