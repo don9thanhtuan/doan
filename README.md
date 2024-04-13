@@ -1,4 +1,5 @@
 # android-book-store
+![Screenshot_20240413_202251](https://github.com/ThinhPham03/android-book-store/assets/119690355/e1247fbe-d57c-4dd8-bb85-284d2a3aa252)
 Công nghệ và công cụ:
 - Ngôn ngữ lập trình: Java
 - Framework: Android Jetpack, Retrofit, Glide
