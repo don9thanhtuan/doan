@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nhom4.bookstoremobile.R;
 import com.nhom4.bookstoremobile.activity.ViewBookDetails;
 import com.nhom4.bookstoremobile.entities.Book;
+import com.nhom4.bookstoremobile.retrofit.DefaultURL;
 import com.nhom4.bookstoremobile.retrofit.RetrofitAPI;
 import com.nhom4.bookstoremobile.service.BookService;
 import com.nhom4.bookstoremobile.service.ExceptionHandler;
@@ -87,7 +88,7 @@ public class ManageEditBookController {
             return;
         }
         newBook.setBookID(book.getBookID());
-        String imageURL = book.getBookImage().replace("http://10.0.2.2:8080", "");
+        String imageURL = book.getBookImage().replace(DefaultURL.getUrl(), "");
         newBook.setBookImage(imageURL);
 
         MultipartBody.Part imagePart;
