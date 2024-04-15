@@ -40,11 +40,11 @@ public class DeleteBookAPIController {
                     orderService.deleteOrder(order.getOrderID());
                 }
             } else{
-                return new ResponseEntity<>("Book deleted fails", HttpStatus.CONFLICT);
+                return new ResponseEntity<>("Fails", HttpStatus.CONFLICT);
             }
         }
 
         bookService.deleteBook(id);
-        return new ResponseEntity<>("Book deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 }
