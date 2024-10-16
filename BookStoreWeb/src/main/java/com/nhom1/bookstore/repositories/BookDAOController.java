@@ -12,4 +12,5 @@ public interface BookDAOController {
     void deleteBook(String id);
     List<Book> search(String tuKhoa);
     void updateQuantity(String id, int daBan);
+    List<Book> findBooksByTitle(String title);
 }

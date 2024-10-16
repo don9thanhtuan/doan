@@ -15,4 +15,5 @@ public interface BookService {
     List<Book> getTopSelling();
     String fileToFilePathConverter(MultipartFile file);
     void updateQuantity(String id, int daBan);
+    List<Book> findBooksByTitle(String title);
 }

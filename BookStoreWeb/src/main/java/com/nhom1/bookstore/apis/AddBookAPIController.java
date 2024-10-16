@@ -23,23 +23,47 @@ public class AddBookAPIController {
     }
     
     @PostMapping
-    public ResponseEntity<String> addBook(@RequestParam("image") MultipartFile file, @RequestParam("book") String bookJSON) {
-        Book newBook = ConverterJSON.jsonToBookEntity(bookJSON);
-        
-        String id = IDGenerator.IDBook();
-        while (true) {
-            if(bookService.search(id).size() == 0) {
-                break;
-            } else{
-                id = IDGenerator.IDBook();
-            }
+    public ResponseEntity<String> addBook(
+            @RequestParam(value = "image", required = false) MultipartFile file,
+            @RequestParam(value = "book", required = false) String bookJSON) {
+
+        // Kiểm tra nếu tham số 'book' bị thiếu
+        if (bookJSON == null || bookJSON.isEmpty()) {
+            return new ResponseEntity<>("Missing book data", HttpStatus.BAD_REQUEST);
         }
+
+        // Chuyển đổi JSON thành đối tượng Book
+        Book newBook = ConverterJSON.jsonToBookEntity(bookJSON);
+
+        // Tạo ID duy nhất cho sách
+        String id = generateUniqueBookID();
         newBook.setBookID(id);
 
-        String filePath = bookService.fileToFilePathConverter(file);
-        newBook.setBookImage(filePath);
+        // Xử lý file ảnh nếu có
+        if (file != null && !file.isEmpty()) {
+            String filePath = bookService.fileToFilePathConverter(file);
+            newBook.setBookImage(filePath);
+            // Log để kiểm tra xem ảnh có được lưu không
+            System.out.println("File uploaded to: " + filePath);
+        } else {
+            newBook.setBookImage("/img/product/default.jpg");  // Ảnh mặc định nếu không có ảnh
+        }
 
+        // Thêm sách vào cơ sở dữ liệu
         bookService.addBook(newBook);
+
+        // Trả về ID của sách đã thêm
         return new ResponseEntity<>(id, HttpStatus.CREATED);
+    }
+
+
+
+    // Hàm tạo ID sách duy nhất
+    private String generateUniqueBookID() {
+        String id;
+        do {
+            id = IDGenerator.IDBook();
+        } while (!bookService.search(id).isEmpty());
+        return id;
     }
 }

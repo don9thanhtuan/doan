@@ -23,13 +23,18 @@ public class AccountDAO {
     public Account getAccountData() {
         Cursor cursor = accountTable.getAccount();
         if (cursor != null && cursor.moveToFirst()) {
-            String userID = cursor.getString(cursor.getColumnIndex("userID"));
-            int isAdminInt = cursor.getInt(cursor.getColumnIndex("isAdmin"));
+            int userIDColumnIndex = cursor.getColumnIndex("userID");
+            int isAdminColumnIndex = cursor.getColumnIndex("isAdmin");
 
-            if (isAdminInt == 0) {
-                return new Account(userID, false);
-            } else {
-                return new Account(userID, true);
+            if (userIDColumnIndex != -1 && isAdminColumnIndex != -1) {
+                String userID = cursor.getString(userIDColumnIndex);
+                int isAdminInt = cursor.getInt(isAdminColumnIndex);
+
+                if (isAdminInt == 0) {
+                    return new Account(userID, false);
+                } else {
+                    return new Account(userID, true);
+                }
             }
         }
         return null;

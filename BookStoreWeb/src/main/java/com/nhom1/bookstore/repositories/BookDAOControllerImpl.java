@@ -47,4 +47,10 @@ public class BookDAOControllerImpl implements BookDAOController{
     public void updateQuantity(String id, int daBan) {
         bookDAO.updateQuantity(id, daBan);
     }
+    
+    @Override
+    public List<Book> findBooksByTitle(String title) {
+        return bookDAO.findBooksByTitle(title); // Gọi phương thức từ `bookDAO`
+    }
+
 }

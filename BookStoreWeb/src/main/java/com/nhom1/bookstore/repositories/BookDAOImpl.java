@@ -106,7 +106,7 @@ public class BookDAOImpl implements BookDAO{
 
     @Override
     public Book getBook(String id) {
-        String sql = "SELECT * FROM Sach where id = ?";
+        String sql = "SELECT * FROM Sach where ID = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -169,7 +169,7 @@ public class BookDAOImpl implements BookDAO{
     @Override
     public List<Book> search(String tuKhoa) {
         List<Book> result = new ArrayList<>();
-        String sql = "SELECT * FROM TaiKhoan WHERE LOWER(ID) LIKE LOWER(?) OR LOWER(Ten) LIKE LOWER(?) OR LOWER(TacGia) LIKE LOWER(?) OR LOWER(NhaXuatBan) LIKE LOWER(?) OR LOWER(Gia) LIKE LOWER(?) OR LOWER(GioiThieu) LIKE LOWER(?)";
+        String sql = "SELECT * FROM Sach WHERE LOWER(ID) LIKE LOWER(?) OR LOWER(Ten) LIKE LOWER(?) OR LOWER(TacGia) LIKE LOWER(?) OR LOWER(NhaXuatBan) LIKE LOWER(?) OR LOWER(Gia) LIKE LOWER(?) OR LOWER(GioiThieu) LIKE LOWER(?)";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, "%" + tuKhoa + "%");
             preparedStatement.setString(2, "%" + tuKhoa + "%");
@@ -201,4 +201,41 @@ public class BookDAOImpl implements BookDAO{
         }
         return result;
     }
+    
+    @Override
+    public List<Book> findBooksByTitle(String title) {
+        List<Book> result = new ArrayList<>();
+        String sql = "SELECT * FROM Sach WHERE LOWER(Ten) LIKE LOWER(?)";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, "%" + title + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String id = resultSet.getString("ID");
+                    String ten = resultSet.getString("Ten");
+                    String hinhAnh = resultSet.getString("HinhAnh");
+                    String tacGia = resultSet.getString("TacGia");
+                    String nhaXuatBan = resultSet.getString("NhaXuatBan");
+                    int tonKho = resultSet.getInt("TonKho");
+
+                    int giaRaw = resultSet.getInt("Gia");
+                    String gia = ConverterCurrency.numberToCurrency(giaRaw);
+
+                    int daBan = resultSet.getInt("DaBan");
+                    double trongLuong = resultSet.getDouble("TrongLuong");
+                    String kichThuoc = resultSet.getString("KichThuoc");
+                    String gioiThieu = resultSet.getString("GioiThieu");
+
+                    result.add(new Book(id, ten, hinhAnh, tacGia, nhaXuatBan, tonKho, gia, daBan, trongLuong, kichThuoc, gioiThieu));
+                }
+            }
+        } catch (SQLException e) {
+            // Sử dụng logging framework để ghi log, ví dụ Log4J hoặc SLF4J
+            System.err.println("Error executing query: " + e.getMessage());
+            throw new RuntimeException("Database error occurred", e);  // Ném exception để lớp gọi có thể biết
+        }
+
+        return result;
+    }
+
 }

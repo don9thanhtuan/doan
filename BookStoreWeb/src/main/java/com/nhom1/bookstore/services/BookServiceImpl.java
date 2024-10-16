@@ -61,20 +61,34 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public String fileToFilePathConverter(MultipartFile file) {
-        String uploadFolder = "src\\main\\resources\\static\\img\\product";
-        String filePath = "/img/product/";
-        Path uploadPath = Paths.get(uploadFolder).toAbsolutePath().normalize();
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        Path targetLocation = uploadPath.resolve(fileName);
         try {
-            Files.copy(file.getInputStream(), targetLocation);
-            filePath += fileName;
-            return filePath;
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            String uploadDir = "D:/bookstore/images/product/";
+
+            // Tạo thư mục nếu chưa tồn tại
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            File destinationFile = new File(uploadDir + fileName);
+            file.transferTo(destinationFile);
+
+            System.out.println("File saved at: " + destinationFile.getAbsolutePath());
+
+            // Trả về đúng đường dẫn ảnh cho API
+            return "/img/product/" + fileName;
         } catch (IOException e) {
             e.printStackTrace();
+            return "/img/product/default.jpg";
         }
-        return "";
     }
+
+
+
+
+
+
 
     @Override
     public List<Book> getTopSelling() {
@@ -102,4 +116,10 @@ public class BookServiceImpl implements BookService{
         System.out.println(fileToDelete.getName());
         fileToDelete.delete();
     }
+    @Override
+    public List<Book> findBooksByTitle(String title) {
+        return bookDAOController.findBooksByTitle(title);
+    }
+
+    
 }

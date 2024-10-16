@@ -1,5 +1,7 @@
 package com.nhom1.bookstore.apis;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,7 @@ public class EditPersonalAccountAPIController {
     }
 
     @PutMapping("/api/accounts/{userid}")
-    public void changeInformation(@PathVariable("userid") String userid, @RequestBody Account newAccount) {        
+    public ResponseEntity<String> changeInformation(@PathVariable("userid") String userid, @RequestBody Account newAccount) {        
             Account currentAccount = accountService.getAccount(userid);
         
         if(newAccount.getUserName() != null) {
@@ -42,5 +44,7 @@ public class EditPersonalAccountAPIController {
         }
 
         accountService.editAccount(currentAccount.getUserID(), newAccount);
+     // Trả về thông báo thành công
+        return new ResponseEntity<>("Cập nhật thông tin tài khoản thành công", HttpStatus.OK);
     }
 }
